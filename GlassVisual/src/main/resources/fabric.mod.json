@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "glassvisual",
+  "version": "${version}",
+  "name": "Glass Visual",
+  "description": "Client-side PvP-style ClickGUI and target HUD for Minecraft 1.21.4.",
+  "authors": [
+    "Glass Visual"
+  ],
+  "contact": {
+    "sources": "https://github.com/your-name/glass-visual"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.glassvisual.GlassVisualClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
