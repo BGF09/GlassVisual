@@ -9,27 +9,30 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 public final class NullMainMenuScreen extends Screen {
-    public NullMainMenuScreen() { super(Text.literal("NULL")); }
-    @Override protected void init() {
-        int center = width / 2, y = height / 2 + 28;
-        int bw = Math.min(230, width - 40), x = center - bw / 2;
-        addDrawableChild(ButtonWidget.builder(Text.literal("SINGLEPLAYER"), b -> client.setScreen(new SelectWorldScreen(this))).dimensions(x,y,bw,24).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("MULTIPLAYER"), b -> client.setScreen(new MultiplayerScreen(this))).dimensions(x,y+31,bw,24).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("OPTIONS"), b -> client.setScreen(new OptionsScreen(this,client.options))).dimensions(x,y+62,bw,24).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("QUIT"), b -> client.scheduleStop()).dimensions(x,y+93,bw,24).build());
+    public NullMainMenuScreen(){super(Text.literal("NULL"));}
+    @Override protected void init(){
+        int center=width/2, y=height/2+26, bw=Math.min(250,width-36), x=center-bw/2;
+        addDrawableChild(menuButton("◈  Singleplayer",()->client.setScreen(new SelectWorldScreen(this)),x,y,bw));
+        addDrawableChild(menuButton("◎  Multiplayer",()->client.setScreen(new MultiplayerScreen(this)),x,y+36,bw));
+        addDrawableChild(menuButton("♙  Account Manager",()->client.setScreen(new NullAccountScreen(this)),x,y+72,bw));
+        addDrawableChild(menuButton("⚙  Settings",()->client.setScreen(new OptionsScreen(this,client.options)),x,y+108,bw));
+        addDrawableChild(menuButton("⇥  Quit",()->client.scheduleStop(),center-48,y+150,96));
     }
-    @Override public void render(DrawContext ctx,int mouseX,int mouseY,float delta) {
-        int accent=NullTheme.accent();
-        ctx.fillGradient(0,0,width,height,0xFF0A0C14,0xFF151A29);
-        ctx.fill(0,height/2-90,width,height/2-86,0x443B4560);
-        ctx.fill(0,height/2-90,width,height/2-88,accent);
-        ctx.fill(width/2-150,height/2-126,width/2+150,height/2+151,0xAA101521);
-        ctx.fill(width/2-150,height/2-126,width/2+150,height/2-123,accent);
-        ctx.drawCenteredTextWithShadow(textRenderer,"NULL",width/2,height/2-100,0xFFFFFFFF);
-        ctx.drawCenteredTextWithShadow(textRenderer,"VISUAL CLIENT",width/2,height/2-78,accent);
-        ctx.drawCenteredTextWithShadow(textRenderer,"CLEAN  •  MINIMAL  •  YOUR STYLE",width/2,height/2-60,0xFF9CA3B8);
+    private ButtonWidget menuButton(String label,Runnable action,int x,int y,int w){
+        return ButtonWidget.builder(Text.literal(label),b->action.run()).dimensions(x,y,w,29).build();
+    }
+    @Override public void render(DrawContext ctx,int mouseX,int mouseY,float delta){
+        int a=NullTheme.accent();
+        ctx.fillGradient(0,0,width,height,0xFF090B11,0xFF151A27);
+        ctx.fill(width/2-1,0,width/2+1,height,0x111FFFFFF);
+        ctx.fill(0,height/2-1,width,height/2+1,0x223C4654);
+        ctx.fill(width/2-190,height/2-190,width/2+190,height/2+205,0x66111622);
+        ctx.fill(width/2-190,height/2-190,width/2+190,height/2-187,a);
+        ctx.drawCenteredTextWithShadow(textRenderer,"N",width/2,height/2-166,0xFF8492E8);
+        ctx.drawCenteredTextWithShadow(textRenderer,"NULL",width/2,height/2-112,0xFFF4F6FC);
+        ctx.drawCenteredTextWithShadow(textRenderer,"VISUAL CLIENT",width/2,height/2-94,a);
         super.render(ctx,mouseX,mouseY,delta);
-        ctx.drawCenteredTextWithShadow(textRenderer,"NULL CLIENT  /  1.21.4",width/2,height-18,0xFF737D94);
+        ctx.drawCenteredTextWithShadow(textRenderer,"NULL CLIENT  •  1.21.4",width/2,height-18,0xFF7F899C);
     }
     @Override public boolean shouldPause(){return false;}
 }
