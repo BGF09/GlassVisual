@@ -77,7 +77,7 @@ public final class ClickGuiScreen extends Screen {
         ctx.drawText(textRenderer,"SCALE  "+Math.round(NullUiSettings.scale()*100)+"%   •   "+NullUiSettings.mode().name(),
             panelX+82,panelY+47,MUTED,false);
 
-        int contentX=panelX+12, contentY=panelY+76, contentW=panelW-24, contentH=panelH-112;
+        int contentX=panelX+12, contentY=panelY+91, contentW=panelW-24, contentH=panelH-127;
         int columns=contentW>=900?5:contentW>=610?3:contentW>=390?2:1;
         int gap=9, rows=(CATEGORIES.length+columns-1)/columns;
         int cardW=(contentW-gap*(columns-1))/columns;
