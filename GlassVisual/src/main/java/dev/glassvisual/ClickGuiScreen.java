@@ -78,12 +78,52 @@ public final class ClickGuiScreen extends Screen {
                 int iy=y+31+(m-1)*(rowHeight+rowGap);if(iy+rowHeight>bottom-5)break;
                 ctx.fill(x+7,iy,right-7,iy+rowHeight,(m%2==0)?ROW:ROW_ALT);
                 ctx.drawText(textRenderer,CATEGORIES[i][m],x+13,iy+(rowHeight-9)/2,WHITE,false);
-                ctx.drawText(textRenderer,"›",right-19,iy+(rowHeight-9)/2,MUTED,false);
+                if(isSupported(i,m)){
+                    String state=moduleEnabled(i,m)?"ON":"OFF";
+                    int stateColor=moduleEnabled(i,m)?GREEN:0xFFFF7777;
+                    ctx.drawText(textRenderer,state,right-13-textRenderer.getWidth(state),iy+(rowHeight-9)/2,stateColor,true);
+                } else ctx.drawText(textRenderer,"—",right-19,iy+(rowHeight-9)/2,MUTED,false);
             }
         }
         super.render(ctx,mouseX,mouseY,delta);
         int sx=panelX+panelW-92;
         for(int i=0;i<NullTheme.colorCount();i++){int bx=sx+(i%3)*25,by=panelY+43+(i/3)*22;ctx.fill(bx+6,by+5,bx+15,by+14,NullTheme.color(i));}
+    }
+
+    private boolean isSupported(int category,int item){
+        return (category==0&&item==3)||(category==1&&item==6)||(category==2&&item==4)||(category==3&&item==3);
+    }
+    private boolean moduleEnabled(int category,int item){
+        GlassVisualClient.ModuleState m=GlassVisualClient.MODULES;
+        if(category==0&&item==3)return m.targetHud;
+        if(category==1&&item==6)return m.keystrokes;
+        if(category==2&&item==4)return m.fps;
+        if(category==3&&item==3)return m.coordinates;
+        return false;
+    }
+    private void toggleModule(int category,int item){
+        GlassVisualClient.ModuleState m=GlassVisualClient.MODULES;
+        if(category==0&&item==3)m.targetHud=!m.targetHud;
+        else if(category==1&&item==6)m.keystrokes=!m.keystrokes;
+        else if(category==2&&item==4)m.fps=!m.fps;
+        else if(category==3&&item==3)m.coordinates=!m.coordinates;
+    }
+    @Override public boolean mouseClicked(double mouseX,double mouseY,int button){
+        if(button==0){
+            calculateBounds();
+            int contentX=panelX+12,contentY=panelY+91,contentW=panelW-24,contentH=panelH-127;
+            int columns=contentW>=900?5:contentW>=610?3:contentW>=390?2:1;
+            int gap=9,rows=(CATEGORIES.length+columns-1)/columns,cardW=(contentW-gap*(columns-1))/columns,cardH=(contentH-gap*(rows-1))/rows;
+            for(int i=0;i<CATEGORIES.length;i++){
+                int col=i%columns,row=i/columns,x=contentX+col*(cardW+gap),y=contentY+row*(cardH+gap);
+                int count=CATEGORIES[i].length-1,rowGap=4,rowHeight=Math.min(27,Math.max(17,(cardH-35-(count-1)*rowGap)/count));
+                for(int m=1;m<CATEGORIES[i].length;m++){
+                    int iy=y+31+(m-1)*(rowHeight+rowGap);
+                    if(isSupported(i,m)&&mouseX>=x+7&&mouseX<x+cardW-7&&mouseY>=iy&&mouseY<iy+rowHeight){toggleModule(i,m);return true;}
+                }
+            }
+        }
+        return super.mouseClicked(mouseX,mouseY,button);
     }
     @Override public boolean shouldPause(){return false;}
 }
