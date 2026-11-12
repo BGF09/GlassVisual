@@ -19,6 +19,14 @@ public final class ClickGuiScreen extends Screen {
     };
     private int panelX,panelY,panelW,panelH;
     public ClickGuiScreen(){super(Text.literal("NULL"));}
+
+    // Screen.render() normally applies Minecraft's background blur before drawing widgets.
+    // This GUI draws its panel and labels before super.render(), so the default blur
+    // was blurring all custom-drawn content while leaving ButtonWidgets sharp.
+    @Override public void renderBackground(DrawContext context,int mouseX,int mouseY,float delta) {
+        // Intentionally empty: keep the world visible behind the translucent ClickGUI
+        // without applying the vanilla menu background blur over the GUI itself.
+    }
     private void calculateBounds(){
         float scale=NullUiSettings.scale();
         int availableW=Math.max(280,width-28),availableH=Math.max(240,height-28);
