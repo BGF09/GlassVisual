@@ -8,7 +8,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.hit.EntityHitResult;
 import org.lwjgl.glfw.GLFW;
 
@@ -37,26 +36,23 @@ public final class GlassVisualClient implements ClientModInitializer {
             }
         });
 
-        // HudRenderCallback is deprecated in newer Fabric API versions, but remains
-        // available in Fabric API 0.119.2 for Minecraft 1.21.4.
         HudRenderCallback.EVENT.register((context, tickCounter) -> {
             MinecraftClient client = MinecraftClient.getInstance();
-            if (!MODULES.targetHud || client.player == null || client.world == null
-                    || client.currentScreen != null) {
+            if (client.player == null || client.world == null || client.currentScreen != null) {
                 return;
             }
 
-            if (client.crosshairTarget instanceof EntityHitResult hit
-                    && hit.getEntity() instanceof LivingEntity target
-                    && target.isAlive()) {
+            if (MODULES.targetHud && client.crosshairTarget instanceof EntityHitResult hit
+                    && hit.getEntity() instanceof LivingEntity target && target.isAlive()) {
                 TargetHudRenderer.render(context, client, target);
             }
+
+            HudOverlayRenderer.render(context, client);
         });
     }
 
     public static final class ModuleState {
         public boolean targetHud = true;
-        public boolean clickGui = true;
         public boolean keystrokes = false;
         public boolean coordinates = false;
         public boolean fps = false;
