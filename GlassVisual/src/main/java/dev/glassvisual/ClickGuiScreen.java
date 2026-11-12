@@ -6,72 +6,47 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 public final class ClickGuiScreen extends Screen {
-    private static final int ACCENT = 0xFFB56BFF;
-    private static final int PANEL = 0xF012111D;
-    private static final int CARD = 0xCC242033;
-    private static final int MUTED = 0xFFAAA4BC;
-
-    public ClickGuiScreen() {
-        super(Text.literal("Glass Visual"));
-    }
-
-    @Override
-    protected void init() {
+    private static final int PANEL=0xF011121B, CARD=0xE51B1E2B, ROW=0xC9272B3B, MUTED=0xFF9CA3B8;
+    private static final String[][] CATEGORIES={
+        {"COMBAT","Aim Assist","Hit Visuals","Target Info","Reach Display","Combat HUD","Particles"},
+        {"MOVEMENT","Sprint Display","Jump Stats","Motion Info","Speed Graph","Elytra HUD","Key Overlay"},
+        {"RENDER","World Tint","Block Outline","Crosshair","Item Display","Effects HUD","Time Overlay"},
+        {"PLAYER","Armor Status","Inventory View","Coordinates","Durability","Status Effects","Totem Counter"},
+        {"MISC","Session Info","Clock","Brand Tag","Notifications","Server Info","Music Widget"}
+    };
+    public ClickGuiScreen(){super(Text.literal("NULL"));}
+    @Override protected void init(){
         clearChildren();
-        int left = width / 2 - 174;
-        int top = height / 2 - 116;
-
-        addToggle("Target HUD", GlassVisualClient.MODULES.targetHud, left + 18, top + 101,
-                () -> GlassVisualClient.MODULES.targetHud = !GlassVisualClient.MODULES.targetHud);
-        addToggle("Keystrokes", GlassVisualClient.MODULES.keystrokes, left + 184, top + 101,
-                () -> GlassVisualClient.MODULES.keystrokes = !GlassVisualClient.MODULES.keystrokes);
-        addToggle("Coordinates", GlassVisualClient.MODULES.coordinates, left + 18, top + 151,
-                () -> GlassVisualClient.MODULES.coordinates = !GlassVisualClient.MODULES.coordinates);
-        addToggle("FPS Counter", GlassVisualClient.MODULES.fps, left + 184, top + 151,
-                () -> GlassVisualClient.MODULES.fps = !GlassVisualClient.MODULES.fps);
-        addToggle("Purple Accent", GlassVisualClient.MODULES.glowAccent, left + 18, top + 201,
-                () -> GlassVisualClient.MODULES.glowAccent = !GlassVisualClient.MODULES.glowAccent);
-        addDrawableChild(ButtonWidget.builder(Text.literal("DONE  •  ESC"), button -> close())
-                .dimensions(left + 184, top + 201, 150, 28).build());
+        int pw=Math.min(width-32,900), left=(width-pw)/2, top=Math.max(24,height/2-225), sx=left+pw-250;
+        for(int i=0;i<NullTheme.colorCount();i++){final int index=i;
+            addDrawableChild(ButtonWidget.builder(Text.literal("●"),b->NullTheme.select(index)).dimensions(sx+i*35,top+13,30,22).build());}
+        addDrawableChild(ButtonWidget.builder(Text.literal("CLOSE  ×"),b->close()).dimensions(left+pw-94,top+48,78,22).build());
     }
-
-    private void addToggle(String name, boolean enabled, int x, int y, Runnable action) {
-        String state = enabled ? "§d●  ON" : "§7○  OFF";
-        addDrawableChild(ButtonWidget.builder(Text.literal(name + "   " + state), button -> {
-            action.run();
-            init();
-        }).dimensions(x, y, 150, 28).build());
+    @Override public void render(DrawContext ctx,int mouseX,int mouseY,float delta){
+        int accent=NullTheme.accent(), pw=Math.min(width-32,900), left=(width-pw)/2, top=Math.max(24,height/2-225);
+        int ph=Math.min(height-top-18,450), gap=10, cw=(pw-36-gap*4)/5;
+        ctx.fill(0,0,width,height,0x99070A12);
+        ctx.fill(0,top+64,width,top+68,0x552D344B); ctx.fill(0,top+64,width,top+66,accent);
+        ctx.fill(left-3,top-3,left+pw+3,top+ph+3,0x55252B42); ctx.fill(left,top,left+pw,top+ph,PANEL);
+        ctx.fill(left,top,left+pw,top+3,accent); ctx.fill(left+1,top+1,left+pw-1,top+2,0x66FFFFFF);
+        ctx.drawText(textRenderer,"NULL",left+20,top+17,0xFFFFFFFF,true);
+        ctx.drawText(textRenderer,"VISUAL CLIENT  /  1.21.4",left+69,top+18,MUTED,false);
+        ctx.drawText(textRenderer,"THEME",left+pw-282,top+19,MUTED,false);
+        ctx.drawText(textRenderer,"ACCENT COLOR",left+20,top+52,accent,true);
+        ctx.drawText(textRenderer,"VISUAL LAYOUT  •  DISPLAY ONLY",left+126,top+52,MUTED,false);
+        int contentTop=top+82;
+        for(int c=0;c<CATEGORIES.length;c++){
+            int x=left+12+c*(cw+gap); ctx.fill(x,contentTop,x+cw,top+ph-14,CARD);
+            ctx.fill(x,contentTop,x+cw,contentTop+27,0xFF202536); ctx.fill(x,contentTop,x+2,top+ph-14,accent);
+            ctx.drawText(textRenderer,CATEGORIES[c][0],x+10,contentTop+10,accent,true);
+            for(int m=1;m<CATEGORIES[c].length;m++){
+                int y=contentTop+37+(m-1)*42; if(y+32>top+ph-18)break;
+                ctx.fill(x+7,y,x+cw-7,y+34,ROW); ctx.fill(x+7,y,x+9,y+34,0x553D455C);
+                ctx.drawText(textRenderer,CATEGORIES[c][m],x+15,y+12,0xFFE7EAF4,false);
+                ctx.drawText(textRenderer,"›",x+cw-20,y+10,MUTED,false);
+            }
+        }
+        super.render(ctx,mouseX,mouseY,delta);
     }
-
-    @Override
-    public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        renderBackground(ctx, mouseX, mouseY, delta);
-        int left = width / 2 - 174;
-        int top = height / 2 - 116;
-
-        ctx.fill(left - 2, top - 2, left + 350, top + 244, 0x665D347A);
-        ctx.fill(left, top, left + 346, top + 240, PANEL);
-        ctx.fill(left + 1, top + 1, left + 345, top + 2, 0x55FFFFFF);
-        ctx.fill(left, top + 56, left + 346, top + 57, 0x887D4AA6);
-
-        ctx.drawText(textRenderer, "GLASS", left + 18, top + 15, 0xFFFFFFFF, true);
-        ctx.drawText(textRenderer, "VISUAL", left + 67, top + 15, ACCENT, true);
-        ctx.drawText(textRenderer, "CLIENT EDITION  /  1.21.4", left + 192, top + 17, MUTED, false);
-        ctx.drawText(textRenderer, "HUD & COMBAT", left + 18, top + 79, ACCENT, true);
-        ctx.drawText(textRenderer, "SCREEN INFO", left + 184, top + 79, ACCENT, true);
-        ctx.drawText(textRenderer, "THEME", left + 18, top + 179, ACCENT, true);
-        ctx.fill(left + 12, top + 96, left + 170, top + 134, CARD);
-        ctx.fill(left + 178, top + 96, left + 336, top + 134, CARD);
-        ctx.fill(left + 12, top + 146, left + 170, top + 184, CARD);
-        ctx.fill(left + 178, top + 146, left + 336, top + 184, CARD);
-        ctx.fill(left + 12, top + 196, left + 170, top + 234, CARD);
-        ctx.drawText(textRenderer, "Right Shift  •  Open / close", left + 184, top + 218, MUTED, false);
-
-        super.render(ctx, mouseX, mouseY, delta);
-    }
-
-    @Override
-    public boolean shouldPause() {
-        return false;
-    }
+    @Override public boolean shouldPause(){return false;}
 }
