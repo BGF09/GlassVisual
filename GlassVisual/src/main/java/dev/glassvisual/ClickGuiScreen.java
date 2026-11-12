@@ -47,6 +47,11 @@ public final class ClickGuiScreen extends Screen {
             }
         }
         super.render(ctx,mouseX,mouseY,delta);
+        int swatchX=left+pw-250;
+        for(int i=0;i<NullTheme.colorCount();i++){
+            int sx=swatchX+i*35;
+            ctx.fill(sx+10,top+19,sx+20,top+29,NullTheme.color(i));
+        }
     }
     @Override public boolean shouldPause(){return false;}
 }
