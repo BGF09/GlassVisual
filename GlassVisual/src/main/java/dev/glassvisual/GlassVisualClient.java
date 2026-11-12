@@ -22,10 +22,13 @@ public final class GlassVisualClient implements ClientModInitializer {
         ScreenEvents.AFTER_INIT.register((client,screen,scaledWidth,scaledHeight)->{
             if(screen instanceof TitleScreen) client.setScreen(new NullMainMenuScreen());
         });
-        ClientTickEvents.END_CLIENT_TICK.register(client->{while(openClickGui.wasPressed()){
-            if(client.currentScreen==null)client.setScreen(new ClickGuiScreen());
-            else if(client.currentScreen instanceof ClickGuiScreen)client.setScreen(null);
-        }});
+        ClientTickEvents.END_CLIENT_TICK.register(client->{
+            NullParticleRenderer.tick(client);
+            while(openClickGui.wasPressed()){
+                if(client.currentScreen==null)client.setScreen(new ClickGuiScreen());
+                else if(client.currentScreen instanceof ClickGuiScreen)client.setScreen(null);
+            }
+        });
         HudRenderCallback.EVENT.register((context,tickCounter)->{
             MinecraftClient client=MinecraftClient.getInstance();
             if(client.player==null||client.world==null||client.currentScreen!=null)return;
