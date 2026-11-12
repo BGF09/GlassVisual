@@ -13,7 +13,7 @@ public final class ClickGuiScreen extends Screen {
     private static final String[][] CATEGORIES={
         {"COMBAT","Aim Assist","Hit Visuals","Target Info","Reach Display","Combat HUD","Particles"},
         {"MOVEMENT","Sprint Display","Jump Stats","Motion Info","Speed Graph","Elytra HUD","Key Overlay"},
-        {"RENDER","World Tint","Block Outline","Crosshair","Item Display","Effects HUD","Time Overlay"},
+        {"RENDER","World Tint","Block Outline","Crosshair","FPS Counter","Effects HUD","Time Overlay"},
         {"PLAYER","Armor Status","Inventory View","Coordinates","Durability","Status Effects","Totem Counter"},
         {"MISC","Session Info","Clock","Brand Tag","Notifications","Server Info","Music Widget"}
     };
