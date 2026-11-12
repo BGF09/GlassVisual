@@ -24,7 +24,7 @@ public final class NullMainMenuScreen extends Screen {
     @Override public void render(DrawContext ctx,int mouseX,int mouseY,float delta){
         int a=NullTheme.accent();
         ctx.fillGradient(0,0,width,height,0xFF090B11,0xFF151A27);
-        ctx.fill(width/2-1,0,width/2+1,height,0x111FFFFFF);
+        ctx.fill(width/2-1,0,width/2+1,height,0x11FFFFFF);
         ctx.fill(0,height/2-1,width,height/2+1,0x223C4654);
         ctx.fill(width/2-190,height/2-190,width/2+190,height/2+205,0x66111622);
         ctx.fill(width/2-190,height/2-190,width/2+190,height/2-187,a);
