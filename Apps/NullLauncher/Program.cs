@@ -68,8 +68,8 @@ internal sealed class LauncherForm : Form
         {
             var candidates = new[]
             {
-                Path.Combine(Environment.GetProgramFiles(), "Minecraft Launcher", "Minecraft.exe"),
-                Path.Combine(Environment.GetProgramFiles(), "WindowsApps", "Microsoft.4297127D64EC6_8wekyb3d8bbwe", "Minecraft.exe")
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Minecraft Launcher", "Minecraft.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "WindowsApps", "Microsoft.4297127D64EC6_8wekyb3d8bbwe", "Minecraft.exe")
             };
             var exe = candidates.FirstOrDefault(File.Exists);
             if (exe is not null) Process.Start(new ProcessStartInfo(exe) { UseShellExecute = true });
