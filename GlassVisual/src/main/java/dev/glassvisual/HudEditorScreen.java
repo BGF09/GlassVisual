@@ -6,8 +6,8 @@ import net.minecraft.text.Text;
 
 /** In-game drag editor for HUD groups. */
 public final class HudEditorScreen extends Screen {
-    private static final int PANEL = 0xD91A1D29;
-    private static final int OUTLINE = 0xFFB69AFF;
+    private static final int PANEL = 0xDDF7FAFF;
+    private static final int OUTLINE = 0xFF8DA8D8;
     private String dragging;
     private int dragOffsetX, dragOffsetY;
 
@@ -15,7 +15,7 @@ public final class HudEditorScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        ctx.fill(0, 0, width, height, 0x66000000);
+        ctx.fill(0, 0, width, height, 0x553B4B68);
         drawElement(ctx, "WATERMARK", HudLayout.watermarkX, HudLayout.watermarkY, 114, 26);
         drawElement(ctx, "FPS", HudLayout.fpsX < 0 ? width - 92 : HudLayout.fpsX, HudLayout.fpsY, 80, 26);
         drawElement(ctx, "COORDINATES", HudLayout.coordinatesX, HudLayout.coordinatesY < 0 ? height - 34 : HudLayout.coordinatesY, 154, 26);
