@@ -27,7 +27,7 @@ public final class HudEditorScreen extends Screen {
         ctx.drawCenteredTextWithShadow(textRenderer, "HUD EDITOR  •  DRAG ELEMENTS  •  ESC TO SAVE",
             width / 2, 12, 0xFFFFFFFF);
         ctx.drawCenteredTextWithShadow(textRenderer, "Right Alt opens this editor",
-            width / 2, 26, 0xFFB9B1C8);
+            width / 2, 26, 0xFF52627B);
         super.render(ctx, mouseX, mouseY, delta);
     }
 
@@ -37,7 +37,7 @@ public final class HudEditorScreen extends Screen {
         ctx.fill(x, y, x + 2, y + h, OUTLINE);
         ctx.fill(x + w - 2, y, x + w, y + h, OUTLINE);
         ctx.fill(x, y + h - 2, x + w, y + h, OUTLINE);
-        ctx.drawText(textRenderer, label, x + 7, y + (h - 9) / 2, 0xFFFFFFFF, true);
+        ctx.drawText(textRenderer, label, x + 7, y + (h - 9) / 2, 0xFF26364F, true);
     }
 
     @Override
