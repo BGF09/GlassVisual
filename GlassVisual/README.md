@@ -1,28 +1,31 @@
-# Glass Visual
+# Glass Visual / NULL
 
-Клиентский Fabric-мод для **Minecraft 1.21.4** с тёмным glass-интерфейсом, темами и PvP-style HUD.
+Клиентский Fabric-мод для **Minecraft 1.21.4** и Java 21. Ветка обновления содержит экспериментальный NULL-style ClickGUI и HUD.
 
-## Возможности
+## Уже реализовано
 
-- ClickGUI открывается на **Right Shift**.
-- NULL-style интерфейс с категориями, настройкой масштаба, FIT / STRETCH / 4:3 режимами и палитрой акцентов.
-- Переключатели Target HUD, Keystrokes, Coordinates, FPS, ArrayList, Armor HUD, Potion HUD и Ping.
-- Target HUD показывает имя, здоровье, дистанцию и настоящий скин игрока, если он доступен в сетевом списке.
-- ArrayList отображает включённые HUD-модули справа экрана.
-- Armor HUD показывает надетую броню и индикаторы её прочности.
-- Potion HUD показывает активные эффекты, уровни и оставшееся время.
-- Ping отображает задержку до сервера; FPS и координаты выводятся отдельными компактными панелями.
-- Редактор HUD открывается на **Right Alt**: перетаскивай восемь групп элементов мышью. Позиции сохраняются.
-- Анимированные уведомления о переключении модулей и обнаруженном использовании некоторых предметов другими игроками.
-- Косметические частицы и кастомное главное меню.
-- Настройки сохраняются в `.minecraft/config/glassvisual.json` и загружаются при следующем запуске.
+- **Right Shift** — открыть ClickGUI.
+- Новый тёмный ClickGUI: боковые категории, поиск, список модулей с описаниями, цветовые акценты и переключение языка RU/EN.
+- Настройки FIT, 4:3 и STRETCH для раскладки интерфейса; отдельные команды 4:3 / 16:9 меняют размер игрового окна. Полноэкранное растяжение изображения также зависит от настроек видеодрайвера.
+- HUD: Target HUD, FPS, координаты, Keystrokes, ArrayList, Armor HUD, Potion HUD и Ping.
+- **Right Alt** — редактор HUD: перетаскивание восьми групп элементов с сохранением позиций.
+- Собственная 2D-система частиц NULL, рисуемая поверх HUD через DrawContext; не использует Minecraft world particle API.
+- Target HUD показывает цель под прицелом, скин игрока (если доступен), здоровье, дистанцию, плавную полосу HP и краткий ghost-эффект при смене цели.
+- Выбор акцентного цвета и сохранение настроек в `.minecraft/config/glassvisual.json`.
+
+## В разработке
+
+- Отдельный встраиваемый шрифт NULL для всех экранов и HUD.
+- Полноценный target tracking по факту нанесения удара, ghost afterimages и дополнительные combat-эффекты.
+- Расширенные настройки модулей, sky/world visuals и hand/item editor.
+- Веб-сайт с безопасной регистрацией и привязкой учётной записи к игровому HUD. Для реального запуска сайта понадобятся хостинг и домен; пароли должны обрабатываться сервером с безопасным хешированием.
 
 ## Требования
 
 - Java 21
 - Minecraft 1.21.4
-- Fabric Loader 0.16.x или новее
-- Fabric API
+- Fabric Loader 0.16.10 или новее
+- Fabric API 0.119.2+1.21.4
 
 ## Сборка
 
@@ -32,9 +35,7 @@
 gradle build
 ```
 
-Готовые JAR-файлы появятся в `build/libs/`. Для установки скопируйте основной `glass-visual-*.jar` в папку `.minecraft/mods` вместе с Fabric API. Файл `*-sources.jar` содержит исходный код и в папку mods не нужен.
-
-GitHub Actions автоматически собирает проект при push в любую ветку и публикует JAR как workflow artifact.
+Основной JAR находится в `build/libs/glass-visual-*.jar`. Клади только его в `.minecraft/mods`. Файл `*-sources.jar` — исходники, он не нужен для запуска.
 
 ## Управление
 
@@ -44,30 +45,6 @@ GitHub Actions автоматически собирает проект при p
 | Right Alt | Открыть редактор HUD |
 | ESC | Закрыть открытый экран |
 
-Клавишу ClickGUI можно изменить в Options → Controls → Key Binds.
-
 ## Конфигурация
 
-Файл `.minecraft/config/glassvisual.json` хранит состояние модулей, выбранную тему, частицы, режим раскладки, масштаб GUI и позиции элементов HUD. Если файл отсутствует или повреждён, клиент использует безопасные значения по умолчанию.
-
-## Структура
-
-```text
-src/main/java/dev/glassvisual/
-├── GlassVisualClient.java
-├── GlassVisualConfig.java
-├── ClickGuiScreen.java
-├── HudOverlayRenderer.java
-├── HudEditorScreen.java
-├── HudLayout.java
-├── TargetHudRenderer.java
-├── TargetNotifier.java
-├── Notifier.java
-├── NullTheme.java
-├── NullUiSettings.java
-└── NullParticleRenderer.java
-```
-
-## Лицензия
-
-MIT — см. LICENSE.
+`.minecraft/config/glassvisual.json` хранит состояние модулей, выбранный цвет, язык, частицы, режим раскладки, масштаб GUI и позиции элементов HUD.
