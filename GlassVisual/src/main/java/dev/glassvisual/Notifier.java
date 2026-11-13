@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.PlayerSkinDrawer;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.util.SkinTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
@@ -52,9 +55,15 @@ public final class Notifier {
         if (target == null || action == null) return;
         ItemStack icon = stack == null ? ItemStack.EMPTY : stack.copy();
         String name = target.getName().getString();
+        MinecraftClient client = MinecraftClient.getInstance();
+        PlayerListEntry entry = client.getNetworkHandler() == null ? null
+            : client.getNetworkHandler().getPlayerListEntry(target.getUuid());
+        SkinTextures skin = entry == null ? null : entry.getSkinTextures();
         synchronized (ACTIVE) {
-            enqueue(new Card(Type.TARGET, "target:" + name + ":" + action,
-                action + " · " + name, NullTheme.accent(), icon, TARGET_TIME));
+            Card card = new Card(Type.TARGET, "target:" + name + ":" + action,
+                action + " · " + name, NullTheme.accent(), icon, TARGET_TIME);
+            card.skin = skin;
+            enqueue(card);
         }
     }
 
@@ -141,9 +150,12 @@ public final class Notifier {
             ctx.drawText(client.textRenderer, card.text, x + 47, y + 15,
                 (fade << 24) | 0x00F5F8FF, true);
         } else {
-            ctx.fill(x + 8, y + 6, x + 30, y + 29, (fade << 24) | 0x00313C50);
-            ctx.fill(x + 13, y + 10, x + 25, y + 21, (fade << 24) | 0x00A8B9CC);
-            ctx.fill(x + 11, y + 21, x + 27, y + 27, (fade << 24) | 0x007D91AA);
+            if (card.skin != null) PlayerSkinDrawer.draw(ctx, card.skin, x + 8, y + 6, 22);
+            else {
+                ctx.fill(x + 8, y + 6, x + 30, y + 29, (fade << 24) | 0x00313C50);
+                ctx.fill(x + 13, y + 10, x + 25, y + 21, (fade << 24) | 0x00A8B9CC);
+                ctx.fill(x + 11, y + 21, x + 27, y + 27, (fade << 24) | 0x007D91AA);
+            }
             ctx.fill(x + 37, y + 6, x + 38, y + height - 6, (Math.round(alpha * 90) << 24) | 0x00A9B6C7);
             ctx.drawText(client.textRenderer, card.text, x + 48, y + 15,
                 (fade << 24) | 0x00F1F3F7, true);
@@ -172,6 +184,7 @@ public final class Notifier {
         final Type type;
         final String key;
         final ItemStack icon;
+        SkinTextures skin;
         String message;
         int accent;
         long duration, started, leaveStarted;
