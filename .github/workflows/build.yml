@@ -1,5 +1,4 @@
-
-name: Build Glass Visual
+name: Build NULL Client and Windows Apps
 
 on:
   push:
@@ -11,8 +10,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,12 +26,40 @@ jobs:
         with:
           gradle-version: '8.11'
 
-      - name: Build JAR
+      - name: Build Fabric mod
         working-directory: GlassVisual
         run: gradle build
 
-      - name: Upload JAR
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish NULL Installer.exe
+        run: dotnet publish Apps/NullInstaller/NullInstaller.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o dist/installer
+
+      - name: Publish NULL Launcher.exe
+        run: dotnet publish Apps/NullLauncher/NullLauncher.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o dist/launcher
+
+      - name: Collect JAR
+        shell: pwsh
+        run: |
+          $jar = Get-ChildItem "GlassVisual/build/libs/glass-visual-1.0.0.jar" -ErrorAction Stop
+          New-Item -ItemType Directory -Force dist/mod | Out-Null
+          Copy-Item $jar.FullName dist/mod/NULL-Visual-1.0.0.jar
+
+      - name: Upload Windows EXE files
         uses: actions/upload-artifact@v4
         with:
-          name: GlassVisual-JAR
-          path: GlassVisual/build/libs/*.jar
+          name: NULL-Windows-EXE
+          path: |
+            dist/installer/NULL-Installer.exe
+            dist/launcher/NULL-Launcher.exe
+          if-no-files-found: error
+
+      - name: Upload mod JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: NULL-Fabric-JAR
+          path: dist/mod/NULL-Visual-1.0.0.jar
+          if-no-files-found: error
