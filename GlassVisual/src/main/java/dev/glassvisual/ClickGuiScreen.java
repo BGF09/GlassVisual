@@ -11,14 +11,14 @@ public final class ClickGuiScreen extends Screen {
     private static final String[][] RU={
         {"Бой","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
         {"Движение","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
-        {"Визуалы","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer"},
+        {"Визуалы","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer","World Particles","Player Trail","Screen Stretch"},
         {"Игрок","Armor Status","Armor HUD","Coordinates","Durability","Inventory","Totem Counter","Food HUD","XP HUD"},
         {"Разное","Session Info","Clock","ArrayList","Notifications","Ping","Direction"}
     };
     private static final String[][] EN={
         {"Combat","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
         {"Movement","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
-        {"Visuals","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer"},
+        {"Visuals","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer","World Particles","Player Trail","Screen Stretch"},
         {"Player","Armor Status","Armor HUD","Coordinates","Durability","Inventory","Totem Counter","Food HUD","XP HUD"},
         {"Misc","Session Info","Clock","ArrayList","Notifications","Ping","Direction"}
     };
@@ -32,10 +32,6 @@ public final class ClickGuiScreen extends Screen {
         float s=NullUiSettings.scale()-0.75f;
         w=Math.min(width-24,Math.round(790*(0.88f+s*0.24f)));
         h=Math.min(height-24,Math.round(470*(0.88f+s*0.24f)));
-        if(NullUiSettings.mode()==NullUiSettings.LayoutMode.STRETCH){w=width-24;h=height-24;}
-        else if(NullUiSettings.mode()==NullUiSettings.LayoutMode.FOUR_THREE){
-            w=Math.min(width-24,Math.round(h*4f/3f));h=Math.min(height-24,Math.round(w*3f/4f));
-        }
         w=Math.max(420,w);h=Math.max(300,h);x=(width-w)/2;y=(height-h)/2;
         search=new TextFieldWidget(textRenderer,x+178,y+22,Math.min(250,w-410),22,Text.literal("Search"));
         search.setMaxLength(40);search.setPlaceholder(Text.literal(tr("Поиск модулей...","Search modules...")));
@@ -95,7 +91,10 @@ public final class ClickGuiScreen extends Screen {
     private String[] categoryNames(){String[][] c=categories();String[] r=new String[c.length];for(int i=0;i<c.length;i++)r[i]=c[i][0];return r;}
     private String description(String name){
         return switch(name){
-            case "Particles" -> tr("Собственные лёгкие частицы NULL в HUD","Lightweight custom NULL HUD particles");
+            case "Particles" -> tr("Декоративные частицы интерфейса HUD","Decorative particles on the HUD");
+            case "World Particles" -> tr("Собственные 3D-частицы вокруг игрока","Custom 3D particles around the player");
+            case "Player Trail" -> tr("Светящийся след движения игрока в мире","Glowing movement trail in the world");
+            case "Screen Stretch" -> tr("Растяжение игрового мира без растяжения HUD","Stretch the 3D world without stretching the HUD");
             case "Aim Assist" -> tr("Мягкая доводка прицела при зажатой атаке","Gentle aim correction while attack is held");
             case "Target HUD" -> tr("Цель под прицелом: здоровье, дистанция и имя","Target under crosshair: health, distance and name");
             case "Hit Visuals" -> tr("Короткий маркер при потере здоровья целью","Brief marker when the focused target loses health");
@@ -135,6 +134,7 @@ public final class ClickGuiScreen extends Screen {
     private boolean enabled(int c,int i){var m=GlassVisualClient.MODULES;
         if(c==0&&i==5)return NullUiSettings.particles;if(c==0&&i==1)return m.aimAssist;if(c==0&&i==2)return m.hitVisuals;if(c==0&&i==3)return m.targetHud;if(c==0&&i==4)return m.combatHud;if(c==1&&i==1)return m.autoSprint;if(c==1&&i==5)return m.keystrokes;
         if(c==2&&i==1)return m.worldTint;if(c==2&&i==2)return m.blockOutline;if(c==2&&i==3)return m.crosshair;if(c==2&&i==6)return m.timeChanger;if(c==2&&i==4)return m.fps;if(c==2&&i==5)return m.potionHud;
+        if(c==2&&i==7)return NullUiSettings.worldParticles;if(c==2&&i==8)return NullUiSettings.playerTrail;if(c==2&&i==9)return NullUiSettings.stretchMode()!=NullUiSettings.StretchMode.OFF;
         if(c==3&&i==6)return m.totemCounter;if(c==3&&i==7)return m.foodHud;if(c==3&&i==8)return m.xpHud;if(c==3&&i==1)return m.armorStatus;if(c==3&&i==2)return m.armorHud;if(c==3&&i==3)return m.coordinates;if(c==3&&i==4)return m.durability;if(c==3&&i==5)return m.inventory;
         if(c==1&&i==2)return m.sprintDisplay;if(c==1&&i==3)return m.jumpStats;if(c==1&&i==4)return m.speedGraph;
         if(c==4&&i==1)return m.sessionInfo;if(c==4&&i==2)return m.clock;if(c==4&&i==4)return m.notifications;
@@ -143,6 +143,7 @@ public final class ClickGuiScreen extends Screen {
     private void toggle(int c,int i){var m=GlassVisualClient.MODULES;
         if(c==0&&i==5)NullUiSettings.particles=!NullUiSettings.particles;else if(c==0&&i==1)m.aimAssist=!m.aimAssist;else if(c==0&&i==2)m.hitVisuals=!m.hitVisuals;else if(c==0&&i==3)m.targetHud=!m.targetHud;else if(c==0&&i==4)m.combatHud=!m.combatHud;else if(c==1&&i==1)m.autoSprint=!m.autoSprint;else if(c==1&&i==5)m.keystrokes=!m.keystrokes;
         else if(c==2&&i==1)m.worldTint=!m.worldTint;else if(c==2&&i==2)m.blockOutline=!m.blockOutline;else if(c==2&&i==3)m.crosshair=!m.crosshair;else if(c==2&&i==6)m.timeChanger=!m.timeChanger;else if(c==2&&i==4)m.fps=!m.fps;else if(c==2&&i==5)m.potionHud=!m.potionHud;
+        else if(c==2&&i==7)NullUiSettings.worldParticles=!NullUiSettings.worldParticles;else if(c==2&&i==8)NullUiSettings.playerTrail=!NullUiSettings.playerTrail;else if(c==2&&i==9)NullUiSettings.toggleScreenStretch();
         else if(c==3&&i==6)m.totemCounter=!m.totemCounter;else if(c==3&&i==7)m.foodHud=!m.foodHud;else if(c==3&&i==8)m.xpHud=!m.xpHud;else if(c==3&&i==1)m.armorStatus=!m.armorStatus;else if(c==3&&i==2)m.armorHud=!m.armorHud;else if(c==3&&i==3)m.coordinates=!m.coordinates;else if(c==3&&i==4)m.durability=!m.durability;else if(c==3&&i==5)m.inventory=!m.inventory;
         else if(c==1&&i==2)m.sprintDisplay=!m.sprintDisplay;else if(c==1&&i==3)m.jumpStats=!m.jumpStats;else if(c==1&&i==4)m.speedGraph=!m.speedGraph;
         else if(c==4&&i==1)m.sessionInfo=!m.sessionInfo;else if(c==4&&i==2)m.clock=!m.clock;else if(c==4&&i==4)m.notifications=!m.notifications;
@@ -171,9 +172,9 @@ public final class ClickGuiScreen extends Screen {
             int row=(int)(my-(y+62))/54;int i=row+1;String q=search.getText().toLowerCase();
             int actual=0;for(int n=1;n<categories()[selected].length;n++){if(!q.isBlank()&&!categories()[selected][n].toLowerCase().contains(q))continue;if(actual++==row){if(isSupported(selected,n)){toggle(selected,n);return true;}break;}}
         }
-        if(my>=y+20&&my<=y+42&&mx>=x+w-190&&mx<=x+w-142){NullUiSettings.setMode(NullUiSettings.LayoutMode.FOUR_THREE);NullUiSettings.setScreenRatio(4,3);GlassVisualConfig.save();init();return true;}
-        if(my>=y+20&&my<=y+42&&mx>=x+w-138&&mx<=x+w-90){NullUiSettings.setMode(NullUiSettings.LayoutMode.FIT);NullUiSettings.setScreenRatio(16,9);GlassVisualConfig.save();init();return true;}
-        if(my>=y+20&&my<=y+42&&mx>=x+w-86&&mx<=x+w-18){NullUiSettings.setMode(NullUiSettings.LayoutMode.STRETCH);GlassVisualConfig.save();init();return true;}
+        if(my>=y+20&&my<=y+42&&mx>=x+w-190&&mx<=x+w-142){NullUiSettings.setStretchMode(NullUiSettings.StretchMode.FOUR_THREE);GlassVisualConfig.save();return true;}
+        if(my>=y+20&&my<=y+42&&mx>=x+w-138&&mx<=x+w-90){NullUiSettings.setStretchMode(NullUiSettings.StretchMode.SIXTEEN_NINE);GlassVisualConfig.save();return true;}
+        if(my>=y+20&&my<=y+42&&mx>=x+w-86&&mx<=x+w-18){NullUiSettings.setStretchMode(NullUiSettings.StretchMode.MANUAL);GlassVisualConfig.save();return true;}
         return false;
     }
     @Override public boolean shouldPause(){return false;}
