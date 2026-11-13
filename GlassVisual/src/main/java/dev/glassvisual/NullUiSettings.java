@@ -12,11 +12,13 @@ public final class NullUiSettings {
     private NullUiSettings() {}
     public static LayoutMode mode() { return mode; }
     public static float scale() { return scale; }
-    public static void setMode(LayoutMode value) { mode = value; }
-    public static void adjustScale(float delta) { scale = Math.max(0.75f, Math.min(1.25f, scale + delta)); }
+    public static void setMode(LayoutMode value) { if (value != null) mode = value; }
+    public static void setScale(float value) { scale = Math.max(0.75f, Math.min(1.25f, value)); }
+    public static void adjustScale(float delta) { setScale(scale + delta); }
 
     // Changes the actual game window aspect ratio; GPU fullscreen stretching is controlled by the graphics driver.
     public static void setScreenRatio(int numerator, int denominator) {
+        if (numerator <= 0 || denominator <= 0) return;
         MinecraftClient client = MinecraftClient.getInstance();
         Window window = client.getWindow();
         if (window.isFullscreen()) window.toggleFullscreen();
