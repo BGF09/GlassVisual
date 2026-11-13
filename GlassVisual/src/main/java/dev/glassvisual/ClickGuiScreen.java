@@ -6,8 +6,8 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 
 public final class ClickGuiScreen extends Screen {
-    private static final int SHADE=0xA9000000, PANEL=0xF00D0F14, SIDE=0xFF10131A, CARD=0xFF171B24;
-    private static final int ROW=0xFF1D222D, WHITE=0xFFF1F3F8, MUTED=0xFF8992A3;
+    private static final int SHADE=0x440D1424, PANEL=0xEEF3F6FC, SIDE=0xFFE8EEF7, CARD=0xFFFFFFFF;
+    private static final int ROW=0xFFF1F4FA, WHITE=0xFF20283A, MUTED=0xFF748099;
     private static final String[][] RU={
         {"Бой","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
         {"Движение","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
@@ -52,7 +52,7 @@ public final class ClickGuiScreen extends Screen {
         String[] cats=categoryNames();
         for(int i=0;i<cats.length;i++){
             int cy=y+57+i*37;boolean active=i==selected;
-            if(active){ctx.fill(x+8,cy-5,x+137,cy+25,0xFF222936);ctx.fill(x+8,cy-5,x+11,cy+25,accent);}
+            if(active){ctx.fill(x+8,cy-5,x+137,cy+25,0xFFDCE8FA);ctx.fill(x+8,cy-5,x+11,cy+25,accent);}
             ctx.drawText(textRenderer,cats[i],x+20,cy+5,active?WHITE:MUTED,active);
         }
         ctx.drawText(textRenderer,tr("НАСТРОЙКИ","SETTINGS"),x+17,y+h-111,MUTED,true);
@@ -86,10 +86,10 @@ public final class ClickGuiScreen extends Screen {
             if(supported){
                 boolean enabled=enabled(selected,i);String state=enabled?"ON":"OFF";
                 int sw=textRenderer.getWidth(state);
-                ctx.fill(listX+listW-48,rowY+13,listX+listW-12,rowY+34,enabled?0xFF244C3A:0xFF343945);
-                ctx.drawText(textRenderer,state,listX+listW-30-sw/2,rowY+19,enabled?0xFF7CF0A9:0xFFB2B9C5,true);
+                ctx.fill(listX+listW-48,rowY+13,listX+listW-12,rowY+34,enabled?0xFFDDF6E8:0xFFE9EDF4);
+                ctx.drawText(textRenderer,state,listX+listW-30-sw/2,rowY+19,enabled?0xFF168A58:0xFF7E899B,true);
             }else{
-                ctx.drawText(textRenderer,tr("СКОРО","SOON"),listX+listW-50,rowY+19,MUTED,false);
+                ctx.drawText(textRenderer,tr("СКОРО","SOON"),listX+listW-50,rowY+19,0xFF9AA4B5,false);
             }
             rowY+=54;shown++;
             if(rowY>y+h-24)break;
