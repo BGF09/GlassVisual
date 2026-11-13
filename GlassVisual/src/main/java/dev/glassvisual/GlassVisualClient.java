@@ -44,6 +44,7 @@ public final class GlassVisualClient implements ClientModInitializer {
                 player.setSprinting(canSprint);
             }
             NullMovementTracker.tick(client);
+            NullHitVisuals.tick(client);
             NullParticleRenderer.tick(client);
             TargetNotifier.tick(client);
             while (openHudEditor.wasPressed()) {
@@ -62,6 +63,7 @@ public final class GlassVisualClient implements ClientModInitializer {
                     && hit.getEntity() instanceof LivingEntity target && target.isAlive()) {
                 TargetHudRenderer.render(context, client, target);
             }
+            if (MODULES.hitVisuals) NullHitVisuals.render(context, client);
             NullParticleRenderer.render(context, client);
             HudOverlayRenderer.render(context, client);
             Notifier.render(context, client);
@@ -84,5 +86,12 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean speedGraph;
         public boolean sessionInfo;
         public boolean clock;
+        public boolean hitVisuals;
+        public boolean combatHud;
+        public boolean worldTint;
+        public boolean crosshair;
+        public boolean durability;
+        public boolean inventory;
+        public boolean notifications = true;
     }
 }
