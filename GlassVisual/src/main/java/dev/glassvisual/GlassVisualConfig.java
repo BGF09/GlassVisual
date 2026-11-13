@@ -27,6 +27,8 @@ public final class GlassVisualConfig {
             NullTheme.select(data.theme);
             NullUiSettings.particles = data.particles;
             NullUiSettings.setScale(data.uiScale);
+            try { NullUiSettings.setMode(NullUiSettings.LayoutMode.valueOf(data.layoutMode)); }
+            catch (IllegalArgumentException ignored) { NullUiSettings.setMode(NullUiSettings.LayoutMode.FIT); }
         } catch (Exception exception) {
             System.err.println("[GlassVisual] Could not load config: " + exception.getMessage());
         }
@@ -42,6 +44,7 @@ public final class GlassVisualConfig {
         data.theme = NullTheme.selectedIndex();
         data.particles = NullUiSettings.particles;
         data.uiScale = NullUiSettings.scale();
+        data.layoutMode = NullUiSettings.mode().name();
         try {
             Files.createDirectories(FILE.getParent());
             Files.writeString(FILE, GSON.toJson(data));
@@ -59,5 +62,6 @@ public final class GlassVisualConfig {
         boolean particles = true;
         int theme;
         float uiScale = 1.0f;
+        String layoutMode = "FIT";
     }
 }
