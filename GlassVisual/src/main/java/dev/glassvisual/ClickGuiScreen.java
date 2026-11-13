@@ -6,8 +6,8 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 
 public final class ClickGuiScreen extends Screen {
-    private static final int SHADE=0x440D1424, PANEL=0xEEF3F6FC, SIDE=0xFFE8EEF7, CARD=0xFFFFFFFF;
-    private static final int ROW=0xFFF1F4FA, WHITE=0xFF20283A, MUTED=0xFF748099;
+    private static final int SHADE=0x99060A12, PANEL=0xF21A202D, SIDE=0xFF141A25, CARD=0xFF242D3B;
+    private static final int ROW=0xFF242D3B, WHITE=0xFFF1F4FC, MUTED=0xFF9AA8BD;
     private static final String[][] RU={
         {"Бой","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
         {"Движение","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
@@ -52,7 +52,7 @@ public final class ClickGuiScreen extends Screen {
         String[] cats=categoryNames();
         for(int i=0;i<cats.length;i++){
             int cy=y+57+i*37;boolean active=i==selected;
-            if(active){roundedFill(ctx,x+8,cy-5,129,30,8,0xFFDCE8FA);ctx.fill(x+8,cy-5,x+11,cy+25,accent);}
+            if(active){roundedFill(ctx,x+8,cy-5,129,30,8,0xFF293447);ctx.fill(x+8,cy-5,x+11,cy+25,accent);}
             ctx.drawText(textRenderer,cats[i],x+20,cy+5,active?WHITE:MUTED,active);
         }
         ctx.drawText(textRenderer,tr("НАСТРОЙКИ","SETTINGS"),x+17,y+h-111,MUTED,true);
@@ -66,19 +66,14 @@ public final class ClickGuiScreen extends Screen {
         drawSmallButton(ctx,x+w-190,y+20,48,22,"4:3",accent);
         drawSmallButton(ctx,x+w-138,y+20,48,22,"16:9",accent);
         drawSmallButton(ctx,x+w-86,y+20,68,22,"STRETCH",accent);
-        ctx.drawText(textRenderer,tr("ЦВЕТ","ACCENT"),x+164,y+62,MUTED,true);
-        for(int i=0;i<NullTheme.colorCount();i++){
-            int bx=x+218+i*24;ctx.fill(bx,y+59,bx+17,y+76,NullTheme.color(i));
-            if(i==NullTheme.selectedIndex()){ctx.fill(bx-2,y+57,bx+19,y+78,0xFFFFFFFF);ctx.fill(bx,y+59,bx+17,y+76,NullTheme.color(i));}
-        }
-        int listX=x+164,listY=y+91,listW=w-184;
+        int listX=x+164,listY=y+62,listW=w-184;
         String q=search.getText().toLowerCase();
         int rowY=listY,shown=0;
         String[][] cat=categories();
         for(int i=1;i<cat[selected].length;i++){
             String name=cat[selected][i];if(!q.isBlank()&&!name.toLowerCase().contains(q))continue;
             int rh=48;roundedFill(ctx,listX,rowY,listW,rh,9,CARD);
-            ctx.fill(listX,rowY,listX+3,rowY+rh,0xFF303746);
+            ctx.fill(listX,rowY,listX+3,rowY+rh,accent);
             ctx.drawText(textRenderer,name,listX+14,rowY+8,WHITE,true);
             String desc=description(name);
             ctx.drawText(textRenderer,desc,listX+14,rowY+24,MUTED,false);
@@ -86,8 +81,8 @@ public final class ClickGuiScreen extends Screen {
             if(supported){
                 boolean enabled=enabled(selected,i);String state=enabled?"ON":"OFF";
                 int sw=textRenderer.getWidth(state);
-                roundedFill(ctx,listX+listW-48,rowY+13,36,21,8,enabled?0xFFDDF6E8:0xFFE9EDF4);
-                ctx.drawText(textRenderer,state,listX+listW-30-sw/2,rowY+19,enabled?0xFF168A58:0xFF7E899B,true);
+                roundedFill(ctx,listX+listW-48,rowY+13,36,21,8,enabled?0xFF174B3B:0xFF343D4D);
+                ctx.drawText(textRenderer,state,listX+listW-30-sw/2,rowY+19,enabled?0xFF66E0A7:0xFFB0BBD0,true);
             }else{
                 ctx.drawText(textRenderer,tr("СКОРО","SOON"),listX+listW-50,rowY+19,0xFF9AA4B5,false);
             }
@@ -159,7 +154,7 @@ public final class ClickGuiScreen extends Screen {
         }
     }
     private void drawSmallButton(DrawContext ctx,int bx,int by,int bw,int bh,String label,int accent){
-        roundedFill(ctx,bx,by,bw,bh,6,0xFF202631);ctx.fill(bx,by,bx+2,by+bh,accent);
+        roundedFill(ctx,bx,by,bw,bh,6,0xFF293447);ctx.fill(bx,by,bx+2,by+bh,accent);
         ctx.drawCenteredTextWithShadow(textRenderer,label,bx+bw/2,by+7,WHITE);
     }
     @Override public boolean mouseClicked(double mx,double my,int button){
@@ -168,9 +163,8 @@ public final class ClickGuiScreen extends Screen {
         for(int i=0;i<categories().length;i++){int cy=y+57+i*37;if(mx>=x+8&&mx<=x+137&&my>=cy-5&&my<=cy+25){selected=i;return true;}}
         if(mx>=x+14&&mx<=x+126&&my>=y+h-89&&my<=y+h-66){NullUiSettings.toggleLanguage();GlassVisualConfig.save();init();return true;}
         if(mx>=x+14&&mx<=x+126&&my>=y+h-60&&my<=y+h-37){NullUiSettings.particles=!NullUiSettings.particles;GlassVisualConfig.save();return true;}
-        if(mx>=x+164&&my>=y+57&&my<=y+80){for(int i=0;i<NullTheme.colorCount();i++){int bx=x+218+i*24;if(mx>=bx-2&&mx<=bx+19){NullTheme.select(i);GlassVisualConfig.save();return true;}}}
-        if(mx>=x+164&&mx<=x+w-20&&my>=y+91&&my<=y+h-20){
-            int row=(int)(my-(y+91))/54;int i=row+1;String q=search.getText().toLowerCase();
+        if(mx>=x+164&&mx<=x+w-20&&my>=y+62&&my<=y+h-20){
+            int row=(int)(my-(y+62))/54;int i=row+1;String q=search.getText().toLowerCase();
             int actual=0;for(int n=1;n<categories()[selected].length;n++){if(!q.isBlank()&&!categories()[selected][n].toLowerCase().contains(q))continue;if(actual++==row){if(isSupported(selected,n)){toggle(selected,n);return true;}break;}}
         }
         if(my>=y+20&&my<=y+42&&mx>=x+w-190&&mx<=x+w-142){NullUiSettings.setMode(NullUiSettings.LayoutMode.FOUR_THREE);NullUiSettings.setScreenRatio(4,3);GlassVisualConfig.save();init();return true;}
