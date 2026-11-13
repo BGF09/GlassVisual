@@ -271,10 +271,19 @@ public final class HudOverlayRenderer {
     }
 
     private static void panel(DrawContext ctx, int x, int y, int w, int h, int accent) {
-        ctx.fill(x + 2, y + 2, x + w + 2, y + h + 2, 0x44000000);
-        ctx.fill(x, y, x + w, y + h, PANEL);
-        ctx.fill(x, y, x + w, y + 2, 0x55FFFFFF);
-        ctx.fill(x, y, x + 2, y + h, accent);
+        roundedFill(ctx, x + 2, y + 2, w, h, 7, 0x33000000);
+        roundedFill(ctx, x, y, w, h, 7, PANEL);
+        ctx.fill(x + 7, y, x + w - 7, y + 2, 0x55FFFFFF);
+        ctx.fill(x, y + 6, x + 2, y + h - 6, accent);
+    }
+
+    private static void roundedFill(DrawContext ctx, int x, int y, int w, int h, int radius, int color) {
+        int r = Math.max(1, Math.min(radius, Math.min(w, h) / 2));
+        for (int row = 0; row < h; row++) {
+            int edge = row < r ? r - 1 - row : (row >= h - r ? row - (h - r) : -1);
+            int inset = edge < 0 ? 0 : r - (int) Math.floor(Math.sqrt(Math.max(0, r * r - edge * edge)));
+            ctx.fill(x + inset, y + row, x + w - inset, y + row + 1, color);
+        }
     }
 
     private static void drawKey(DrawContext ctx, MinecraftClient client, String label,
