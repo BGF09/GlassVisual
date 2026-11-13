@@ -2,7 +2,10 @@ name: Build NULL Client and Windows Apps
 
 on:
   push:
-    branches: ['**']
+    branches: [update/glassvisual-v1.1]
+    paths:
+      - 'Apps/**'
+      - '.github/workflows/build.yml'
   workflow_dispatch:
 
 permissions:
