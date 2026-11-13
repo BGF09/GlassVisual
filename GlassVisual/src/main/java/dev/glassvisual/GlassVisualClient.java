@@ -24,6 +24,7 @@ public final class GlassVisualClient implements ClientModInitializer {
         });
         ClientTickEvents.END_CLIENT_TICK.register(client->{
             NullParticleRenderer.tick(client);
+            TargetNotifier.tick(client);
             while(openClickGui.wasPressed()){
                 if(client.currentScreen==null)client.setScreen(new ClickGuiScreen());
                 else if(client.currentScreen instanceof ClickGuiScreen)client.setScreen(null);
@@ -35,6 +36,7 @@ public final class GlassVisualClient implements ClientModInitializer {
             if(MODULES.targetHud&&client.crosshairTarget instanceof EntityHitResult hit&&hit.getEntity() instanceof LivingEntity target&&target.isAlive())
                 TargetHudRenderer.render(context,client,target);
             HudOverlayRenderer.render(context,client);
+            Notifier.render(context,client);
         });
     }
     public static final class ModuleState {
