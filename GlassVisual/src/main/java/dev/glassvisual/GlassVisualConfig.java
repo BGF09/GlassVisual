@@ -35,8 +35,13 @@ public final class GlassVisualConfig {
             HudLayout.coordinatesY = data.coordinatesY;
             HudLayout.keysX = data.keysX;
             HudLayout.keysY = data.keysY;
-            try { NullUiSettings.setMode(NullUiSettings.LayoutMode.valueOf(data.layoutMode)); }
-            catch (IllegalArgumentException ignored) { NullUiSettings.setMode(NullUiSettings.LayoutMode.FIT); }
+            try {
+                NullUiSettings.setMode(data.layoutMode == null
+                    ? NullUiSettings.LayoutMode.FIT
+                    : NullUiSettings.LayoutMode.valueOf(data.layoutMode));
+            } catch (IllegalArgumentException ignored) {
+                NullUiSettings.setMode(NullUiSettings.LayoutMode.FIT);
+            }
         } catch (Exception exception) {
             System.err.println("[GlassVisual] Could not load config: " + exception.getMessage());
         }
