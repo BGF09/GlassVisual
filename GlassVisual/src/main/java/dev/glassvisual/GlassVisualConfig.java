@@ -21,6 +21,8 @@ public final class GlassVisualConfig {
             m.targetHud=d.targetHud; m.keystrokes=d.keystrokes; m.coordinates=d.coordinates; m.fps=d.fps;
             m.glowAccent=d.glowAccent; m.arrayList=d.arrayList; m.armorHud=d.armorHud; m.potionHud=d.potionHud; m.ping=d.ping; m.autoSprint=d.autoSprint;
             m.sprintDisplay=d.sprintDisplay; m.jumpStats=d.jumpStats; m.speedGraph=d.speedGraph; m.sessionInfo=d.sessionInfo; m.clock=d.clock;
+            m.hitVisuals=d.hitVisuals; m.combatHud=d.combatHud; m.worldTint=d.worldTint; m.crosshair=d.crosshair;
+            m.durability=d.durability; m.inventory=d.inventory; m.notifications=d.notifications;
             NullTheme.select(d.theme);
             NullUiSettings.particles=d.particles;
             NullUiSettings.setScale(d.uiScale);
@@ -43,6 +45,8 @@ public final class GlassVisualConfig {
         d.targetHud=m.targetHud; d.keystrokes=m.keystrokes; d.coordinates=m.coordinates; d.fps=m.fps;
         d.glowAccent=m.glowAccent; d.arrayList=m.arrayList; d.armorHud=m.armorHud; d.potionHud=m.potionHud; d.ping=m.ping; d.autoSprint=m.autoSprint;
         d.sprintDisplay=m.sprintDisplay; d.jumpStats=m.jumpStats; d.speedGraph=m.speedGraph; d.sessionInfo=m.sessionInfo; d.clock=m.clock;
+        d.hitVisuals=m.hitVisuals; d.combatHud=m.combatHud; d.worldTint=m.worldTint; d.crosshair=m.crosshair;
+        d.durability=m.durability; d.inventory=m.inventory; d.notifications=m.notifications;
         d.theme=NullTheme.selectedIndex(); d.particles=NullUiSettings.particles; d.uiScale=NullUiSettings.scale();
         d.layoutMode=NullUiSettings.mode().name(); d.language=NullUiSettings.language();
         d.watermarkX=HudLayout.watermarkX; d.watermarkY=HudLayout.watermarkY;
@@ -55,7 +59,8 @@ public final class GlassVisualConfig {
     }
 
     private static final class Data {
-        boolean targetHud=true, keystrokes, coordinates, fps, glowAccent=true, arrayList=true, armorHud, potionHud, ping, autoSprint, sprintDisplay, jumpStats, speedGraph, sessionInfo, clock;
+        boolean targetHud=true, keystrokes, coordinates, fps, glowAccent=true, arrayList=true, armorHud, potionHud, ping, autoSprint, sprintDisplay, jumpStats, speedGraph, sessionInfo, clock, hitVisuals, combatHud, worldTint, crosshair, durability, inventory;
+        boolean notifications=true;
         boolean particles=true; int theme; float uiScale=1.0f; String layoutMode="FIT", language="ru";
         int watermarkX=12,watermarkY=12,fpsX=-1,fpsY=12,coordinatesX=12,coordinatesY=-1,keysX=12,keysY=-1;
         int arrayListX=-1,arrayListY=70,armorX=12,armorY=-1,potionsX=-1,potionsY=170,pingX=-1,pingY=42;
