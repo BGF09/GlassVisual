@@ -112,7 +112,7 @@ public final class NullWorldEffects {
         TrailPoint(Vec3d position, int age) { this.position = position; this.age = age; }
     }
     private static final class Spark {
-        Vec3d position; final double vx, vy, vz, size; final int life; int age;
+        Vec3d position; final double vx, vz, size; double vy; final int life; int age;
         Spark(Vec3d position, double vx, double vy, double vz, int life, double size) {
             this.position = position; this.vx = vx; this.vy = vy; this.vz = vz; this.life = life; this.size = size;
         }
