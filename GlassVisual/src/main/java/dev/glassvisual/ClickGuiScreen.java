@@ -29,6 +29,7 @@ public final class ClickGuiScreen extends Screen {
     private String tr(String ru,String en){return NullUiSettings.russian()?ru:en;}
     @Override public void renderBackground(DrawContext ctx,int mx,int my,float delta){}
     @Override protected void init(){
+        float s=NullUiSettings.scale()-0.75f;
         w=Math.min(width-24,Math.round(790*(0.88f+s*0.24f)));
         h=Math.min(height-24,Math.round(470*(0.88f+s*0.24f)));
         w=Math.max(420,w);h=Math.max(300,h);x=(width-w)/2;y=(height-h)/2;
