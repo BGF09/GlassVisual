@@ -24,6 +24,10 @@ public final class GlassVisualConfig {
             GlassVisualClient.MODULES.coordinates = data.coordinates;
             GlassVisualClient.MODULES.fps = data.fps;
             GlassVisualClient.MODULES.glowAccent = data.glowAccent;
+            GlassVisualClient.MODULES.arrayList = data.arrayList;
+            GlassVisualClient.MODULES.armorHud = data.armorHud;
+            GlassVisualClient.MODULES.potionHud = data.potionHud;
+            GlassVisualClient.MODULES.ping = data.ping;
             NullTheme.select(data.theme);
             NullUiSettings.particles = data.particles;
             NullUiSettings.setScale(data.uiScale);
@@ -35,6 +39,14 @@ public final class GlassVisualConfig {
             HudLayout.coordinatesY = data.coordinatesY;
             HudLayout.keysX = data.keysX;
             HudLayout.keysY = data.keysY;
+            HudLayout.arrayListX = data.arrayListX;
+            HudLayout.arrayListY = data.arrayListY;
+            HudLayout.armorX = data.armorX;
+            HudLayout.armorY = data.armorY;
+            HudLayout.potionsX = data.potionsX;
+            HudLayout.potionsY = data.potionsY;
+            HudLayout.pingX = data.pingX;
+            HudLayout.pingY = data.pingY;
             try {
                 NullUiSettings.setMode(data.layoutMode == null
                     ? NullUiSettings.LayoutMode.FIT
@@ -54,6 +66,10 @@ public final class GlassVisualConfig {
         data.coordinates = GlassVisualClient.MODULES.coordinates;
         data.fps = GlassVisualClient.MODULES.fps;
         data.glowAccent = GlassVisualClient.MODULES.glowAccent;
+        data.arrayList = GlassVisualClient.MODULES.arrayList;
+        data.armorHud = GlassVisualClient.MODULES.armorHud;
+        data.potionHud = GlassVisualClient.MODULES.potionHud;
+        data.ping = GlassVisualClient.MODULES.ping;
         data.theme = NullTheme.selectedIndex();
         data.particles = NullUiSettings.particles;
         data.uiScale = NullUiSettings.scale();
@@ -66,6 +82,14 @@ public final class GlassVisualConfig {
         data.coordinatesY = HudLayout.coordinatesY;
         data.keysX = HudLayout.keysX;
         data.keysY = HudLayout.keysY;
+        data.arrayListX = HudLayout.arrayListX;
+        data.arrayListY = HudLayout.arrayListY;
+        data.armorX = HudLayout.armorX;
+        data.armorY = HudLayout.armorY;
+        data.potionsX = HudLayout.potionsX;
+        data.potionsY = HudLayout.potionsY;
+        data.pingX = HudLayout.pingX;
+        data.pingY = HudLayout.pingY;
         try {
             Files.createDirectories(FILE.getParent());
             Files.writeString(FILE, GSON.toJson(data));
@@ -80,6 +104,10 @@ public final class GlassVisualConfig {
         boolean coordinates;
         boolean fps;
         boolean glowAccent = true;
+        boolean arrayList = true;
+        boolean armorHud;
+        boolean potionHud;
+        boolean ping;
         boolean particles = true;
         int theme;
         float uiScale = 1.0f;
@@ -88,5 +116,9 @@ public final class GlassVisualConfig {
         int fpsX = -1, fpsY = 12;
         int coordinatesX = 12, coordinatesY = -1;
         int keysX = 12, keysY = -1;
+        int arrayListX = -1, arrayListY = 70;
+        int armorX = 12, armorY = -1;
+        int potionsX = -1, potionsY = 170;
+        int pingX = -1, pingY = 42;
     }
 }
