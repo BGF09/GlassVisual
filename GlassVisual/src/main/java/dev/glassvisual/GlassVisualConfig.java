@@ -27,6 +27,14 @@ public final class GlassVisualConfig {
             NullTheme.select(data.theme);
             NullUiSettings.particles = data.particles;
             NullUiSettings.setScale(data.uiScale);
+            HudLayout.watermarkX = data.watermarkX;
+            HudLayout.watermarkY = data.watermarkY;
+            HudLayout.fpsX = data.fpsX;
+            HudLayout.fpsY = data.fpsY;
+            HudLayout.coordinatesX = data.coordinatesX;
+            HudLayout.coordinatesY = data.coordinatesY;
+            HudLayout.keysX = data.keysX;
+            HudLayout.keysY = data.keysY;
             try { NullUiSettings.setMode(NullUiSettings.LayoutMode.valueOf(data.layoutMode)); }
             catch (IllegalArgumentException ignored) { NullUiSettings.setMode(NullUiSettings.LayoutMode.FIT); }
         } catch (Exception exception) {
@@ -45,6 +53,14 @@ public final class GlassVisualConfig {
         data.particles = NullUiSettings.particles;
         data.uiScale = NullUiSettings.scale();
         data.layoutMode = NullUiSettings.mode().name();
+        data.watermarkX = HudLayout.watermarkX;
+        data.watermarkY = HudLayout.watermarkY;
+        data.fpsX = HudLayout.fpsX;
+        data.fpsY = HudLayout.fpsY;
+        data.coordinatesX = HudLayout.coordinatesX;
+        data.coordinatesY = HudLayout.coordinatesY;
+        data.keysX = HudLayout.keysX;
+        data.keysY = HudLayout.keysY;
         try {
             Files.createDirectories(FILE.getParent());
             Files.writeString(FILE, GSON.toJson(data));
@@ -63,5 +79,9 @@ public final class GlassVisualConfig {
         int theme;
         float uiScale = 1.0f;
         String layoutMode = "FIT";
+        int watermarkX = 12, watermarkY = 12;
+        int fpsX = -1, fpsY = 12;
+        int coordinatesX = 12, coordinatesY = -1;
+        int keysX = 12, keysY = -1;
     }
 }
