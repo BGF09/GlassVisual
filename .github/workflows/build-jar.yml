@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: null-jar-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-jar:
     runs-on: ubuntu-latest
