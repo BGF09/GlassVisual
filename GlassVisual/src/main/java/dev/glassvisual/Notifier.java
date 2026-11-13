@@ -135,17 +135,15 @@ public final class Notifier {
     private static void drawCard(DrawContext ctx, MinecraftClient client, Card card,
                                  int x, int y, int width, int height, float alpha) {
         int fade = Math.max(0, Math.min(255, Math.round(alpha * 255)));
-        ctx.fill(x - 2, y - 2, x + width + 2, y + height + 2, (Math.round(alpha * 35) << 24) | 0x00101828);
-        ctx.fill(x, y, x + width, y + height, (fade << 24) | (BG & 0x00FFFFFF));
+        roundedFill(ctx, x - 2, y - 2, width + 4, height + 4, 12, (Math.round(alpha * 35) << 24) | 0x00101828);
         int border = (Math.round(alpha * 170) << 24) | (BORDER & 0x00FFFFFF);
-        ctx.fill(x, y, x + width, y + 1, border);
-        ctx.fill(x, y + height - 1, x + width, y + height, border);
-        ctx.fill(x, y, x + 1, y + height, border);
-        ctx.fill(x + width - 1, y, x + width, y + height, border);
+        roundedFill(ctx, x, y, width, height, 10, border);
+        roundedFill(ctx, x + 1, y + 1, width - 2, height - 2, 9, (fade << 24) | (BG & 0x00FFFFFF));
         int accent = (fade << 24) | (card.accent & 0x00FFFFFF);
 
         if (card.type == Type.MODULE) {
-            drawBell(ctx, x + 10, y + 9, accent, alpha);
+            int sway = (int) Math.round(Math.sin(System.nanoTime() / 110_000_000.0) * 1.2);
+            drawBell(ctx, x + 10 + sway, y + 9, accent, alpha);
             ctx.fill(x + 36, y + 7, x + 37, y + height - 7, (Math.round(alpha * 90) << 24) | 0x00A9C7DA);
             ctx.drawText(client.textRenderer, card.text, x + 47, y + 15,
                 (fade << 24) | 0x00F5F8FF, true);
@@ -164,6 +162,15 @@ public final class Notifier {
                 ctx.fill(ix - 5, y + 5, x + width - 5, y + height - 5, (Math.round(alpha * 90) << 24) | 0x00A9B6C7);
                 ctx.drawItem(card.icon, ix, y + 10);
             }
+        }
+    }
+
+    private static void roundedFill(DrawContext ctx, int x, int y, int width, int height, int radius, int color) {
+        int r = Math.max(1, Math.min(radius, Math.min(width, height) / 2));
+        for (int row = 0; row < height; row++) {
+            int edge = row < r ? r - 1 - row : (row >= height - r ? row - (height - r) : -1);
+            int inset = edge < 0 ? 0 : r - (int) Math.floor(Math.sqrt(Math.max(0, r * r - edge * edge)));
+            ctx.fill(x + inset, y + row, x + width - inset, y + row + 1, color);
         }
     }
 
