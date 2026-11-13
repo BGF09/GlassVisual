@@ -107,6 +107,7 @@ public final class ClickGuiScreen extends Screen {
         else if(category==1&&item==6)m.keystrokes=!m.keystrokes;
         else if(category==2&&item==4)m.fps=!m.fps;
         else if(category==3&&item==3)m.coordinates=!m.coordinates;
+        Notifier.module(new Module(CATEGORIES[category][item]), moduleEnabled(category,item));
     }
     @Override public boolean mouseClicked(double mouseX,double mouseY,int button){
         if(button==0){
