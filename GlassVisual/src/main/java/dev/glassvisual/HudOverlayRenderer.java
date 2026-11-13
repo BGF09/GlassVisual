@@ -169,14 +169,16 @@ public final class HudOverlayRenderer {
             }
         }
         if (modules.inventory) {
-            var stack = client.player.getMainHandStack();
-            String item = stack.isEmpty() ? "EMPTY" : stack.getName().getString();
-            if (item.length() > 17) item = item.substring(0, 16) + "…";
-            int x = 12, y = height - 124;
-            panel(ctx, x, y, 158, 26, accent);
-            if (!stack.isEmpty()) ctx.drawItem(stack, x + 6, y + 4);
-            ctx.drawText(client.textRenderer, item, x + 29, y + 5, TEXT, true);
-            ctx.drawText(client.textRenderer, "x" + stack.getCount(), x + 29, y + 15, MUTED, false);
+            int x = width / 2 - 94, y = height - 82;
+            panel(ctx, x, y, 188, 27, accent);
+            for (int slot = 0; slot < 9; slot++) {
+                int sx = x + 3 + slot * 20;
+                boolean selected = client.player.getInventory().selectedSlot == slot;
+                ctx.fill(sx, y + 3, sx + 19, y + 24, selected ? 0xFFDCE8FA : 0x22313C50);
+                if (selected) ctx.fill(sx, y + 3, sx + 19, y + 5, accent);
+                var stack = client.player.getInventory().getStack(slot);
+                if (!stack.isEmpty()) ctx.drawItem(stack, sx + 1, y + 4);
+            }
         }
     }
 
