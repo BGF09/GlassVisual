@@ -25,6 +25,10 @@ public final class GlassVisualConfig {
             m.durability=d.durability; m.inventory=d.inventory; m.notifications=d.notifications; m.armorStatus=d.armorStatus; m.timeChanger=d.timeChanger; m.blockOutline=d.blockOutline; m.aimAssist=d.aimAssist; m.directionHud=d.directionHud; m.totemCounter=d.totemCounter; m.foodHud=d.foodHud; m.xpHud=d.xpHud;
             NullTheme.select(d.theme);
             NullUiSettings.particles=d.particles;
+            NullUiSettings.worldParticles=d.worldParticles;
+            NullUiSettings.playerTrail=d.playerTrail;
+            try { NullUiSettings.setStretchMode(d.stretchMode == null ? NullUiSettings.StretchMode.OFF : NullUiSettings.StretchMode.valueOf(d.stretchMode)); }
+            catch (IllegalArgumentException ignored) { NullUiSettings.setStretchMode(NullUiSettings.StretchMode.OFF); }
             NullUiSettings.setScale(d.uiScale);
             NullUiSettings.setLanguage(d.language == null ? "ru" : d.language);
             HudLayout.watermarkX=d.watermarkX; HudLayout.watermarkY=d.watermarkY;
@@ -47,7 +51,9 @@ public final class GlassVisualConfig {
         d.sprintDisplay=m.sprintDisplay; d.jumpStats=m.jumpStats; d.speedGraph=m.speedGraph; d.sessionInfo=m.sessionInfo; d.clock=m.clock;
         d.hitVisuals=m.hitVisuals; d.combatHud=m.combatHud; d.worldTint=m.worldTint; d.crosshair=m.crosshair;
         d.durability=m.durability; d.inventory=m.inventory; d.notifications=m.notifications; d.armorStatus=m.armorStatus; d.timeChanger=m.timeChanger; d.blockOutline=m.blockOutline; d.aimAssist=m.aimAssist; d.directionHud=m.directionHud; d.totemCounter=m.totemCounter; d.foodHud=m.foodHud; d.xpHud=m.xpHud;
-        d.theme=NullTheme.selectedIndex(); d.particles=NullUiSettings.particles; d.uiScale=NullUiSettings.scale();
+        d.theme=NullTheme.selectedIndex(); d.particles=NullUiSettings.particles;
+        d.worldParticles=NullUiSettings.worldParticles; d.playerTrail=NullUiSettings.playerTrail;
+        d.stretchMode=NullUiSettings.stretchMode().name(); d.uiScale=NullUiSettings.scale();
         d.layoutMode=NullUiSettings.mode().name(); d.language=NullUiSettings.language();
         d.watermarkX=HudLayout.watermarkX; d.watermarkY=HudLayout.watermarkY;
         d.fpsX=HudLayout.fpsX; d.fpsY=HudLayout.fpsY; d.coordinatesX=HudLayout.coordinatesX; d.coordinatesY=HudLayout.coordinatesY;
@@ -61,7 +67,7 @@ public final class GlassVisualConfig {
     private static final class Data {
         boolean targetHud=true, keystrokes, coordinates, fps, glowAccent=true, arrayList=true, armorHud, potionHud, ping, autoSprint, sprintDisplay, jumpStats, speedGraph, sessionInfo, clock, hitVisuals, combatHud, worldTint, crosshair, durability, inventory;
         boolean notifications=true, armorStatus, timeChanger, blockOutline, aimAssist, directionHud, totemCounter, foodHud, xpHud;
-        boolean particles=true; int theme; float uiScale=1.0f; String layoutMode="FIT", language="ru";
+        boolean particles=true, worldParticles=true, playerTrail=true; int theme; float uiScale=1.0f; String layoutMode="FIT", language="ru", stretchMode="OFF";
         int watermarkX=12,watermarkY=12,fpsX=-1,fpsY=12,coordinatesX=12,coordinatesY=-1,keysX=12,keysY=-1;
         int arrayListX=-1,arrayListY=70,armorX=12,armorY=-1,potionsX=-1,potionsY=170,pingX=-1,pingY=42;
     }
