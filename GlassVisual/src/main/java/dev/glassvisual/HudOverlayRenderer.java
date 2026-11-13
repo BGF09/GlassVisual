@@ -89,7 +89,7 @@ public final class HudOverlayRenderer {
             GlassVisualClient.MODULES.armorHud, GlassVisualClient.MODULES.potionHud,
             GlassVisualClient.MODULES.ping
         };
-        int x = HudLayout.arrayListX < 0 ? screenWidth - 112 : HudLayout.arrayListX;
+        int x = HudLayout.arrayListX;
         int y = HudLayout.arrayListY;
         for (int i = 0; i < names.length; i++) {
             if (!active[i]) continue;
@@ -144,7 +144,7 @@ public final class HudOverlayRenderer {
     private static void panel(DrawContext ctx, int x, int y, int w, int h, int accent) {
         ctx.fill(x + 2, y + 2, x + w + 2, y + h + 2, 0x44000000);
         ctx.fill(x, y, x + w, y + h, PANEL);
-        ctx.fill(x, y, x + w, y + 2, 0x553FFFFFF);
+        ctx.fill(x, y, x + w, y + 2, 0x55FFFFFF);
         ctx.fill(x, y, x + 2, y + h, accent);
     }
 
