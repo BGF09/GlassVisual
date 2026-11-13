@@ -6,6 +6,10 @@ public final class HudLayout {
     public static int fpsX = -1, fpsY = 12;
     public static int coordinatesX = 12, coordinatesY = -1;
     public static int keysX = 12, keysY = -1;
+    public static int arrayListX = -1, arrayListY = 70;
+    public static int armorX = 12, armorY = -1;
+    public static int potionsX = -1, potionsY = 170;
+    public static int pingX = -1, pingY = 42;
 
     private HudLayout() {}
 }
