@@ -13,10 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 public final class HudOverlayRenderer {
-    private static final int PANEL = 0xDDF7FAFF;
-    private static final int TEXT = 0xFF202A3B;
-    private static final int MUTED = 0xFF758198;
-    private static final int SOFT = 0xFF69758B;
+    private static final int PANEL = 0xE91A202D;
+    private static final int TEXT = 0xFFF1F3FA;
+    private static final int MUTED = 0xFF9AA8BD;
+    private static final int SOFT = 0xFF7D8AA0;
 
     private HudOverlayRenderer() {}
 
@@ -105,7 +105,7 @@ public final class HudOverlayRenderer {
             String speed = String.format(java.util.Locale.ROOT, "%.1f m/s", NullMovementTracker.speed());
             ctx.drawText(client.textRenderer, speed, x + 76, y + 6, TEXT, true);
             int graphX = x + 8, graphY = y + 24, graphW = 126, graphH = 27;
-            ctx.fill(graphX, graphY + graphH - 1, graphX + graphW, graphY + graphH, 0x22313C50);
+            ctx.fill(graphX, graphY + graphH - 1, graphX + graphW, graphY + graphH, 0x55313C50);
             for (int i = 0; i < NullMovementTracker.samples(); i++) {
                 float value = Math.max(0.0f, Math.min(12.0f, NullMovementTracker.speedAt(i)));
                 int bar = Math.max(1, Math.round((value / 12.0f) * (graphH - 2)));
@@ -154,7 +154,7 @@ public final class HudOverlayRenderer {
             ctx.drawText(client.textRenderer, held, x + 58, y + 7, TEXT, true);
             float cooldown = client.player.getAttackCooldownProgress(0.0f);
             int barWidth = Math.round(154 * Math.max(0.0f, Math.min(1.0f, cooldown)));
-            ctx.fill(x + 9, y + 25, x + 163, y + 31, 0xFFDCE3EF);
+            ctx.fill(x + 9, y + 25, x + 163, y + 31, 0xFF303B4D);
             if (barWidth > 0) ctx.fill(x + 9, y + 25, x + 9 + barWidth, y + 31, accent);
         }
         if (modules.durability) {
@@ -177,7 +177,7 @@ public final class HudOverlayRenderer {
             for (int slot = 0; slot < 9; slot++) {
                 int sx = x + 3 + slot * 20;
                 boolean selected = client.player.getInventory().selectedSlot == slot;
-                ctx.fill(sx, y + 3, sx + 19, y + 24, selected ? 0xFFDCE8FA : 0x22313C50);
+                ctx.fill(sx, y + 3, sx + 19, y + 24, selected ? 0xFF303B4D : 0x22313C50);
                 if (selected) ctx.fill(sx, y + 3, sx + 19, y + 5, accent);
                 var stack = client.player.getInventory().getStack(slot);
                 if (!stack.isEmpty()) ctx.drawItem(stack, sx + 1, y + 4);
@@ -279,7 +279,7 @@ public final class HudOverlayRenderer {
     private static void panel(DrawContext ctx, int x, int y, int w, int h, int accent) {
         roundedFill(ctx, x + 2, y + 2, w, h, 7, 0x33000000);
         roundedFill(ctx, x, y, w, h, 7, PANEL);
-        ctx.fill(x + 7, y, x + w - 7, y + 2, 0x55FFFFFF);
+        ctx.fill(x + 7, y, x + w - 7, y + 2, 0x22FFFFFF);
         ctx.fill(x, y + 6, x + 2, y + h - 6, accent);
     }
 
