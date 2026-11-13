@@ -194,12 +194,18 @@ public final class HudOverlayRenderer {
     }
 
     private static void renderArrayList(DrawContext ctx, MinecraftClient client, int accent, int screenWidth) {
-        String[] names = {"Target HUD", "Keystrokes", "FPS", "Coordinates", "Armor HUD", "Potion HUD", "Ping"};
+        String[] names = {"Aim Assist", "Hit Visuals", "Target HUD", "Combat HUD", "Particles",
+            "Auto Sprint", "Sprint Display", "Jump Stats", "Speed Graph", "Keystrokes",
+            "World Tint", "Block Outline", "Crosshair", "FPS", "Potion HUD", "Time Changer",
+            "Armor Status", "Armor HUD", "Coordinates", "Durability", "Inventory",
+            "Session Info", "Clock", "Notifications", "Ping"};
+        var m = GlassVisualClient.MODULES;
         boolean[] active = {
-            GlassVisualClient.MODULES.targetHud, GlassVisualClient.MODULES.keystrokes,
-            GlassVisualClient.MODULES.fps, GlassVisualClient.MODULES.coordinates,
-            GlassVisualClient.MODULES.armorHud, GlassVisualClient.MODULES.potionHud,
-            GlassVisualClient.MODULES.ping
+            m.aimAssist, m.hitVisuals, m.targetHud, m.combatHud, NullUiSettings.particles,
+            m.autoSprint, m.sprintDisplay, m.jumpStats, m.speedGraph, m.keystrokes,
+            m.worldTint, m.blockOutline, m.crosshair, m.fps, m.potionHud, m.timeChanger,
+            m.armorStatus, m.armorHud, m.coordinates, m.durability, m.inventory,
+            m.sessionInfo, m.clock, m.notifications, m.ping
         };
         int x = HudLayout.arrayListX;
         int y = HudLayout.arrayListY;
