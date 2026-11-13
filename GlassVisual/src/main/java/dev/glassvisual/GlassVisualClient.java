@@ -43,6 +43,7 @@ public final class GlassVisualClient implements ClientModInitializer {
                     && player.getHungerManager().getFoodLevel() > 6;
                 player.setSprinting(canSprint);
             }
+            NullMovementTracker.tick(client);
             NullParticleRenderer.tick(client);
             TargetNotifier.tick(client);
             while (openHudEditor.wasPressed()) {
@@ -78,5 +79,10 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean potionHud;
         public boolean ping;
         public boolean autoSprint;
+        public boolean sprintDisplay;
+        public boolean jumpStats;
+        public boolean speedGraph;
+        public boolean sessionInfo;
+        public boolean clock;
     }
 }
