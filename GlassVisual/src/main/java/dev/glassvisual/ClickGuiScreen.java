@@ -103,6 +103,11 @@ public final class ClickGuiScreen extends Screen {
             case "Target HUD" -> tr("Цель под прицелом: здоровье, дистанция и имя","Target under crosshair: health, distance and name");
             case "Auto Sprint" -> tr("Автоматически бежать при движении вперёд","Automatically sprint while moving forward");
             case "Keystrokes" -> tr("Отображение нажатых клавиш","Show pressed movement keys");
+            case "Sprint Display" -> tr("Показывает, включён ли спринт","Shows whether sprint is active");
+            case "Jump Stats" -> tr("Считает прыжки за текущую сессию","Counts jumps in this session");
+            case "Speed Graph" -> tr("График текущей скорости игрока","Live player movement speed graph");
+            case "Session Info" -> tr("Время текущей игровой сессии","Current play session duration");
+            case "Clock" -> tr("Локальные часы в HUD","Local clock in the HUD");
             case "FPS Counter" -> tr("Текущий FPS в компактной панели","Current FPS in a compact panel");
             case "Armor HUD" -> tr("Броня и прочность предметов","Equipped armor and durability");
             case "Potion HUD" -> tr("Эффекты и время действия","Active effects and remaining time");
@@ -112,17 +117,24 @@ public final class ClickGuiScreen extends Screen {
             default -> tr("Визуальный модуль NULL","NULL visual module");
         };
     }
-    private boolean isSupported(int c,int i){return(c==0&&i==3)||(c==1&&(i==1||i==5))||(c==2&&(i==4||i==5))||(c==3&&(i==2||i==3))||(c==4&&(i==3||i==5));}
+    private boolean isSupported(int c,int i){
+        return (c==0&&i==3)||(c==1&&(i==1||i==2||i==3||i==4||i==5))
+            ||(c==2&&(i==4||i==5))||(c==3&&(i==2||i==3))||(c==4&&(i==1||i==2||i==3||i==5));
+    }
     private boolean enabled(int c,int i){var m=GlassVisualClient.MODULES;
         if(c==0&&i==3)return m.targetHud;if(c==1&&i==1)return m.autoSprint;if(c==1&&i==5)return m.keystrokes;
         if(c==2&&i==4)return m.fps;if(c==2&&i==5)return m.potionHud;
         if(c==3&&i==2)return m.armorHud;if(c==3&&i==3)return m.coordinates;
+        if(c==1&&i==2)return m.sprintDisplay;if(c==1&&i==3)return m.jumpStats;if(c==1&&i==4)return m.speedGraph;
+        if(c==4&&i==1)return m.sessionInfo;if(c==4&&i==2)return m.clock;
         if(c==4&&i==3)return m.arrayList;if(c==4&&i==5)return m.ping;return false;
     }
     private void toggle(int c,int i){var m=GlassVisualClient.MODULES;
         if(c==0&&i==3)m.targetHud=!m.targetHud;else if(c==1&&i==1)m.autoSprint=!m.autoSprint;else if(c==1&&i==5)m.keystrokes=!m.keystrokes;
         else if(c==2&&i==4)m.fps=!m.fps;else if(c==2&&i==5)m.potionHud=!m.potionHud;
         else if(c==3&&i==2)m.armorHud=!m.armorHud;else if(c==3&&i==3)m.coordinates=!m.coordinates;
+        else if(c==1&&i==2)m.sprintDisplay=!m.sprintDisplay;else if(c==1&&i==3)m.jumpStats=!m.jumpStats;else if(c==1&&i==4)m.speedGraph=!m.speedGraph;
+        else if(c==4&&i==1)m.sessionInfo=!m.sessionInfo;else if(c==4&&i==2)m.clock=!m.clock;
         else if(c==4&&i==3)m.arrayList=!m.arrayList;else if(c==4&&i==5)m.ping=!m.ping;
         GlassVisualConfig.save();Notifier.module(new Module(categories()[c][i]),enabled(c,i));
     }
