@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>NULL-Launcher</AssemblyName>
+    <ApplicationIcon>null.ico</ApplicationIcon>
     <RootNamespace>NullLauncher</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
