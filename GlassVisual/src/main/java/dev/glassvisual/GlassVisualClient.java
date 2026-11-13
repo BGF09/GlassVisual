@@ -41,6 +41,7 @@ public final class GlassVisualClient implements ClientModInitializer {
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            NullAimAssist.tick(client);
             if (MODULES.timeChanger && client.world != null) {
                 ((ClientWorld.Properties) client.world.getLevelProperties()).setTimeOfDay(6000L);
             }
@@ -117,5 +118,6 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean armorStatus;
         public boolean timeChanger;
         public boolean blockOutline;
+        public boolean aimAssist;
     }
 }
