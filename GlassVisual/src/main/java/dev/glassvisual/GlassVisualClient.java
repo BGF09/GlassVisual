@@ -4,11 +4,15 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexRendering;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.client.world.ClientWorld;
@@ -60,6 +64,19 @@ public final class GlassVisualClient implements ClientModInitializer {
             }
         });
 
+        WorldRenderEvents.BLOCK_OUTLINE.register((context, outline) -> {
+            if (!MODULES.blockOutline || context.matrixStack() == null || context.consumers() == null) return true;
+            MatrixStack matrices = context.matrixStack();
+            var pos = outline.blockPos();
+            var shape = outline.blockState().getOutlineShape(context.world(), pos);
+            matrices.push();
+            matrices.translate(-outline.cameraX(), -outline.cameraY(), -outline.cameraZ());
+            VertexRendering.drawOutline(matrices, context.consumers().getBuffer(RenderLayer.getLines()),
+                shape, pos.getX(), pos.getY(), pos.getZ(), NullTheme.accent());
+            matrices.pop();
+            return false;
+        });
+
         HudRenderCallback.EVENT.register((context, tickCounter) -> {
             MinecraftClient client = MinecraftClient.getInstance();
             if (client.player == null || client.world == null || client.currentScreen != null) return;
@@ -99,5 +116,6 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean notifications = true;
         public boolean armorStatus;
         public boolean timeChanger;
+        public boolean blockOutline;
     }
 }
