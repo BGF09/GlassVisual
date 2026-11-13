@@ -16,7 +16,8 @@ import org.lwjgl.glfw.GLFW;
 public final class GlassVisualClient implements ClientModInitializer {
     public static final String MOD_ID = "glassvisual";
     public static final ModuleState MODULES = new ModuleState();
-    private static KeyBinding openClickGui;\n    private static KeyBinding openHudEditor;
+    private static KeyBinding openClickGui;
+    private static KeyBinding openHudEditor;
 
     @Override
     public void onInitializeClient() {
