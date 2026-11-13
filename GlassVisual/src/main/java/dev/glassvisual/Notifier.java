@@ -16,8 +16,8 @@ public final class Notifier {
     private static final int LIMIT = 5;
     private static final long MODULE_TIME = 2_000_000_000L;
     private static final long TARGET_TIME = 2_500_000_000L;
-    private static final int BG = 0xF0141B29;
-    private static final int BORDER = 0xAA71849D;
+    private static final int BG = 0xF4F7FAFF;
+    private static final int BORDER = 0xAA9AAAC2;
     private static final List<Card> ACTIVE = new ArrayList<>(LIMIT);
     private static final ArrayDeque<Card> QUEUED = new ArrayDeque<>();
 
@@ -147,7 +147,7 @@ public final class Notifier {
             drawBell(ctx, x + 10 + sway, y + 9, accent, alpha);
             ctx.fill(x + 36, y + 7, x + 37, y + height - 7, (Math.round(alpha * 90) << 24) | 0x00A9C7DA);
             ctx.drawText(client.textRenderer, card.text, x + 47, y + 15,
-                (fade << 24) | 0x00F5F8FF, true);
+                (fade << 24) | 0x00202A3B, true);
         } else {
             if (card.skin != null) PlayerSkinDrawer.draw(ctx, card.skin, x + 8, y + 6, 22);
             else {
@@ -157,7 +157,7 @@ public final class Notifier {
             }
             ctx.fill(x + 37, y + 6, x + 38, y + height - 6, (Math.round(alpha * 90) << 24) | 0x00A9B6C7);
             ctx.drawText(client.textRenderer, card.text, x + 48, y + 15,
-                (fade << 24) | 0x00F1F3F7, true);
+                (fade << 24) | 0x00202A3B, true);
             if (!card.icon.isEmpty()) {
                 int ix = x + width - 28;
                 ctx.fill(ix - 5, y + 5, x + width - 5, y + height - 5, (Math.round(alpha * 90) << 24) | 0x00A9B6C7);
