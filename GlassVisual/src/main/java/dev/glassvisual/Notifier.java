@@ -24,7 +24,7 @@ public final class Notifier {
         if (module == null) return;
         String name = module.getName();
         String message = (enabled ? "Включено (" : "Выключено (") + name + ")";
-        int accent = enabled ? 0xFF75DDF2 : 0xFFFF777F;
+        int accent = enabled ? NullTheme.accent() : 0xFFFF777F;
         synchronized (ACTIVE) {
             for (int i = 0; i < ACTIVE.size(); i++) {
                 Card card = ACTIVE.get(i);
@@ -54,7 +54,7 @@ public final class Notifier {
         String name = target.getName().getString();
         synchronized (ACTIVE) {
             enqueue(new Card(Type.TARGET, "target:" + name + ":" + action,
-                action, NullTheme.accent(), icon, TARGET_TIME));
+                action + " · " + name, NullTheme.accent(), icon, TARGET_TIME));
         }
     }
 
@@ -138,14 +138,14 @@ public final class Notifier {
         if (card.type == Type.MODULE) {
             drawBell(ctx, x + 10, y + 9, accent, alpha);
             ctx.fill(x + 36, y + 7, x + 37, y + height - 7, (Math.round(alpha * 90) << 24) | 0x00A9C7DA);
-            ctx.drawText(client.textRenderer, Text.literal(card.message), x + 47, y + 15,
+            ctx.drawText(client.textRenderer, card.text, x + 47, y + 15,
                 (fade << 24) | 0x00F5F8FF, true);
         } else {
             ctx.fill(x + 8, y + 6, x + 30, y + 29, (fade << 24) | 0x00313C50);
             ctx.fill(x + 13, y + 10, x + 25, y + 21, (fade << 24) | 0x00A8B9CC);
             ctx.fill(x + 11, y + 21, x + 27, y + 27, (fade << 24) | 0x007D91AA);
             ctx.fill(x + 37, y + 6, x + 38, y + height - 6, (Math.round(alpha * 90) << 24) | 0x00A9B6C7);
-            ctx.drawText(client.textRenderer, Text.literal(card.message), x + 48, y + 15,
+            ctx.drawText(client.textRenderer, card.text, x + 48, y + 15,
                 (fade << 24) | 0x00F1F3F7, true);
             if (!card.icon.isEmpty()) {
                 int ix = x + width - 28;
@@ -177,7 +177,7 @@ public final class Notifier {
         long duration, started, leaveStarted;
         boolean leaving;
         Card(Type type, String key, String message, int accent, ItemStack icon, long duration) {
-            this.type = type; this.key = key; this.message = message; this.accent = accent;
+            this.type = type; this.key = key; this.message = message; this.text = Text.literal(message); this.accent = accent;
             this.icon = icon == null ? ItemStack.EMPTY : icon; this.duration = duration;
         }
     }
