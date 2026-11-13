@@ -40,6 +40,15 @@ public final class GlassVisualClient implements ClientModInitializer {
             if (screen instanceof TitleScreen) client.setScreen(new NullMainMenuScreen());
         });
 
+        WorldRenderEvents.START.register(context -> {
+            float stretch = NullUiSettings.stretchFactor(MinecraftClient.getInstance());
+            if (Math.abs(stretch - 1.0f) > 0.001f) {
+                var projection = context.projectionMatrix();
+                projection.m00(projection.m00() * stretch);
+            }
+        });
+        WorldRenderEvents.AFTER_ENTITIES.register(NullWorldEffects::render);
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             NullAimAssist.tick(client);
             if (MODULES.timeChanger && client.world != null) {
@@ -55,6 +64,7 @@ public final class GlassVisualClient implements ClientModInitializer {
             NullMovementTracker.tick(client);
             NullHitVisuals.tick(client);
             NullParticleRenderer.tick(client);
+            NullWorldEffects.tick(client);
             TargetNotifier.tick(client);
             while (openHudEditor.wasPressed()) {
                 if (client.currentScreen == null) client.setScreen(new HudEditorScreen());
