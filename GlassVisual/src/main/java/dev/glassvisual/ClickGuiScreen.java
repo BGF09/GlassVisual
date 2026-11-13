@@ -32,6 +32,10 @@ public final class ClickGuiScreen extends Screen {
         float s=NullUiSettings.scale()-0.75f;
         w=Math.min(width-24,Math.round(790*(0.88f+s*0.24f)));
         h=Math.min(height-24,Math.round(470*(0.88f+s*0.24f)));
+        if(NullUiSettings.mode()==NullUiSettings.LayoutMode.STRETCH){w=width-24;h=height-24;}
+        else if(NullUiSettings.mode()==NullUiSettings.LayoutMode.FOUR_THREE){
+            w=Math.min(width-24,Math.round(h*4f/3f));h=Math.min(height-24,Math.round(w*3f/4f));
+        }
         w=Math.max(420,w);h=Math.max(300,h);x=(width-w)/2;y=(height-h)/2;
         search=new TextFieldWidget(textRenderer,x+178,y+22,Math.min(250,w-410),22,Text.literal("Search"));
         search.setMaxLength(40);search.setPlaceholder(Text.literal(tr("Поиск модулей...","Search modules...")));
@@ -59,7 +63,9 @@ public final class ClickGuiScreen extends Screen {
         ctx.drawText(textRenderer,cats[selected].toUpperCase(),x+164,y+17,WHITE,true);
         ctx.drawText(textRenderer,tr("ВИЗУАЛЬНЫЙ КЛИЕНТ  •  1.21.4","VISUAL CLIENT  •  1.21.4"),x+164,y+32,MUTED,false);
         search.render(ctx,mx,my,delta);
-        drawSmallButton(ctx,x+w-112,y+20,94,22,"FIT / 4:3",accent);
+        drawSmallButton(ctx,x+w-190,y+20,48,22,"4:3",accent);
+        drawSmallButton(ctx,x+w-138,y+20,48,22,"16:9",accent);
+        drawSmallButton(ctx,x+w-86,y+20,68,22,"STRETCH",accent);
         ctx.drawText(textRenderer,tr("ЦВЕТ","ACCENT"),x+164,y+62,MUTED,true);
         for(int i=0;i<NullTheme.colorCount();i++){
             int bx=x+218+i*24;ctx.fill(bx,y+59,bx+17,y+76,NullTheme.color(i));
@@ -134,7 +140,9 @@ public final class ClickGuiScreen extends Screen {
             int row=(int)(my-(y+91))/54;int i=row+1;String q=search.getText().toLowerCase();
             int actual=0;for(int n=1;n<categories()[selected].length;n++){if(!q.isBlank()&&!categories()[selected][n].toLowerCase().contains(q))continue;if(actual++==row){if(isSupported(selected,n)){toggle(selected,n);return true;}break;}}
         }
-        if(mx>=x+w-112&&my<=y+44){NullUiSettings.setMode(NullUiSettings.mode()==NullUiSettings.LayoutMode.FIT?NullUiSettings.LayoutMode.FOUR_THREE:NullUiSettings.LayoutMode.FIT);GlassVisualConfig.save();return true;}
+        if(my>=y+20&&my<=y+42&&mx>=x+w-190&&mx<=x+w-142){NullUiSettings.setMode(NullUiSettings.LayoutMode.FOUR_THREE);NullUiSettings.setScreenRatio(4,3);GlassVisualConfig.save();init();return true;}
+        if(my>=y+20&&my<=y+42&&mx>=x+w-138&&mx<=x+w-90){NullUiSettings.setMode(NullUiSettings.LayoutMode.FIT);NullUiSettings.setScreenRatio(16,9);GlassVisualConfig.save();init();return true;}
+        if(my>=y+20&&my<=y+42&&mx>=x+w-86&&mx<=x+w-18){NullUiSettings.setMode(NullUiSettings.LayoutMode.STRETCH);GlassVisualConfig.save();init();return true;}
         return false;
     }
     @Override public boolean shouldPause(){return false;}
