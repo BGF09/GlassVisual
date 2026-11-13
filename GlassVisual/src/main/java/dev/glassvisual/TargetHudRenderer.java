@@ -12,68 +12,75 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
 public final class TargetHudRenderer {
-    private static final int PANEL=0xEAF7FAFF, MUTED=0xFF71809A;
+    private static final int PANEL=0xF21A202D, MUTED=0xFF9AA8BD, TEXT=0xFFF3F5FB;
     private static UUID previousTarget;
     private static int ghostTicks;
     private static float smoothHealth=-1, ghostHealth=-1;
     private TargetHudRenderer(){}
 
     public static void render(DrawContext ctx,MinecraftClient client,LivingEntity target){
-        int x=client.getWindow().getScaledWidth()/2+14;
+        int x=client.getWindow().getScaledWidth()/2+16;
         int y=client.getWindow().getScaledHeight()/2+34;
-        int w=184,h=66,accent=NullTheme.accent();
+        int w=204,h=76,accent=NullTheme.accent();
         float health=Math.max(0,target.getHealth()),maxHealth=Math.max(1,target.getMaxHealth());
         float ratio=MathHelper.clamp(health/maxHealth,0.0f,1.0f);
         if(previousTarget==null||!previousTarget.equals(target.getUuid())){
-            previousTarget=target.getUuid();ghostTicks=18;ghostHealth=ratio;smoothHealth=ratio;
+            previousTarget=target.getUuid();ghostTicks=20;ghostHealth=ratio;smoothHealth=ratio;
         }
         if(smoothHealth<0)smoothHealth=ratio;
-        smoothHealth+= (ratio-smoothHealth)*0.22f;
+        smoothHealth+=(ratio-smoothHealth)*0.20f;
         if(ghostTicks>0)ghostTicks--;
-        double distance=client.player.distanceTo(target);
-
-        roundedFill(ctx,x-3,y-3,w+6,h+6,10,0x220D1424);
-        roundedFill(ctx,x,y,w,h,9,PANEL);
-        ctx.fill(x,y,x+w,y+2,accent);
-        // A soft ghost echo appears briefly when the tracked target changes.
-        if(ghostTicks>0){
-            int alpha=Math.min(75,ghostTicks*4);
-            int ghost=(alpha<<24)|(accent&0x00FFFFFF);
-            ctx.fill(x+w-43,y+8,x+w-12,y+39,ghost);
-            ctx.fill(x+w-37,y+3,x+w-18,y+15,ghost);
-            ctx.fill(x+w-40,y+36,x+w-15,y+43,ghost);
-        }
+        double distance=client.player==null?0:client.player.distanceTo(target);
+        roundedFill(ctx,x-3,y-3,w+6,h+6,12,0x55000000);
+        roundedFill(ctx,x,y,w,h,10,PANEL);
+        roundedFill(ctx,x+1,y+1,w-2,h-2,9,0xFF202938);
+        roundedFill(ctx,x,y,4,h,2,accent);
+        ctx.fill(x+12,y+8,x+w-12,y+9,0x334B5B72);
 
         boolean skinDrawn=false;
         if(target instanceof PlayerEntity player&&client.getNetworkHandler()!=null){
             PlayerListEntry entry=client.getNetworkHandler().getPlayerListEntry(player.getUuid());
-            if(entry!=null){SkinTextures skin=entry.getSkinTextures();PlayerSkinDrawer.draw(ctx,skin,x+9,y+13,34);skinDrawn=true;}
+            if(entry!=null){SkinTextures skin=entry.getSkinTextures();PlayerSkinDrawer.draw(ctx,skin,x+12,y+17,38);skinDrawn=true;}
         }
         if(!skinDrawn){
-            ctx.fill(x+9,y+13,x+43,y+47,0xFFE5EAF3);
-            ctx.fill(x+18,y+17,x+34,y+32,0xFF9AA9C1);
-            ctx.fill(x+14,y+33,x+38,y+44,accent);
+            roundedFill(ctx,x+12,y+17,38,38,8,0xFF303D52);
+            roundedFill(ctx,x+21,y+20,20,19,8,0xFF8796AE);
+            roundedFill(ctx,x+17,y+37,28,14,6,accent);
         }
-        String name=target.getName().getString();if(name.length()>17)name=name.substring(0,16)+"…";
-        ctx.drawText(textRenderer(client),Text.literal(name),x+52,y+10,0xFF202A3B,true);
-        ctx.drawText(textRenderer(client),Text.literal(String.format("%.1f HP  •  %.1fm",health,distance)),x+52,y+24,MUTED,false);
-        ctx.drawText(textRenderer(client),Text.literal("TARGET"),x+w-48,y+10,accent,true);
+        String name=target.getName().getString();
+        if(name.length()>18)name=name.substring(0,17)+"…";
+        ctx.drawText(client.textRenderer,Text.literal(name),x+60,y+14,TEXT,true);
+        String type=target instanceof PlayerEntity?"PLAYER":"ENTITY";
+        int tagW=client.textRenderer.getWidth(type)+12;
+        roundedFill(ctx,x+w-tagW-11,y+12,tagW,15,6,0xFF303B50);
+        ctx.drawText(client.textRenderer,type,x+w-tagW-5,y+16,accent,true);
 
-        int bx=x+52,by=y+43,bw=119;
-        ctx.fill(bx,by,bx+bw,by+7,0xFFDCE3EF);
+        int hpColor=ratio>0.6f?0xFF55D69A:ratio>0.3f?0xFFFFC56B:0xFFFF6B78;
+        String hp=String.format(java.util.Locale.ROOT,"%.1f / %.0f HP",health,maxHealth);
+        ctx.drawText(client.textRenderer,hp,x+60,y+34,hpColor,true);
+        String range=String.format(java.util.Locale.ROOT,"%.1fm away",distance);
+        ctx.drawText(client.textRenderer,range,x+60,y+48,MUTED,false);
+
+        int bx=x+12,by=y+63,bw=w-24;
+        roundedFill(ctx,bx,by,bw,6,3,0xFF354155);
         int ghostWidth=Math.round(bw*MathHelper.clamp(ghostHealth,0,1));
-        if(ghostWidth>0)ctx.fill(bx,by,bx+ghostWidth,by+7,0x667F8CA8);
+        if(ghostWidth>0)roundedFill(ctx,bx,by,ghostWidth,6,3,0x667F8CA8);
         int fill=Math.round(bw*MathHelper.clamp(smoothHealth,0,1));
-        if(fill>0){ctx.fill(bx,by,bx+fill,by+7,accent);ctx.fill(bx,by,bx+fill,by+1,0x66FFFFFF);}
-        ctx.drawText(textRenderer(client),Text.literal("NULL"),x+9,y+52,accent,false);
+        if(fill>0)roundedFill(ctx,bx,by,fill,6,3,hpColor);
+        if(ghostTicks>0){
+            int alpha=Math.min(90,ghostTicks*4);
+            ctx.fill(x+w-8,y+3,x+w-5,y+6,(alpha<<24)|(accent&0x00FFFFFF));
+        }
     }
     private static void roundedFill(DrawContext ctx,int x,int y,int w,int h,int radius,int color){
+        if(w<=0||h<=0)return;
         int r=Math.max(1,Math.min(radius,Math.min(w,h)/2));
-        for(int row=0;row<h;row++){
-            int edge=row<r?r-1-row:(row>=h-r?row-(h-r):-1);
-            int inset=edge<0?0:r-(int)Math.floor(Math.sqrt(Math.max(0,r*r-edge*edge)));
+        ctx.fill(x+r,y,x+w-r,y+h,color);
+        for(int row=0;row<r;row++){
+            int dy=r-row-1;
+            int inset=r-(int)Math.floor(Math.sqrt(Math.max(0,r*r-dy*dy)));
             ctx.fill(x+inset,y+row,x+w-inset,y+row+1,color);
+            ctx.fill(x+inset,y+h-1-row,x+w-inset,y+h-row,color);
         }
     }
-    private static net.minecraft.client.font.TextRenderer textRenderer(MinecraftClient client){return client.textRenderer;}
 }
