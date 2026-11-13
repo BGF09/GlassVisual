@@ -2,6 +2,8 @@ package dev.glassvisual;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.KeyBinding;
@@ -70,6 +72,55 @@ public final class HudOverlayRenderer {
         }
         if (GlassVisualClient.MODULES.arrayList) {
             renderArrayList(ctx, client, accent, width);
+        }
+        renderUtilityWidgets(ctx, client, accent, width, height);
+    }
+
+    private static void renderUtilityWidgets(DrawContext ctx, MinecraftClient client, int accent, int width, int height) {
+        var modules = GlassVisualClient.MODULES;
+        if (modules.sprintDisplay && client.player != null) {
+            int x = 12, y = height - 62;
+            panel(ctx, x, y, 112, 24, accent);
+            boolean sprinting = client.player.isSprinting();
+            ctx.drawText(client.textRenderer, "SPRINT", x + 8, y + 8, MUTED, true);
+            String state = sprinting ? "ON" : "OFF";
+            int color = sprinting ? 0xFF36A875 : 0xFF8792A5;
+            ctx.drawText(client.textRenderer, state, x + 69, y + 8, color, true);
+        }
+        if (modules.jumpStats && client.player != null) {
+            int x = 12, y = height - 92;
+            panel(ctx, x, y, 112, 24, accent);
+            ctx.drawText(client.textRenderer, "JUMPS", x + 8, y + 8, MUTED, true);
+            ctx.drawText(client.textRenderer, Integer.toString(NullMovementTracker.jumps()), x + 69, y + 8, TEXT, true);
+        }
+        if (modules.speedGraph && client.player != null) {
+            int x = width - 154, y = height - 72;
+            panel(ctx, x, y, 142, 58, accent);
+            ctx.drawText(client.textRenderer, "SPEED", x + 8, y + 6, MUTED, true);
+            String speed = String.format(java.util.Locale.ROOT, "%.1f m/s", NullMovementTracker.speed());
+            ctx.drawText(client.textRenderer, speed, x + 76, y + 6, TEXT, true);
+            int graphX = x + 8, graphY = y + 24, graphW = 126, graphH = 27;
+            ctx.fill(graphX, graphY + graphH - 1, graphX + graphW, graphY + graphH, 0x22313C50);
+            for (int i = 0; i < NullMovementTracker.samples(); i++) {
+                float value = Math.max(0.0f, Math.min(12.0f, NullMovementTracker.speedAt(i)));
+                int bar = Math.max(1, Math.round((value / 12.0f) * (graphH - 2)));
+                int bx = graphX + i * graphW / 48;
+                ctx.fill(bx, graphY + graphH - bar, bx + 2, graphY + graphH, accent);
+            }
+        }
+        if (modules.sessionInfo) {
+            long seconds = NullMovementTracker.sessionSeconds();
+            String elapsed = String.format(java.util.Locale.ROOT, "%02d:%02d:%02d",
+                seconds / 3600, (seconds / 60) % 60, seconds % 60);
+            panel(ctx, 12, 44, 132, 24, accent);
+            ctx.drawText(client.textRenderer, "SESSION", 20, 52, MUTED, true);
+            ctx.drawText(client.textRenderer, elapsed, 74, 52, TEXT, true);
+        }
+        if (modules.clock) {
+            String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            int x = width - 92, y = 12;
+            panel(ctx, x, y, 80, 24, accent);
+            ctx.drawText(client.textRenderer, time, x + 10, y + 8, TEXT, true);
         }
     }
 
