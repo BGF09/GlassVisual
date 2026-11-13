@@ -93,5 +93,6 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean durability;
         public boolean inventory;
         public boolean notifications = true;
+        public boolean armorStatus;
     }
 }
