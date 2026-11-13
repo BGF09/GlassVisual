@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 
 /** Optional, gently smoothed aim correction while the attack key is held. */
 public final class NullAimAssist {
@@ -24,7 +25,8 @@ public final class NullAimAssist {
 
         for (PlayerEntity candidate : client.world.getPlayers()) {
             if (candidate == player || !candidate.isAlive() || candidate.isSpectator()
-                    || player.isTeammate(candidate) || !player.canSee(candidate)) continue;
+                    || player.isTeammate(candidate) || candidate.isInvisibleTo(player)
+                    || !player.canSee(candidate, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, candidate.getEyeY())) continue;
 
             Vec3d direction = candidate.getEyePos().subtract(player.getEyePos());
             double distance = direction.length();
