@@ -55,7 +55,7 @@ public final class TargetHudRenderer {
             ctx.fill(x+14,y+33,x+38,y+44,accent);
         }
         String name=target.getName().getString();if(name.length()>17)name=name.substring(0,16)+"…";
-        ctx.drawText(textRenderer(client),Text.literal(name),x+52,y+10,0xFFFFFFFF,true);
+        ctx.drawText(textRenderer(client),Text.literal(name),x+52,y+10,0xFF202A3B,true);
         ctx.drawText(textRenderer(client),Text.literal(String.format("%.1f HP  •  %.1fm",health,distance)),x+52,y+24,MUTED,false);
         ctx.drawText(textRenderer(client),Text.literal("TARGET"),x+w-48,y+10,accent,true);
 
