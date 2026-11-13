@@ -1,4 +1,5 @@
 {
   "key.glassvisual.open_gui": "Открыть меню NULL",
-  "category.glassvisual": "NULL"
+  "category.glassvisual": "Glass Visual",
+  "key.glassvisual.hud_editor": "Открыть редактор HUD"
 }
