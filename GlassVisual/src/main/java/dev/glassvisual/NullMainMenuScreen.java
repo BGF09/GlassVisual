@@ -29,7 +29,7 @@ public final class NullMainMenuScreen extends Screen {
         ctx.fill(width / 2 - 190, height / 2 - 190, width / 2 + 190, height / 2 + 205, 0xCCFFFFFF);
         ctx.fill(width / 2 - 190, height / 2 - 190, width / 2 + 190, height / 2 - 187, accent);
         ctx.drawCenteredTextWithShadow(textRenderer, "N", width / 2, height / 2 - 166, 0xFF8492E8);
-        ctx.drawCenteredTextWithShadow(textRenderer, "NULL", width / 2, height / 2 - 112, 0xFFF4F6FC);
+        ctx.drawCenteredTextWithShadow(textRenderer, "NULL", width / 2, height / 2 - 112, 0xFF202A3B);
         ctx.drawCenteredTextWithShadow(textRenderer, "VISUAL CLIENT", width / 2, height / 2 - 94, 0xFF536789);
         ctx.drawCenteredTextWithShadow(textRenderer, "ACCOUNT  •  " + NullAccountProfile.login(), width / 2, height / 2 - 72, 0xFF687A9C);
         super.render(ctx, mouseX, mouseY, delta);
