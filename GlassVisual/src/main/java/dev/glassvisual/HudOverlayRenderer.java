@@ -10,6 +10,8 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
 
 public final class HudOverlayRenderer {
@@ -127,6 +129,47 @@ public final class HudOverlayRenderer {
             panel(ctx, x, y, 80, 24, accent);
             ctx.drawText(client.textRenderer, time, x + 10, y + 8, TEXT, true);
         }
+
+        if (modules.totemCounter && client.player != null) {
+            int count = 0;
+            for (ItemStack stack : client.player.getInventory().main) {
+                if (stack.isOf(Items.TOTEM_OF_UNDYING)) count += stack.getCount();
+            }
+            if (client.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING))
+                count += client.player.getOffHandStack().getCount();
+            int x = 12, y = height - 152;
+            panel(ctx, x, y, 112, 24, accent);
+            ctx.drawText(client.textRenderer, "TOTEMS", x + 8, y + 8, MUTED, true);
+            ctx.drawText(client.textRenderer, Integer.toString(count), x + 76, y + 8, TEXT, true);
+        }
+        if (modules.foodHud && client.player != null) {
+            int food = client.player.getHungerManager().getFoodLevel();
+            float saturation = client.player.getHungerManager().getSaturationLevel();
+            int x = 12, y = height - 182;
+            panel(ctx, x, y, 142, 24, accent);
+            ctx.drawText(client.textRenderer, "FOOD", x + 8, y + 8, MUTED, true);
+            ctx.drawText(client.textRenderer, food + "/20", x + 54, y + 8, TEXT, true);
+            ctx.drawText(client.textRenderer, String.format(java.util.Locale.ROOT, "%.1f sat", saturation),
+                x + 91, y + 8, accent, true);
+        }
+        if (modules.xpHud && client.player != null) {
+            int level = client.player.experienceLevel;
+            float progress = client.player.experienceProgress;
+            int x = 12, y = height - 212;
+            panel(ctx, x, y, 142, 24, accent);
+            ctx.drawText(client.textRenderer, "LEVEL", x + 8, y + 8, MUTED, true);
+            ctx.drawText(client.textRenderer, Integer.toString(level), x + 54, y + 8, TEXT, true);
+            ctx.fill(x + 84, y + 10, x + 133, y + 15, 0xFF303B4D);
+            int fill = Math.round(49 * MathHelper.clamp(progress, 0.0f, 1.0f));
+            if (fill > 0) ctx.fill(x + 84, y + 10, x + 84 + fill, y + 15, accent);
+        }
+        if (modules.directionHud && client.player != null) {
+            int facing = MathHelper.floor(client.player.getYaw() / 90.0f + 0.5f) & 3;
+            String[] directions = {"SOUTH", "WEST", "NORTH", "EAST"};
+            int x = width / 2 - 42, y = 12;
+            panel(ctx, x, y, 84, 24, accent);
+            ctx.drawCenteredTextWithShadow(client.textRenderer, directions[facing], x + 42, y + 8, TEXT);
+        }
     }
 
     private static void renderCombatWidgets(DrawContext ctx, MinecraftClient client, int accent, int width, int height) {
@@ -197,15 +240,15 @@ public final class HudOverlayRenderer {
         String[] names = {"Aim Assist", "Hit Visuals", "Target HUD", "Combat HUD", "Particles",
             "Auto Sprint", "Sprint Display", "Jump Stats", "Speed Graph", "Keystrokes",
             "World Tint", "Block Outline", "Crosshair", "FPS", "Potion HUD", "Time Changer",
-            "Armor Status", "Armor HUD", "Coordinates", "Durability", "Inventory",
-            "Session Info", "Clock", "Notifications", "Ping"};
+            "Armor Status", "Armor HUD", "Coordinates", "Durability", "Inventory", "Totem Counter", "Food HUD", "XP HUD",
+            "Session Info", "Clock", "Notifications", "Ping", "Direction"};
         var m = GlassVisualClient.MODULES;
         boolean[] active = {
             m.aimAssist, m.hitVisuals, m.targetHud, m.combatHud, NullUiSettings.particles,
             m.autoSprint, m.sprintDisplay, m.jumpStats, m.speedGraph, m.keystrokes,
             m.worldTint, m.blockOutline, m.crosshair, m.fps, m.potionHud, m.timeChanger,
-            m.armorStatus, m.armorHud, m.coordinates, m.durability, m.inventory,
-            m.sessionInfo, m.clock, m.notifications, m.ping
+            m.armorStatus, m.armorHud, m.coordinates, m.durability, m.inventory, m.totemCounter, m.foodHud, m.xpHud,
+            m.sessionInfo, m.clock, m.notifications, m.ping, m.directionHud
         };
         int x = HudLayout.arrayListX;
         int y = HudLayout.arrayListY;
