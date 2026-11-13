@@ -43,7 +43,7 @@ public final class ClickGuiScreen extends Screen {
     }
     @Override public void render(DrawContext ctx,int mx,int my,float delta){
         int accent=NullTheme.accent();ctx.fill(0,0,width,height,SHADE);
-        ctx.fill(x-4,y-4,x+w+4,y+h+4,0x66000000);ctx.fill(x,y,x+w,y+h,PANEL);
+        ctx.fill(x-4,y-4,x+w+4,y+h+4,0x220D1424);ctx.fill(x,y,x+w,y+h,PANEL);
         ctx.fill(x,y,x+145,y+h,SIDE);ctx.fill(x,y,x+w,y+3,accent);
         ctx.drawText(textRenderer,"N",x+17,y+17,accent,true);
         ctx.drawText(textRenderer,"NULL",x+34,y+17,WHITE,true);
