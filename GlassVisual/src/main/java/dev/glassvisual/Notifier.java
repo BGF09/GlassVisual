@@ -16,8 +16,8 @@ public final class Notifier {
     private static final int LIMIT = 5;
     private static final long MODULE_TIME = 2_000_000_000L;
     private static final long TARGET_TIME = 2_500_000_000L;
-    private static final int BG = 0xF4F7FAFF;
-    private static final int BORDER = 0xAA9AAAC2;
+    private static final int BG = 0xF21A202D;
+    private static final int BORDER = 0xAA46536A;
     private static final List<Card> ACTIVE = new ArrayList<>(LIMIT);
     private static final ArrayDeque<Card> QUEUED = new ArrayDeque<>();
 
@@ -145,9 +145,9 @@ public final class Notifier {
         if (card.type == Type.MODULE) {
             int sway = (int) Math.round(Math.sin(System.nanoTime() / 110_000_000.0) * 1.2);
             drawBell(ctx, x + 10 + sway, y + 9, accent, alpha);
-            ctx.fill(x + 36, y + 7, x + 37, y + height - 7, (Math.round(alpha * 90) << 24) | 0x00A9C7DA);
+            ctx.fill(x + 36, y + 7, x + 37, y + height - 7, (Math.round(alpha * 90) << 24) | 0x003B4A62);
             ctx.drawText(client.textRenderer, card.text, x + 47, y + 15,
-                (fade << 24) | 0x00202A3B, true);
+                (fade << 24) | 0x00F1F3FA, true);
         } else {
             if (card.skin != null) PlayerSkinDrawer.draw(ctx, card.skin, x + 8, y + 6, 22);
             else {
