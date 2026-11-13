@@ -129,8 +129,8 @@ public final class ClickGuiScreen extends Screen {
         };
     }
     private boolean isSupported(int c,int i){
-        return (c==0&&i==3)||(c==1&&(i==1||i==2||i==3||i==4||i==5))
-            ||(c==2&&(i==4||i==5))||(c==3&&(i==2||i==3))||(c==4&&(i==1||i==2||i==3||i==5));
+        String[][] groups = categories();
+        return c >= 0 && c < groups.length && i > 0 && i < groups[c].length;
     }
     private boolean enabled(int c,int i){var m=GlassVisualClient.MODULES;
         if(c==0&&i==1)return m.aimAssist;if(c==0&&i==2)return m.hitVisuals;if(c==0&&i==3)return m.targetHud;if(c==0&&i==4)return m.combatHud;if(c==1&&i==1)return m.autoSprint;if(c==1&&i==5)return m.keystrokes;
