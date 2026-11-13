@@ -32,8 +32,8 @@ public final class TargetHudRenderer {
         if(ghostTicks>0)ghostTicks--;
         double distance=client.player.distanceTo(target);
 
-        ctx.fill(x-3,y-3,x+w+3,y+h+3,0x220D1424);
-        ctx.fill(x,y,x+w,y+h,PANEL);
+        roundedFill(ctx,x-3,y-3,w+6,h+6,10,0x220D1424);
+        roundedFill(ctx,x,y,w,h,9,PANEL);
         ctx.fill(x,y,x+w,y+2,accent);
         // A soft ghost echo appears briefly when the tracked target changes.
         if(ghostTicks>0){
@@ -66,6 +66,14 @@ public final class TargetHudRenderer {
         int fill=Math.round(bw*MathHelper.clamp(smoothHealth,0,1));
         if(fill>0){ctx.fill(bx,by,bx+fill,by+7,accent);ctx.fill(bx,by,bx+fill,by+1,0x66FFFFFF);}
         ctx.drawText(textRenderer(client),Text.literal("NULL"),x+9,y+52,accent,false);
+    }
+    private static void roundedFill(DrawContext ctx,int x,int y,int w,int h,int radius,int color){
+        int r=Math.max(1,Math.min(radius,Math.min(w,h)/2));
+        for(int row=0;row<h;row++){
+            int edge=row<r?r-1-row:(row>=h-r?row-(h-r):-1);
+            int inset=edge<0?0:r-(int)Math.floor(Math.sqrt(Math.max(0,r*r-edge*edge)));
+            ctx.fill(x+inset,y+row,x+w-inset,y+row+1,color);
+        }
     }
     private static net.minecraft.client.font.TextRenderer textRenderer(MinecraftClient client){return client.textRenderer;}
 }
