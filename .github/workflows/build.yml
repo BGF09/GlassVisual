@@ -3,7 +3,7 @@ name: Build Glass Visual
 
 on:
   push:
-    branches: [main, master, visual-finish, null-visual]
+    branches: [main, master, visual-finish, null-visual, feature/notifier-redesign]
   workflow_dispatch:
 
 permissions:
