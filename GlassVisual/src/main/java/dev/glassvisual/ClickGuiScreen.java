@@ -12,15 +12,15 @@ public final class ClickGuiScreen extends Screen {
         {"Бой","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
         {"Движение","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
         {"Визуалы","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer"},
-        {"Игрок","Armor Status","Armor HUD","Coordinates","Durability","Inventory"},
-        {"Разное","Session Info","Clock","ArrayList","Notifications","Ping"}
+        {"Игрок","Armor Status","Armor HUD","Coordinates","Durability","Inventory","Totem Counter","Food HUD","XP HUD"},
+        {"Разное","Session Info","Clock","ArrayList","Notifications","Ping","Direction"}
     };
     private static final String[][] EN={
         {"Combat","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
         {"Movement","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
         {"Visuals","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer"},
-        {"Player","Armor Status","Armor HUD","Coordinates","Durability","Inventory"},
-        {"Misc","Session Info","Clock","ArrayList","Notifications","Ping"}
+        {"Player","Armor Status","Armor HUD","Coordinates","Durability","Inventory","Totem Counter","Food HUD","XP HUD"},
+        {"Misc","Session Info","Clock","ArrayList","Notifications","Ping","Direction"}
     };
     private int x,y,w,h,selected;
     private TextFieldWidget search;
@@ -105,6 +105,10 @@ public final class ClickGuiScreen extends Screen {
             case "Time Changer" -> tr("Фиксирует локальное время мира на полдень","Locks the local world time to noon");
             case "Crosshair" -> tr("Акцентный прицел NULL поверх стандартного","NULL accent reticle over the vanilla crosshair");
             case "Armor Status" -> tr("Процент прочности каждой части брони","Durability percentage for each armor piece");
+            case "Totem Counter" -> tr("Считает тотемы во всём инвентаре","Counts totems in your inventory");
+            case "Food HUD" -> tr("Показывает голод и насыщение","Shows hunger and saturation");
+            case "XP HUD" -> tr("Уровень и прогресс опыта","Experience level and progress");
+            case "Direction" -> tr("Показывает направление взгляда","Shows your current facing direction");
             case "Durability" -> tr("Прочность предмета в основной руке","Main-hand item durability");
             case "Inventory" -> tr("Название выбранного предмета и количество","Selected item name and stack count");
             case "Notifications" -> tr("Уведомления о переключении модулей","Module toggle notifications");
@@ -131,18 +135,18 @@ public final class ClickGuiScreen extends Screen {
     private boolean enabled(int c,int i){var m=GlassVisualClient.MODULES;
         if(c==0&&i==5)return NullUiSettings.particles;if(c==0&&i==1)return m.aimAssist;if(c==0&&i==2)return m.hitVisuals;if(c==0&&i==3)return m.targetHud;if(c==0&&i==4)return m.combatHud;if(c==1&&i==1)return m.autoSprint;if(c==1&&i==5)return m.keystrokes;
         if(c==2&&i==1)return m.worldTint;if(c==2&&i==2)return m.blockOutline;if(c==2&&i==3)return m.crosshair;if(c==2&&i==6)return m.timeChanger;if(c==2&&i==4)return m.fps;if(c==2&&i==5)return m.potionHud;
-        if(c==3&&i==1)return m.armorStatus;if(c==3&&i==2)return m.armorHud;if(c==3&&i==3)return m.coordinates;if(c==3&&i==4)return m.durability;if(c==3&&i==5)return m.inventory;
+        if(c==3&&i==6)return m.totemCounter;if(c==3&&i==7)return m.foodHud;if(c==3&&i==8)return m.xpHud;if(c==3&&i==1)return m.armorStatus;if(c==3&&i==2)return m.armorHud;if(c==3&&i==3)return m.coordinates;if(c==3&&i==4)return m.durability;if(c==3&&i==5)return m.inventory;
         if(c==1&&i==2)return m.sprintDisplay;if(c==1&&i==3)return m.jumpStats;if(c==1&&i==4)return m.speedGraph;
         if(c==4&&i==1)return m.sessionInfo;if(c==4&&i==2)return m.clock;if(c==4&&i==4)return m.notifications;
-        if(c==4&&i==3)return m.arrayList;if(c==4&&i==5)return m.ping;return false;
+        if(c==4&&i==3)return m.arrayList;if(c==4&&i==5)return m.ping;if(c==4&&i==6)return m.directionHud;return false;
     }
     private void toggle(int c,int i){var m=GlassVisualClient.MODULES;
         if(c==0&&i==5)NullUiSettings.particles=!NullUiSettings.particles;else if(c==0&&i==1)m.aimAssist=!m.aimAssist;else if(c==0&&i==2)m.hitVisuals=!m.hitVisuals;else if(c==0&&i==3)m.targetHud=!m.targetHud;else if(c==0&&i==4)m.combatHud=!m.combatHud;else if(c==1&&i==1)m.autoSprint=!m.autoSprint;else if(c==1&&i==5)m.keystrokes=!m.keystrokes;
         else if(c==2&&i==1)m.worldTint=!m.worldTint;else if(c==2&&i==2)m.blockOutline=!m.blockOutline;else if(c==2&&i==3)m.crosshair=!m.crosshair;else if(c==2&&i==6)m.timeChanger=!m.timeChanger;else if(c==2&&i==4)m.fps=!m.fps;else if(c==2&&i==5)m.potionHud=!m.potionHud;
-        else if(c==3&&i==1)m.armorStatus=!m.armorStatus;else if(c==3&&i==2)m.armorHud=!m.armorHud;else if(c==3&&i==3)m.coordinates=!m.coordinates;else if(c==3&&i==4)m.durability=!m.durability;else if(c==3&&i==5)m.inventory=!m.inventory;
+        else if(c==3&&i==6)m.totemCounter=!m.totemCounter;else if(c==3&&i==7)m.foodHud=!m.foodHud;else if(c==3&&i==8)m.xpHud=!m.xpHud;else if(c==3&&i==1)m.armorStatus=!m.armorStatus;else if(c==3&&i==2)m.armorHud=!m.armorHud;else if(c==3&&i==3)m.coordinates=!m.coordinates;else if(c==3&&i==4)m.durability=!m.durability;else if(c==3&&i==5)m.inventory=!m.inventory;
         else if(c==1&&i==2)m.sprintDisplay=!m.sprintDisplay;else if(c==1&&i==3)m.jumpStats=!m.jumpStats;else if(c==1&&i==4)m.speedGraph=!m.speedGraph;
         else if(c==4&&i==1)m.sessionInfo=!m.sessionInfo;else if(c==4&&i==2)m.clock=!m.clock;else if(c==4&&i==4)m.notifications=!m.notifications;
-        else if(c==4&&i==3)m.arrayList=!m.arrayList;else if(c==4&&i==5)m.ping=!m.ping;
+        else if(c==4&&i==3)m.arrayList=!m.arrayList;else if(c==4&&i==5)m.ping=!m.ping;else if(c==4&&i==6)m.directionHud=!m.directionHud;
         GlassVisualConfig.save();Notifier.module(new Module(categories()[c][i]),enabled(c,i));
     }
     private static void roundedFill(DrawContext ctx,int x,int y,int w,int h,int radius,int color){
