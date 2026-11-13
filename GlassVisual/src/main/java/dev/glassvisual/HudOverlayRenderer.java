@@ -11,9 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 public final class HudOverlayRenderer {
-    private static final int PANEL = 0xD9101420;
-    private static final int TEXT = 0xFFF3F5FC;
-    private static final int MUTED = 0xFF9CA7BC;
+    private static final int PANEL = 0xDDF7FAFF;
+    private static final int TEXT = 0xFF202A3B;
+    private static final int MUTED = 0xFF758198;
     private static final int SOFT = 0xFF69758B;
 
     private HudOverlayRenderer() {}
@@ -151,9 +151,9 @@ public final class HudOverlayRenderer {
     private static void drawKey(DrawContext ctx, MinecraftClient client, String label,
                                 KeyBinding key, int x, int y, int accent, int width) {
         boolean pressed = key.isPressed();
-        ctx.fill(x, y, x + width, y + 20, pressed ? 0xE53A4058 : PANEL);
+        ctx.fill(x, y, x + width, y + 20, pressed ? 0xFFDCE8FA : PANEL);
         ctx.fill(x, y, x + width, y + 2, pressed ? accent : 0x665E687F);
-        int textColor = pressed ? 0xFFFFFFFF : MUTED;
+        int textColor = pressed ? 0xFF202A3B : MUTED;
         int textX = x + (width - client.textRenderer.getWidth(label)) / 2;
         ctx.drawText(client.textRenderer, label, textX, y + 6, textColor, true);
     }
