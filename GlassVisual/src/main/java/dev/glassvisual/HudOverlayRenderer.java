@@ -68,6 +68,9 @@ public final class HudOverlayRenderer {
         if (GlassVisualClient.MODULES.armorHud && client.player != null) {
             renderArmor(ctx, client, accent, width, height);
         }
+        if (GlassVisualClient.MODULES.armorStatus && client.player != null) {
+            renderArmorStatus(ctx, client, accent, height);
+        }
         if (GlassVisualClient.MODULES.potionHud && client.player != null) {
             renderPotions(ctx, client, accent, width);
         }
@@ -227,6 +230,23 @@ public final class HudOverlayRenderer {
                 ctx.fill(itemX + 1, y + 22, itemX + 17, y + 24, 0xFF3B4050);
                 if (barWidth > 0) ctx.fill(itemX + 1, y + 22, itemX + 1 + barWidth, y + 24, remaining > 0.5f ? 0xFF73D99B : 0xFFFFB45F);
             }
+        }
+    }
+
+    private static void renderArmorStatus(DrawContext ctx, MinecraftClient client, int accent, int screenHeight) {
+        EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+        String[] labels = {"HELMET", "CHEST", "LEGS", "BOOTS"};
+        int x = 12, y = Math.max(82, screenHeight / 2 + 62);
+        panel(ctx, x, y, 132, 82, accent);
+        ctx.drawText(client.textRenderer, "ARMOR STATUS", x + 8, y + 6, accent, true);
+        for (int i = 0; i < slots.length; i++) {
+            ItemStack stack = client.player.getEquippedStack(slots[i]);
+            int remaining = stack.isEmpty() || !stack.isDamageable() ? 0
+                : Math.round(100.0f * (1.0f - (float) stack.getDamage() / stack.getMaxDamage()));
+            int color = remaining > 50 ? 0xFF36A875 : remaining > 20 ? 0xFFE0A04E : 0xFFE16F78;
+            ctx.drawText(client.textRenderer, labels[i], x + 8, y + 21 + i * 14, MUTED, false);
+            ctx.drawText(client.textRenderer, stack.isEmpty() ? "—" : remaining + "%",
+                x + 91, y + 21 + i * 14, color, true);
         }
     }
 
