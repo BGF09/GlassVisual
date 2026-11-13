@@ -23,17 +23,17 @@ public final class NullMainMenuScreen extends Screen {
     }
     @Override public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
         int accent = NullTheme.accent();
-        ctx.fillGradient(0, 0, width, height, 0xFF090B11, 0xFF151A27);
-        ctx.fill(width / 2 - 1, 0, width / 2 + 1, height, 0x11FFFFFF);
-        ctx.fill(0, height / 2 - 1, width, height / 2 + 1, 0x223C4654);
-        ctx.fill(width / 2 - 190, height / 2 - 190, width / 2 + 190, height / 2 + 205, 0x66111622);
+        ctx.fillGradient(0, 0, width, height, 0xFFF0F5FC, 0xFFDCE8F6);
+        ctx.fill(width / 2 - 1, 0, width / 2 + 1, height, 0x44FFFFFF);
+        ctx.fill(0, height / 2 - 1, width, height / 2 + 1, 0x22818FA8);
+        ctx.fill(width / 2 - 190, height / 2 - 190, width / 2 + 190, height / 2 + 205, 0xCCFFFFFF);
         ctx.fill(width / 2 - 190, height / 2 - 190, width / 2 + 190, height / 2 - 187, accent);
         ctx.drawCenteredTextWithShadow(textRenderer, "N", width / 2, height / 2 - 166, 0xFF8492E8);
         ctx.drawCenteredTextWithShadow(textRenderer, "NULL", width / 2, height / 2 - 112, 0xFFF4F6FC);
-        ctx.drawCenteredTextWithShadow(textRenderer, "VISUAL CLIENT", width / 2, height / 2 - 94, accent);
-        ctx.drawCenteredTextWithShadow(textRenderer, "ACCOUNT  •  " + NullAccountProfile.login(), width / 2, height / 2 - 72, 0xFFB98AFF);
+        ctx.drawCenteredTextWithShadow(textRenderer, "VISUAL CLIENT", width / 2, height / 2 - 94, 0xFF536789);
+        ctx.drawCenteredTextWithShadow(textRenderer, "ACCOUNT  •  " + NullAccountProfile.login(), width / 2, height / 2 - 72, 0xFF687A9C);
         super.render(ctx, mouseX, mouseY, delta);
-        ctx.drawCenteredTextWithShadow(textRenderer, "NULL CLIENT  •  1.21.4", width / 2, height - 18, 0xFF7F899C);
+        ctx.drawCenteredTextWithShadow(textRenderer, "NULL CLIENT  •  1.21.4", width / 2, height - 18, 0xFF71809A);
     }
     @Override public boolean shouldPause() { return false; }
 }
