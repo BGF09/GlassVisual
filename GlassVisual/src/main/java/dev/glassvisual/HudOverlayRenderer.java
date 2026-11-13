@@ -24,6 +24,7 @@ public final class HudOverlayRenderer {
         int accent = NullTheme.accent();
         int width = client.getWindow().getScaledWidth();
         int height = client.getWindow().getScaledHeight();
+        if (GlassVisualClient.MODULES.worldTint) ctx.fill(0, 0, width, height, 0x169B7CFF);
         renderWatermark(ctx, client, accent, width, height);
 
         if (GlassVisualClient.MODULES.fps) {
@@ -74,6 +75,7 @@ public final class HudOverlayRenderer {
             renderArrayList(ctx, client, accent, width);
         }
         renderUtilityWidgets(ctx, client, accent, width, height);
+        renderCombatWidgets(ctx, client, accent, width, height);
     }
 
     private static void renderUtilityWidgets(DrawContext ctx, MinecraftClient client, int accent, int width, int height) {
@@ -121,6 +123,60 @@ public final class HudOverlayRenderer {
             int x = width - 92, y = 12;
             panel(ctx, x, y, 80, 24, accent);
             ctx.drawText(client.textRenderer, time, x + 10, y + 8, TEXT, true);
+        }
+    }
+
+    private static void renderCombatWidgets(DrawContext ctx, MinecraftClient client, int accent, int width, int height) {
+        var modules = GlassVisualClient.MODULES;
+        if (modules.crosshair) {
+            int cx = width / 2, cy = height / 2;
+            int dark = 0xB0182232;
+            ctx.fill(cx - 1, cy - 8, cx + 2, cy - 3, dark);
+            ctx.fill(cx - 1, cy + 4, cx + 2, cy + 9, dark);
+            ctx.fill(cx - 8, cy - 1, cx - 3, cy + 2, dark);
+            ctx.fill(cx + 4, cy - 1, cx + 9, cy + 2, dark);
+            ctx.fill(cx, cy - 7, cx + 1, cy - 3, accent);
+            ctx.fill(cx, cy + 4, cx + 1, cy + 8, accent);
+            ctx.fill(cx - 7, cy, cx - 3, cy + 1, accent);
+            ctx.fill(cx + 4, cy, cx + 8, cy + 1, accent);
+        }
+        if (client.player == null) return;
+        if (modules.combatHud) {
+            int x = width / 2 - 86, y = height - 52;
+            panel(ctx, x, y, 172, 40, accent);
+            String held = client.player.getMainHandStack().isEmpty() ? "EMPTY"
+                : client.player.getMainHandStack().getName().getString();
+            if (held.length() > 18) held = held.substring(0, 17) + "…";
+            ctx.drawText(client.textRenderer, "COMBAT", x + 9, y + 7, MUTED, true);
+            ctx.drawText(client.textRenderer, held, x + 58, y + 7, TEXT, true);
+            float cooldown = client.player.getAttackCooldownProgress(0.0f);
+            int barWidth = Math.round(154 * Math.max(0.0f, Math.min(1.0f, cooldown)));
+            ctx.fill(x + 9, y + 25, x + 163, y + 31, 0xFFDCE3EF);
+            if (barWidth > 0) ctx.fill(x + 9, y + 25, x + 9 + barWidth, y + 31, accent);
+        }
+        if (modules.durability) {
+            var stack = client.player.getMainHandStack();
+            if (stack.isDamageable()) {
+                int x = width / 2 + 96, y = height - 34;
+                float remaining = 1.0f - (float) stack.getDamage() / stack.getMaxDamage();
+                panel(ctx, x, y, 110, 24, accent);
+                ctx.drawText(client.textRenderer, "DURABILITY", x + 7, y + 4, MUTED, true);
+                ctx.drawText(client.textRenderer, Math.round(remaining * 100) + "%", x + 72, y + 4,
+                    remaining > 0.5f ? 0xFF36A875 : 0xFFE18B55, true);
+                ctx.fill(x + 7, y + 16, x + 103, y + 19, 0xFFDCE3EF);
+                int bar = Math.round(96 * Math.max(0.0f, remaining));
+                if (bar > 0) ctx.fill(x + 7, y + 16, x + 7 + bar, y + 19, accent);
+            }
+        }
+        if (modules.inventory) {
+            var stack = client.player.getMainHandStack();
+            String item = stack.isEmpty() ? "EMPTY" : stack.getName().getString();
+            if (item.length() > 17) item = item.substring(0, 16) + "…";
+            int x = 12, y = height - 124;
+            panel(ctx, x, y, 158, 26, accent);
+            if (!stack.isEmpty()) ctx.drawItem(stack, x + 6, y + 4);
+            ctx.drawText(client.textRenderer, item, x + 29, y + 5, TEXT, true);
+            ctx.drawText(client.textRenderer, "x" + stack.getCount(), x + 29, y + 15, MUTED, false);
         }
     }
 
