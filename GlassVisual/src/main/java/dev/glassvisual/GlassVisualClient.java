@@ -66,7 +66,7 @@ public final class GlassVisualClient implements ClientModInitializer {
             if (MODULES.hitVisuals) NullHitVisuals.render(context, client);
             NullParticleRenderer.render(context, client);
             HudOverlayRenderer.render(context, client);
-            Notifier.render(context, client);
+            if (MODULES.notifications) Notifier.render(context, client);
         });
     }
 
