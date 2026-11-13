@@ -36,6 +36,13 @@ public final class GlassVisualClient implements ClientModInitializer {
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (MODULES.autoSprint && client.player != null) {
+                var player = client.player;
+                boolean canSprint = player.input.movementForward > 0.0F
+                    && !player.isSneaking() && !player.horizontalCollision
+                    && player.getHungerManager().getFoodLevel() > 6;
+                player.setSprinting(canSprint);
+            }
             NullParticleRenderer.tick(client);
             TargetNotifier.tick(client);
             while (openHudEditor.wasPressed()) {
@@ -70,5 +77,6 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean armorHud;
         public boolean potionHud;
         public boolean ping;
+        public boolean autoSprint;
     }
 }
