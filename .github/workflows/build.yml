@@ -52,7 +52,8 @@ jobs:
       - name: Collect JAR
         shell: pwsh
         run: |
-          $jar = Get-ChildItem "GlassVisual/build/libs/glass-visual-1.0.0.jar" -ErrorAction Stop
+          $jar = Get-ChildItem "GlassVisual/build/libs/glass-visual-*.jar" | Where-Object { $_.Name -notlike "*sources*" } | Select-Object -First 1
+          if (-not $jar) { throw "NULL mod JAR was not produced" }
           New-Item -ItemType Directory -Force dist/mod | Out-Null
           Copy-Item $jar.FullName dist/mod/NULL-Visual-1.0.0.jar
 
