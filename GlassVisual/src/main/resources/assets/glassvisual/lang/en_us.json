@@ -1,4 +1,5 @@
 {
   "key.glassvisual.open_gui": "Open NULL ClickGUI",
-  "category.glassvisual": "NULL"
+  "category.glassvisual": "Glass Visual",
+  "key.glassvisual.hud_editor": "Open HUD editor"
 }
