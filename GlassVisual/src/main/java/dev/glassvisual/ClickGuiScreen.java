@@ -43,8 +43,8 @@ public final class ClickGuiScreen extends Screen {
     }
     @Override public void render(DrawContext ctx,int mx,int my,float delta){
         int accent=NullTheme.accent();ctx.fill(0,0,width,height,SHADE);
-        ctx.fill(x-4,y-4,x+w+4,y+h+4,0x220D1424);ctx.fill(x,y,x+w,y+h,PANEL);
-        ctx.fill(x,y,x+145,y+h,SIDE);ctx.fill(x,y,x+w,y+3,accent);
+        ctx.fill(x-4,y-4,x+w+4,y+h+4,0x220D1424);roundedFill(ctx,x,y,w,h,14,PANEL);
+        roundedFill(ctx,x,y,145,h,14,SIDE);ctx.fill(x,y,x+w,y+3,accent);
         ctx.drawText(textRenderer,"N",x+17,y+17,accent,true);
         ctx.drawText(textRenderer,"NULL",x+34,y+17,WHITE,true);
         ctx.drawText(textRenderer,"CLIENT",x+72,y+18,MUTED,false);
@@ -52,7 +52,7 @@ public final class ClickGuiScreen extends Screen {
         String[] cats=categoryNames();
         for(int i=0;i<cats.length;i++){
             int cy=y+57+i*37;boolean active=i==selected;
-            if(active){ctx.fill(x+8,cy-5,x+137,cy+25,0xFFDCE8FA);ctx.fill(x+8,cy-5,x+11,cy+25,accent);}
+            if(active){roundedFill(ctx,x+8,cy-5,129,30,8,0xFFDCE8FA);ctx.fill(x+8,cy-5,x+11,cy+25,accent);}
             ctx.drawText(textRenderer,cats[i],x+20,cy+5,active?WHITE:MUTED,active);
         }
         ctx.drawText(textRenderer,tr("НАСТРОЙКИ","SETTINGS"),x+17,y+h-111,MUTED,true);
@@ -77,7 +77,7 @@ public final class ClickGuiScreen extends Screen {
         String[][] cat=categories();
         for(int i=1;i<cat[selected].length;i++){
             String name=cat[selected][i];if(!q.isBlank()&&!name.toLowerCase().contains(q))continue;
-            int rh=48;ctx.fill(listX,rowY,listX+listW,rowY+rh,CARD);
+            int rh=48;roundedFill(ctx,listX,rowY,listW,rh,9,CARD);
             ctx.fill(listX,rowY,listX+3,rowY+rh,0xFF303746);
             ctx.drawText(textRenderer,name,listX+14,rowY+8,WHITE,true);
             String desc=description(name);
@@ -86,7 +86,7 @@ public final class ClickGuiScreen extends Screen {
             if(supported){
                 boolean enabled=enabled(selected,i);String state=enabled?"ON":"OFF";
                 int sw=textRenderer.getWidth(state);
-                ctx.fill(listX+listW-48,rowY+13,listX+listW-12,rowY+34,enabled?0xFFDDF6E8:0xFFE9EDF4);
+                roundedFill(ctx,listX+listW-48,rowY+13,36,21,8,enabled?0xFFDDF6E8:0xFFE9EDF4);
                 ctx.drawText(textRenderer,state,listX+listW-30-sw/2,rowY+19,enabled?0xFF168A58:0xFF7E899B,true);
             }else{
                 ctx.drawText(textRenderer,tr("СКОРО","SOON"),listX+listW-50,rowY+19,0xFF9AA4B5,false);
@@ -147,8 +147,16 @@ public final class ClickGuiScreen extends Screen {
         else if(c==4&&i==3)m.arrayList=!m.arrayList;else if(c==4&&i==5)m.ping=!m.ping;
         GlassVisualConfig.save();Notifier.module(new Module(categories()[c][i]),enabled(c,i));
     }
+    private static void roundedFill(DrawContext ctx,int x,int y,int w,int h,int radius,int color){
+        int r=Math.max(1,Math.min(radius,Math.min(w,h)/2));
+        for(int row=0;row<h;row++){
+            int edge=row<r?r-1-row:(row>=h-r?row-(h-r):-1);
+            int inset=edge<0?0:r-(int)Math.floor(Math.sqrt(Math.max(0,r*r-edge*edge)));
+            ctx.fill(x+inset,y+row,x+w-inset,y+row+1,color);
+        }
+    }
     private void drawSmallButton(DrawContext ctx,int bx,int by,int bw,int bh,String label,int accent){
-        ctx.fill(bx,by,bx+bw,by+bh,0xFF202631);ctx.fill(bx,by,bx+2,by+bh,accent);
+        roundedFill(ctx,bx,by,bw,bh,6,0xFF202631);ctx.fill(bx,by,bx+2,by+bh,accent);
         ctx.drawCenteredTextWithShadow(textRenderer,label,bx+bw/2,by+7,WHITE);
     }
     @Override public boolean mouseClicked(double mx,double my,int button){
