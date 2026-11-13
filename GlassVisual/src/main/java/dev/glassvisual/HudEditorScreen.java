@@ -6,8 +6,8 @@ import net.minecraft.text.Text;
 
 /** In-game drag editor for HUD groups. */
 public final class HudEditorScreen extends Screen {
-    private static final int PANEL = 0xDDF7FAFF;
-    private static final int OUTLINE = 0xFF8DA8D8;
+    private static final int PANEL = 0xE91A202D;
+    private static final int OUTLINE = 0xFF9B7CFF;
     private String dragging;
     private int dragOffsetX, dragOffsetY;
 
@@ -15,7 +15,7 @@ public final class HudEditorScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        ctx.fill(0, 0, width, height, 0x553B4B68);
+        ctx.fill(0, 0, width, height, 0x99060A12);
         drawElement(ctx, "WATERMARK", HudLayout.watermarkX, HudLayout.watermarkY, 114, 26);
         drawElement(ctx, "FPS", HudLayout.fpsX < 0 ? width - 92 : HudLayout.fpsX, HudLayout.fpsY, 80, 26);
         drawElement(ctx, "COORDINATES", HudLayout.coordinatesX, HudLayout.coordinatesY < 0 ? height - 34 : HudLayout.coordinatesY, 154, 26);
@@ -25,9 +25,9 @@ public final class HudEditorScreen extends Screen {
         drawElement(ctx, "POTIONS", HudLayout.potionsX < 0 ? width - 154 : HudLayout.potionsX, HudLayout.potionsY, 146, 54);
         drawElement(ctx, "PING", HudLayout.pingX < 0 ? width - 92 : HudLayout.pingX, HudLayout.pingY, 80, 24);
         ctx.drawCenteredTextWithShadow(textRenderer, "HUD EDITOR  •  DRAG ELEMENTS  •  ESC TO SAVE",
-            width / 2, 12, 0xFFFFFFFF);
+            width / 2, 12, 0xFFF1F3FA);
         ctx.drawCenteredTextWithShadow(textRenderer, "Right Alt opens this editor",
-            width / 2, 26, 0xFF52627B);
+            width / 2, 26, 0xFF9AA8BD);
         super.render(ctx, mouseX, mouseY, delta);
     }
 
@@ -37,7 +37,7 @@ public final class HudEditorScreen extends Screen {
         ctx.fill(x, y, x + 2, y + h, OUTLINE);
         ctx.fill(x + w - 2, y, x + w, y + h, OUTLINE);
         ctx.fill(x, y + h - 2, x + w, y + h, OUTLINE);
-        ctx.drawText(textRenderer, label, x + 7, y + (h - 9) / 2, 0xFF26364F, true);
+        ctx.drawText(textRenderer, label, x + 7, y + (h - 9) / 2, 0xFFF1F3FA, true);
     }
 
     @Override
