@@ -119,5 +119,9 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean timeChanger;
         public boolean blockOutline;
         public boolean aimAssist;
+        public boolean directionHud;
+        public boolean totemCounter;
+        public boolean foodHud;
+        public boolean xpHud;
     }
 }
