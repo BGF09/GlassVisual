@@ -41,17 +41,17 @@ public final class ClickGuiScreen extends Screen {
     @Override protected void init(){
         clearChildren();calculateBounds();
         int x=panelX+panelW-294,y=panelY+13;
-        addDrawableChild(ButtonWidget.builder(Text.literal("−"),b->{NullUiSettings.adjustScale(-0.05f);init();}).dimensions(x,y,22,20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("+"),b->{NullUiSettings.adjustScale(0.05f);init();}).dimensions(x+24,y,22,20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("−"),b->{NullUiSettings.adjustScale(-0.05f);GlassVisualConfig.save();init();}).dimensions(x,y,22,20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("+"),b->{NullUiSettings.adjustScale(0.05f);GlassVisualConfig.save();init();}).dimensions(x+24,y,22,20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("FIT"),b->{NullUiSettings.setMode(NullUiSettings.LayoutMode.FIT);init();}).dimensions(x+50,y,38,20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("4:3"),b->NullUiSettings.setScreenRatio(4,3)).dimensions(x+92,y,42,20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("16:9"),b->NullUiSettings.setScreenRatio(16,9)).dimensions(x+138,y,46,20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("FULL"),b->MinecraftClient.getInstance().getWindow().toggleFullscreen()).dimensions(x+188,y,48,20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal(NullUiSettings.particles?"PARTICLES ON":"PARTICLES OFF"),b->{NullUiSettings.particles=!NullUiSettings.particles;init();})
+        addDrawableChild(ButtonWidget.builder(Text.literal(NullUiSettings.particles?"PARTICLES ON":"PARTICLES OFF"),b->{NullUiSettings.particles=!NullUiSettings.particles;GlassVisualConfig.save();init();})
             .dimensions(panelX+16,panelY+43,112,20).build());
         int swatchX=panelX+panelW-92;
         for(int i=0;i<NullTheme.colorCount();i++){final int index=i;
-            addDrawableChild(ButtonWidget.builder(Text.literal(" "),b->NullTheme.select(index)).dimensions(swatchX+(i%3)*25,panelY+43+(i/3)*22,21,18).build());}
+            addDrawableChild(ButtonWidget.builder(Text.literal(" "),b->{NullTheme.select(index);GlassVisualConfig.save();}).dimensions(swatchX+(i%3)*25,panelY+43+(i/3)*22,21,18).build());}
         addDrawableChild(ButtonWidget.builder(Text.literal("×"),b->close()).dimensions(panelX+panelW-30,panelY+panelH-29,20,20).build());
     }
     @Override public void render(DrawContext ctx,int mouseX,int mouseY,float delta){
@@ -107,6 +107,7 @@ public final class ClickGuiScreen extends Screen {
         else if(category==1&&item==6)m.keystrokes=!m.keystrokes;
         else if(category==2&&item==4)m.fps=!m.fps;
         else if(category==3&&item==3)m.coordinates=!m.coordinates;
+        GlassVisualConfig.save();
         Notifier.module(new Module(CATEGORIES[category][item]), moduleEnabled(category,item));
     }
     @Override public boolean mouseClicked(double mouseX,double mouseY,int button){
