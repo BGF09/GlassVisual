@@ -54,6 +54,7 @@ public final class GlassVisualClient implements ClientModInitializer {
                     && hit.getEntity() instanceof LivingEntity target && target.isAlive()) {
                 TargetHudRenderer.render(context, client, target);
             }
+            NullParticleRenderer.render(context, client);
             HudOverlayRenderer.render(context, client);
             Notifier.render(context, client);
         });
