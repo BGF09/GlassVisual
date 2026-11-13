@@ -8,7 +8,7 @@
 - NULL-style интерфейс с категориями, настройкой масштаба, FIT / STRETCH / 4:3 режимами и палитрой акцентов.
 - Переключатели Target HUD, Keystrokes, Coordinates и FPS Counter.
 - Target HUD показывает имя, здоровье, дистанцию и настоящий скин игрока, если он доступен в сетевом списке.
-- Keystrokes, координаты, FPS и Watermark отрисовываются поверх игрового HUD.
+- Keystrokes, координаты, FPS и Watermark отрисовываются поверх игрового HUD.\n- Редактор HUD открывается на Right Alt: перетаскивай Watermark, FPS, Coordinates и Keystrokes мышью; позиции сохраняются.
 - Анимированные уведомления о переключении модулей и обнаруженном использовании некоторых предметов другими игроками.
 - Косметические частицы и кастомное главное меню.
 - Настройки сохраняются в `.minecraft/config/glassvisual.json` и загружаются при следующем запуске.
@@ -36,7 +36,7 @@ GitHub Actions автоматически собирает проект при p
 
 | Клавиша | Действие |
 |---|---|
-| Right Shift | Открыть / закрыть ClickGUI |
+| Right Shift | Открыть / закрыть ClickGUI |\n| Right Alt | Открыть редактор HUD |
 | ESC | Закрыть ClickGUI |
 
 Клавишу ClickGUI можно изменить в Options → Controls → Key Binds.
@@ -52,7 +52,7 @@ src/main/java/dev/glassvisual/
 ├── GlassVisualClient.java
 ├── GlassVisualConfig.java
 ├── ClickGuiScreen.java
-├── HudOverlayRenderer.java
+├── HudOverlayRenderer.java\n├── HudEditorScreen.java\n├── HudLayout.java
 ├── TargetHudRenderer.java
 ├── TargetNotifier.java
 ├── Notifier.java
