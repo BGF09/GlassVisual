@@ -10,14 +10,14 @@ public final class ClickGuiScreen extends Screen {
     private static final int ROW=0xFF1D222D, WHITE=0xFFF1F3F8, MUTED=0xFF8992A3;
     private static final String[][] RU={
         {"Бой","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
-        {"Движение","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
+        {"Движение","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
         {"Визуалы","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer"},
         {"Игрок","Armor Status","Armor HUD","Coordinates","Durability","Inventory"},
         {"Разное","Session Info","Clock","ArrayList","Notifications","Ping"}
     };
     private static final String[][] EN={
         {"Combat","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
-        {"Movement","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
+        {"Movement","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
         {"Visuals","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer"},
         {"Player","Armor Status","Armor HUD","Coordinates","Durability","Inventory"},
         {"Misc","Session Info","Clock","ArrayList","Notifications","Ping"}
@@ -101,6 +101,7 @@ public final class ClickGuiScreen extends Screen {
     private String description(String name){
         return switch(name){
             case "Target HUD" -> tr("Цель под прицелом: здоровье, дистанция и имя","Target under crosshair: health, distance and name");
+            case "Auto Sprint" -> tr("Автоматически бежать при движении вперёд","Automatically sprint while moving forward");
             case "Keystrokes" -> tr("Отображение нажатых клавиш","Show pressed movement keys");
             case "FPS Counter" -> tr("Текущий FPS в компактной панели","Current FPS in a compact panel");
             case "Armor HUD" -> tr("Броня и прочность предметов","Equipped armor and durability");
@@ -111,15 +112,15 @@ public final class ClickGuiScreen extends Screen {
             default -> tr("Визуальный модуль NULL","NULL visual module");
         };
     }
-    private boolean isSupported(int c,int i){return(c==0&&i==3)||(c==1&&i==4)||(c==2&&(i==4||i==5))||(c==3&&(i==2||i==3))||(c==4&&(i==3||i==5));}
+    private boolean isSupported(int c,int i){return(c==0&&i==3)||(c==1&&(i==1||i==5))||(c==2&&(i==4||i==5))||(c==3&&(i==2||i==3))||(c==4&&(i==3||i==5));}
     private boolean enabled(int c,int i){var m=GlassVisualClient.MODULES;
-        if(c==0&&i==3)return m.targetHud;if(c==1&&i==4)return m.keystrokes;
+        if(c==0&&i==3)return m.targetHud;if(c==1&&i==1)return m.autoSprint;if(c==1&&i==5)return m.keystrokes;
         if(c==2&&i==4)return m.fps;if(c==2&&i==5)return m.potionHud;
         if(c==3&&i==2)return m.armorHud;if(c==3&&i==3)return m.coordinates;
         if(c==4&&i==3)return m.arrayList;if(c==4&&i==5)return m.ping;return false;
     }
     private void toggle(int c,int i){var m=GlassVisualClient.MODULES;
-        if(c==0&&i==3)m.targetHud=!m.targetHud;else if(c==1&&i==4)m.keystrokes=!m.keystrokes;
+        if(c==0&&i==3)m.targetHud=!m.targetHud;else if(c==1&&i==1)m.autoSprint=!m.autoSprint;else if(c==1&&i==5)m.keystrokes=!m.keystrokes;
         else if(c==2&&i==4)m.fps=!m.fps;else if(c==2&&i==5)m.potionHud=!m.potionHud;
         else if(c==3&&i==2)m.armorHud=!m.armorHud;else if(c==3&&i==3)m.coordinates=!m.coordinates;
         else if(c==4&&i==3)m.arrayList=!m.arrayList;else if(c==4&&i==5)m.ping=!m.ping;
