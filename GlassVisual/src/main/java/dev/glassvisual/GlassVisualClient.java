@@ -16,7 +16,7 @@ import org.lwjgl.glfw.GLFW;
 public final class GlassVisualClient implements ClientModInitializer {
     public static final String MOD_ID = "glassvisual";
     public static final ModuleState MODULES = new ModuleState();
-    private static KeyBinding openClickGui;
+    private static KeyBinding openClickGui;\n    private static KeyBinding openHudEditor;
 
     @Override
     public void onInitializeClient() {
@@ -26,6 +26,11 @@ public final class GlassVisualClient implements ClientModInitializer {
             GLFW.GLFW_KEY_RIGHT_SHIFT, "category.glassvisual"
         ));
 
+        openHudEditor = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.glassvisual.hud_editor", InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_RIGHT_ALT, "category.glassvisual"
+        ));
+
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
             if (screen instanceof TitleScreen) client.setScreen(new NullMainMenuScreen());
         });
@@ -33,6 +38,9 @@ public final class GlassVisualClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             NullParticleRenderer.tick(client);
             TargetNotifier.tick(client);
+            while (openHudEditor.wasPressed()) {
+                if (client.currentScreen == null) client.setScreen(new HudEditorScreen());
+            }
             while (openClickGui.wasPressed()) {
                 if (client.currentScreen == null) client.setScreen(new ClickGuiScreen());
                 else if (client.currentScreen instanceof ClickGuiScreen) client.setScreen(null);
