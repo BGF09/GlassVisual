@@ -11,7 +11,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.world.MutableWorldProperties;
+import net.minecraft.client.world.ClientWorld;
 import org.lwjgl.glfw.GLFW;
 
 public final class GlassVisualClient implements ClientModInitializer {
@@ -38,7 +38,7 @@ public final class GlassVisualClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (MODULES.timeChanger && client.world != null) {
-                ((MutableWorldProperties) client.world.getLevelProperties()).setTimeOfDay(6000L);
+                ((ClientWorld.Properties) client.world.getLevelProperties()).setTimeOfDay(6000L);
             }
             if (MODULES.autoSprint && client.player != null) {
                 var player = client.player;
