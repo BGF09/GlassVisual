@@ -69,7 +69,7 @@
 gradle build
 ```
 
-Основной JAR находится в `build/libs/glass-visual-*.jar`. В папку `.minecraft/mods` помещается только основной JAR, не `*-sources.jar`.
+Основной JAR находится в `build/libs/glass-visual-1.1.0.jar`. В папку `.minecraft/mods` помещается только основной JAR, не `*-sources.jar`.
 
 ## Управление
 
