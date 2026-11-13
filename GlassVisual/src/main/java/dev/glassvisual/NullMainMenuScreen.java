@@ -23,17 +23,17 @@ public final class NullMainMenuScreen extends Screen {
     }
     @Override public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
         int accent = NullTheme.accent();
-        ctx.fillGradient(0, 0, width, height, 0xFFF0F5FC, 0xFFDCE8F6);
-        ctx.fill(width / 2 - 1, 0, width / 2 + 1, height, 0x44FFFFFF);
-        ctx.fill(0, height / 2 - 1, width, height / 2 + 1, 0x22818FA8);
-        ctx.fill(width / 2 - 190, height / 2 - 190, width / 2 + 190, height / 2 + 205, 0xCCFFFFFF);
+        ctx.fillGradient(0, 0, width, height, 0xFF0B101A, 0xFF151D2B);
+        ctx.fill(width / 2 - 1, 0, width / 2 + 1, height, 0x223E4A60);
+        ctx.fill(0, height / 2 - 1, width, height / 2 + 1, 0x334E5D76);
+        ctx.fill(width / 2 - 190, height / 2 - 190, width / 2 + 190, height / 2 + 205, 0xEE1B2432);
         ctx.fill(width / 2 - 190, height / 2 - 190, width / 2 + 190, height / 2 - 187, accent);
-        ctx.drawCenteredTextWithShadow(textRenderer, "N", width / 2, height / 2 - 166, 0xFF8492E8);
-        ctx.drawCenteredTextWithShadow(textRenderer, "NULL", width / 2, height / 2 - 112, 0xFF202A3B);
-        ctx.drawCenteredTextWithShadow(textRenderer, "VISUAL CLIENT", width / 2, height / 2 - 94, 0xFF536789);
-        ctx.drawCenteredTextWithShadow(textRenderer, "ACCOUNT  •  " + NullAccountProfile.login(), width / 2, height / 2 - 72, 0xFF687A9C);
+        ctx.drawCenteredTextWithShadow(textRenderer, "N", width / 2, height / 2 - 166, accent);
+        ctx.drawCenteredTextWithShadow(textRenderer, "NULL", width / 2, height / 2 - 112, 0xFFF2F4FA);
+        ctx.drawCenteredTextWithShadow(textRenderer, "VISUAL CLIENT", width / 2, height / 2 - 94, 0xFF9AA8BD);
+        ctx.drawCenteredTextWithShadow(textRenderer, "ACCOUNT  •  " + NullAccountProfile.login(), width / 2, height / 2 - 72, 0xFF8D9CB3);
         super.render(ctx, mouseX, mouseY, delta);
-        ctx.drawCenteredTextWithShadow(textRenderer, "NULL CLIENT  •  1.21.4", width / 2, height - 18, 0xFF71809A);
+        ctx.drawCenteredTextWithShadow(textRenderer, "NULL CLIENT  •  1.21.4", width / 2, height - 18, 0xFF8D9CB3);
     }
     @Override public boolean shouldPause() { return false; }
 }
