@@ -186,6 +186,7 @@ public final class Notifier {
         final ItemStack icon;
         SkinTextures skin;
         String message;
+        Text text;
         int accent;
         long duration, started, leaveStarted;
         boolean leaving;
