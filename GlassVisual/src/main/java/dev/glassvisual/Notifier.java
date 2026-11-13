@@ -33,6 +33,7 @@ public final class Notifier {
                 Card card = ACTIVE.get(i);
                 if (card.type == Type.MODULE && card.key.equals(name)) {
                     card.message = message;
+                    card.text = Text.literal(message);
                     card.accent = accent;
                     card.started = System.nanoTime();
                     card.duration = MODULE_TIME;
