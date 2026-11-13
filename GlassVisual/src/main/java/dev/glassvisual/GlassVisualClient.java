@@ -26,7 +26,6 @@ public final class GlassVisualClient implements ClientModInitializer {
             "key.glassvisual.open_gui", InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_RIGHT_SHIFT, "category.glassvisual"
         ));
-
         openHudEditor = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.glassvisual.hud_editor", InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_RIGHT_ALT, "category.glassvisual"
@@ -66,5 +65,9 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean coordinates;
         public boolean fps;
         public boolean glowAccent = true;
+        public boolean arrayList = true;
+        public boolean armorHud;
+        public boolean potionHud;
+        public boolean ping;
     }
 }
