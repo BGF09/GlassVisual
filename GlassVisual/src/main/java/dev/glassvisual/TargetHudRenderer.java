@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
 public final class TargetHudRenderer {
-    private static final int PANEL=0xE00D1018, MUTED=0xFFAAA6BB;
+    private static final int PANEL=0xEAF7FAFF, MUTED=0xFF71809A;
     private static UUID previousTarget;
     private static int ghostTicks;
     private static float smoothHealth=-1, ghostHealth=-1;
@@ -32,7 +32,7 @@ public final class TargetHudRenderer {
         if(ghostTicks>0)ghostTicks--;
         double distance=client.player.distanceTo(target);
 
-        ctx.fill(x-3,y-3,x+w+3,y+h+3,0x44000000);
+        ctx.fill(x-3,y-3,x+w+3,y+h+3,0x220D1424);
         ctx.fill(x,y,x+w,y+h,PANEL);
         ctx.fill(x,y,x+w,y+2,accent);
         // A soft ghost echo appears briefly when the tracked target changes.
@@ -50,8 +50,8 @@ public final class TargetHudRenderer {
             if(entry!=null){SkinTextures skin=entry.getSkinTextures();PlayerSkinDrawer.draw(ctx,skin,x+9,y+13,34);skinDrawn=true;}
         }
         if(!skinDrawn){
-            ctx.fill(x+9,y+13,x+43,y+47,0xFF292438);
-            ctx.fill(x+18,y+17,x+34,y+32,0xFFB8A0D5);
+            ctx.fill(x+9,y+13,x+43,y+47,0xFFE5EAF3);
+            ctx.fill(x+18,y+17,x+34,y+32,0xFF9AA9C1);
             ctx.fill(x+14,y+33,x+38,y+44,accent);
         }
         String name=target.getName().getString();if(name.length()>17)name=name.substring(0,16)+"…";
@@ -60,7 +60,7 @@ public final class TargetHudRenderer {
         ctx.drawText(textRenderer(client),Text.literal("TARGET"),x+w-48,y+10,accent,true);
 
         int bx=x+52,by=y+43,bw=119;
-        ctx.fill(bx,by,bx+bw,by+7,0xFF302B3A);
+        ctx.fill(bx,by,bx+bw,by+7,0xFFDCE3EF);
         int ghostWidth=Math.round(bw*MathHelper.clamp(ghostHealth,0,1));
         if(ghostWidth>0)ctx.fill(bx,by,bx+ghostWidth,by+7,0x667F8CA8);
         int fill=Math.round(bw*MathHelper.clamp(smoothHealth,0,1));
