@@ -68,21 +68,21 @@ public final class ClickGuiScreen extends Screen {
         String[][] cat=categories();
         for(int i=1;i<cat[selected].length;i++){
             String name=cat[selected][i];if(!q.isBlank()&&!name.toLowerCase().contains(q))continue;
-            int rh=48;roundedFill(ctx,listX,rowY,listW,rh,9,CARD);
+            int rh=38;roundedFill(ctx,listX,rowY,listW,rh,8,CARD);
             ctx.fill(listX,rowY,listX+3,rowY+rh,accent);
-            ctx.drawText(textRenderer,name,listX+14,rowY+8,WHITE,true);
+            ctx.drawText(textRenderer,name,listX+14,rowY+5,WHITE,true);
             String desc=description(name);
-            ctx.drawText(textRenderer,desc,listX+14,rowY+24,MUTED,false);
+            ctx.drawText(textRenderer,desc,listX+14,rowY+20,MUTED,false);
             boolean supported=isSupported(selected,i);
             if(supported){
                 boolean enabled=enabled(selected,i);String state=enabled?"ON":"OFF";
                 int sw=textRenderer.getWidth(state);
-                roundedFill(ctx,listX+listW-48,rowY+13,36,21,8,enabled?0xFF174B3B:0xFF343D4D);
-                ctx.drawText(textRenderer,state,listX+listW-30-sw/2,rowY+19,enabled?0xFF66E0A7:0xFFB0BBD0,true);
+                roundedFill(ctx,listX+listW-48,rowY+9,36,20,8,enabled?0xFF174B3B:0xFF343D4D);
+                ctx.drawText(textRenderer,state,listX+listW-30-sw/2,rowY+15,enabled?0xFF66E0A7:0xFFB0BBD0,true);
             }else{
-                ctx.drawText(textRenderer,tr("СКОРО","SOON"),listX+listW-50,rowY+19,0xFF9AA4B5,false);
+                ctx.drawText(textRenderer,tr("СКОРО","SOON"),listX+listW-50,rowY+15,0xFF9AA4B5,false);
             }
-            rowY+=54;shown++;
+            rowY+=42;shown++;
             if(rowY>y+h-24)break;
         }
         if(shown==0)ctx.drawText(textRenderer,tr("Ничего не найдено","No modules found"),listX+12,listY+14,MUTED,false);
@@ -169,7 +169,7 @@ public final class ClickGuiScreen extends Screen {
         if(mx>=x+14&&mx<=x+126&&my>=y+h-89&&my<=y+h-66){NullUiSettings.toggleLanguage();GlassVisualConfig.save();init();return true;}
         if(mx>=x+14&&mx<=x+126&&my>=y+h-60&&my<=y+h-37){NullUiSettings.particles=!NullUiSettings.particles;GlassVisualConfig.save();return true;}
         if(mx>=x+164&&mx<=x+w-20&&my>=y+62&&my<=y+h-20){
-            int row=(int)(my-(y+62))/54;int i=row+1;String q=search.getText().toLowerCase();
+            int row=(int)(my-(y+62))/42;int i=row+1;String q=search.getText().toLowerCase();
             int actual=0;for(int n=1;n<categories()[selected].length;n++){if(!q.isBlank()&&!categories()[selected][n].toLowerCase().contains(q))continue;if(actual++==row){if(isSupported(selected,n)){toggle(selected,n);return true;}break;}}
         }
         if(my>=y+20&&my<=y+42&&mx>=x+w-190&&mx<=x+w-142){NullUiSettings.setStretchMode(NullUiSettings.StretchMode.FOUR_THREE);GlassVisualConfig.save();return true;}
