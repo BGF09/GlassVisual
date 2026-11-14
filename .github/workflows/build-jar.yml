@@ -47,7 +47,7 @@ jobs:
                    dev/glassvisual/NullWorldParticles.class dev/glassvisual/NullVisualSettings.class \
                    dev/glassvisual/mixin/GameRendererMixin.class dev/glassvisual/ClickGuiScreen.class \
                    glassvisual.mixins.json fabric.mod.json assets/glassvisual/font/gui.json \
-                   assets/glassvisual/font/inter-regular.otf assets/glassvisual/font/inter-semibold.otf; do
+                   assets/glassvisual/font/inter-regular.ttf assets/glassvisual/font/inter-semibold.ttf; do
             grep -q "$f" jar-listing.txt || { echo "MISSING IN JAR: $f"; exit 1; }
           done
           # Minecraft resource identifiers must be lowercase [a-z0-9/._-]; anything else is silently ignored in game.
