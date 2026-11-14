@@ -13,7 +13,7 @@ public final class ClickGuiScreen extends Screen {
     private static final String[][] RU={
         {"Бой","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
         {"Движение","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
-        {"Визуалы","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer","World Particles","Player Trail","Screen Stretch","Legit ESP"},
+        {"Визуалы","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Always Night","World Particles","Player Trail","Screen Stretch","Legit ESP"},
         {"Игрок","Armor Status","Armor HUD","Coordinates","Durability","Inventory","Totem Counter","Food HUD","XP HUD","Hand Position"},
         {"Разное","Session Info","Clock","ArrayList","Notifications","Ping","Direction"}
     };
@@ -104,7 +104,7 @@ public final class ClickGuiScreen extends Screen {
             case "Combat HUD" -> tr("Предмет в руке и индикатор перезарядки удара","Held item and attack cooldown indicator");
             case "World Tint" -> tr("Лёгкий цветовой оттенок игрового экрана","Subtle color tint over the game view");
             case "Block Outline" -> tr("Цветная обводка блока под прицелом","Accent outline around the targeted block");
-            case "Time Changer" -> tr("Постоянная ночь только на твоём клиенте","Always night on your client only");
+            case "Always Night" -> tr("Постоянная ночь только на твоём клиенте","Always night on your client only");
             case "Legit ESP" -> tr("Обводка игроков только при прямой видимости + HP над головой","Player outline and health above head only when visible");
             case "Hand Position" -> tr("Двигай рукой: NumPad 4/6, 8/2, 7/9","Move hand with NumPad 4/6, 8/2, 7/9");
             case "Crosshair" -> tr("Собственный прицел NULL вместо стандартного","Custom NULL reticle replacing the vanilla crosshair");

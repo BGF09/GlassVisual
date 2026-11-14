@@ -245,7 +245,7 @@ public final class HudOverlayRenderer {
     private static void renderArrayList(DrawContext ctx, MinecraftClient client, int accent, int screenWidth) {
         String[] names = {"Aim Assist", "Hit Visuals", "Target HUD", "Combat HUD", "Particles",
             "Auto Sprint", "Sprint Display", "Jump Stats", "Speed Graph", "Keystrokes",
-            "World Tint", "Block Outline", "Crosshair", "FPS", "Potion HUD", "Time Changer",
+            "World Tint", "Block Outline", "Crosshair", "FPS", "Potion HUD", "Always Night",
             "Armor Status", "Armor HUD", "Coordinates", "Durability", "Inventory", "Totem Counter", "Food HUD", "XP HUD",
             "Session Info", "Clock", "Notifications", "Ping", "Direction"};
         var m = GlassVisualClient.MODULES;

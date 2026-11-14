@@ -16,7 +16,7 @@ public final class NullLegitEsp {
  private static java.util.UUID targetId;
  private NullLegitEsp(){}
  public static void tick(MinecraftClient client){
-  if(!GlassVisualClient.MODULES.legitEsp||client.player==null||client.world==null){GHOSTS.clear();targetId=null;return;}
+  if((!GlassVisualClient.MODULES.legitEsp&&!GlassVisualClient.MODULES.targetHud)||client.player==null||client.world==null){GHOSTS.clear();targetId=null;return;}
   if(client.crosshairTarget instanceof EntityHitResult hit&&hit.getEntity() instanceof PlayerEntity p&&p!=client.player&&!p.isInvisible()&&client.player.canSee(p)){
    if(!p.getUuid().equals(targetId)){GHOSTS.clear();targetId=p.getUuid();}
    GHOSTS.addLast(new Ghost(p.getBoundingBox(),0));
@@ -26,11 +26,11 @@ public final class NullLegitEsp {
  }
  public static void render(WorldRenderContext context){
   MinecraftClient client=MinecraftClient.getInstance();
-  if(!GlassVisualClient.MODULES.legitEsp||client.player==null||context.matrixStack()==null||context.consumers()==null)return;
+  if((!GlassVisualClient.MODULES.legitEsp&&!GlassVisualClient.MODULES.targetHud)||client.player==null||context.matrixStack()==null||context.consumers()==null)return;
   MatrixStack matrices=context.matrixStack();Vec3d camera=context.camera().getPos();matrices.push();matrices.translate(-camera.x,-camera.y,-camera.z);
   Matrix4f matrix=matrices.peek().getPositionMatrix();VertexConsumer lines=context.consumers().getBuffer(RenderLayer.getLines());
   int accent=NullTheme.accent();
-  for(PlayerEntity p:client.world.getPlayers()){
+  if(GlassVisualClient.MODULES.legitEsp)for(PlayerEntity p:client.world.getPlayers()){
    if(p==client.player||p.isInvisible()||!client.player.canSee(p)||!p.isAlive())continue;
    Box box=p.getBoundingBox().expand(0.025);
    drawBox(lines,matrix,box,accent,220);
