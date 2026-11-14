@@ -42,6 +42,7 @@ public final class GlassVisualConfig {
             HudLayout.potionsX=d.potionsX; HudLayout.potionsY=d.potionsY;
             HudLayout.pingX=d.pingX; HudLayout.pingY=d.pingY;
             HudLayout.inventoryX=d.inventoryX; HudLayout.inventoryY=d.inventoryY;
+            HudLayout.notificationsX=d.notificationsX; HudLayout.notificationsY=d.notificationsY;
             try { NullUiSettings.setMode(d.layoutMode == null ? NullUiSettings.LayoutMode.FIT : NullUiSettings.LayoutMode.valueOf(d.layoutMode)); }
             catch (IllegalArgumentException ignored) { NullUiSettings.setMode(NullUiSettings.LayoutMode.FIT); }
         } catch (Exception e) { System.err.println("[NULL] Config load failed: " + e.getMessage()); }
@@ -66,6 +67,7 @@ public final class GlassVisualConfig {
         d.armorX=HudLayout.armorX; d.armorY=HudLayout.armorY; d.potionsX=HudLayout.potionsX; d.potionsY=HudLayout.potionsY;
         d.pingX=HudLayout.pingX; d.pingY=HudLayout.pingY;
         d.inventoryX=HudLayout.inventoryX; d.inventoryY=HudLayout.inventoryY;
+        d.notificationsX=HudLayout.notificationsX; d.notificationsY=HudLayout.notificationsY;
         try { Files.createDirectories(FILE.getParent()); Files.writeString(FILE,GSON.toJson(d)); }
         catch(IOException e) { System.err.println("[NULL] Config save failed: " + e.getMessage()); }
     }
@@ -76,6 +78,6 @@ public final class GlassVisualConfig {
         boolean particles=true, worldParticles=true, playerTrail=true; int theme; float uiScale=1.0f; String layoutMode="FIT", language="ru", stretchMode="FOUR_THREE";
         float handX=0.0f,handY=0.0f,handZ=0.0f;
         int watermarkX=12,watermarkY=12,fpsX=-1,fpsY=12,coordinatesX=12,coordinatesY=-1,keysX=12,keysY=-1;
-        int arrayListX=-1,arrayListY=70,armorX=12,armorY=-1,potionsX=-1,potionsY=170,pingX=-1,pingY=42,inventoryX=-1,inventoryY=-1;
+        int arrayListX=-1,arrayListY=70,armorX=12,armorY=-1,potionsX=-1,potionsY=170,pingX=-1,pingY=42,inventoryX=-1,inventoryY=-1,notificationsX=-1,notificationsY=42;
     }
 }
