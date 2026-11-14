@@ -38,6 +38,21 @@ jobs:
           chmod +x gradlew
           ./gradlew build --stacktrace
 
+      - name: Verify JAR contents
+        run: |
+          JAR=GlassVisual/build/libs/glass-visual-1.2.0.jar
+          unzip -l "$JAR" > jar-listing.txt
+          cat jar-listing.txt
+          for f in dev/glassvisual/NullModules.class dev/glassvisual/NullPlayerTrail.class \
+                   dev/glassvisual/NullWorldParticles.class dev/glassvisual/NullVisualSettings.class \
+                   dev/glassvisual/mixin/GameRendererMixin.class dev/glassvisual/ClickGuiScreen.class \
+                   glassvisual.mixins.json fabric.mod.json assets/glassvisual/font/gui.json \
+                   assets/glassvisual/font/inter-Regular.otf assets/glassvisual/font/inter-SemiBold.otf; do
+            grep -q "$f" jar-listing.txt || { echo "MISSING IN JAR: $f"; exit 1; }
+          done
+          unzip -p "$JAR" glassvisual.mixins.json
+          echo "JAR CONTENT CHECK OK"
+
       - name: Upload NULL JAR
         uses: actions/upload-artifact@v4
         with:
