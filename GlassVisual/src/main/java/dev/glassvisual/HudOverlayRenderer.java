@@ -227,7 +227,7 @@ public final class HudOverlayRenderer {
                 var stack=client.player.getInventory().getStack(slot);
                 if(!stack.isEmpty()){ctx.drawItem(stack,sx+2,y+8);if(stack.getCount()>1)ctx.drawStackOverlay(client.textRenderer,stack,sx+2,y+8);}
             }
-            var selectedStack=client.player.getInventory().getSelectedStack();
+            var selectedStack=client.player.getMainHandStack();
             if(!selectedStack.isEmpty()){String name=selectedStack.getName().getString();int labelWidth=client.textRenderer.getWidth(name)+14;
                 roundedFill(ctx,x+100-labelWidth/2,y-19,labelWidth,16,5,0xC9161D2A);
                 ctx.drawCenteredTextWithShadow(client.textRenderer,ui(name),x+100,y-15,TEXT);}
