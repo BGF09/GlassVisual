@@ -2,7 +2,6 @@ package dev.glassvisual;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFW;
 public final class NullHandSettings {
  private static float x,y,z; private static int saveTicks;
  private NullHandSettings(){}

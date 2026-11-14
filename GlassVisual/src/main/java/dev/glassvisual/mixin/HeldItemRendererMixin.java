@@ -14,7 +14,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HeldItemRenderer.class)
 public abstract class HeldItemRendererMixin {
  @Inject(method="renderFirstPersonItem",at=@At("HEAD"))
- private void null$moveFirstPersonHand(AbstractClientPlayerEntity player,float tickProgress,float pitch,Hand hand,float swingProgress,ItemStack item,float equipProgress,MatrixStack matrices,VertexConsumerProvider vertexConsumers,int light,CallbackInfo ci){
-  if(GlassVisualClient.MODULES.handPosition)NullHandSettings.apply(matrices);
+ private void null$pushHandOffset(AbstractClientPlayerEntity player,float tickProgress,float pitch,Hand hand,float swingProgress,ItemStack item,float equipProgress,MatrixStack matrices,VertexConsumerProvider vertexConsumers,int light,CallbackInfo ci){
+  if(GlassVisualClient.MODULES.handPosition){matrices.push();NullHandSettings.apply(matrices);}
+ }
+ @Inject(method="renderFirstPersonItem",at=@At("RETURN"))
+ private void null$popHandOffset(AbstractClientPlayerEntity player,float tickProgress,float pitch,Hand hand,float swingProgress,ItemStack item,float equipProgress,MatrixStack matrices,VertexConsumerProvider vertexConsumers,int light,CallbackInfo ci){
+  if(GlassVisualClient.MODULES.handPosition)matrices.pop();
  }
 }
