@@ -6,7 +6,8 @@
   "client": [
     "InGameHudMixin",
     "HeldItemRendererMixin",
-    "WorldTimeMixin"
+    "WorldTimeMixin",
+    "GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -2,7 +2,7 @@ name: Build NULL Fabric JAR
 
 on:
   push:
-    branches: [update/glassvisual-v1.1]
+    branches: [update/glassvisual-v1.1, null-v1.1-build-2]
     paths:
       - 'GlassVisual/**'
       - '.github/workflows/build-jar.yml'
@@ -31,12 +31,12 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.11'
 
       - name: Build Fabric JAR
         working-directory: GlassVisual
-        run: gradle build
+        run: |
+          chmod +x gradlew
+          ./gradlew build --stacktrace
 
       - name: Upload NULL JAR
         uses: actions/upload-artifact@v4

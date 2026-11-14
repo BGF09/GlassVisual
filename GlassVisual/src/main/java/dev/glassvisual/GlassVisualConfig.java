@@ -31,6 +31,7 @@ public final class GlassVisualConfig {
             NullUiSettings.playerTrail=d.playerTrail;
             try { NullUiSettings.setStretchMode(d.stretchMode == null ? NullUiSettings.StretchMode.OFF : NullUiSettings.StretchMode.valueOf(d.stretchMode)); }
             catch (IllegalArgumentException ignored) { NullUiSettings.setStretchMode(NullUiSettings.StretchMode.OFF); }
+            loadVisuals(d);
             NullUiSettings.setScale(d.uiScale);
             NullUiSettings.setLanguage(d.language == null ? "ru" : d.language);
             HudLayout.watermarkX=d.watermarkX; HudLayout.watermarkY=d.watermarkY;
@@ -59,6 +60,7 @@ public final class GlassVisualConfig {
         d.handX=NullHandSettings.x(); d.handY=NullHandSettings.y(); d.handZ=NullHandSettings.z();
         d.theme=NullTheme.selectedIndex(); d.particles=NullUiSettings.particles;
         d.worldParticles=NullUiSettings.worldParticles; d.playerTrail=NullUiSettings.playerTrail;
+        saveVisuals(d);
         d.stretchMode=NullUiSettings.stretchMode().name(); d.uiScale=NullUiSettings.scale();
         d.layoutMode=NullUiSettings.mode().name(); d.language=NullUiSettings.language();
         d.watermarkX=HudLayout.watermarkX; d.watermarkY=HudLayout.watermarkY;
@@ -72,9 +74,40 @@ public final class GlassVisualConfig {
         catch(IOException e) { System.err.println("[NULL] Config save failed: " + e.getMessage()); }
     }
 
+    private static void loadVisuals(Data d) {
+        NullUiSettings.setManualStretch(d.manualStretch);
+        NullVisualSettings.setParticleDensity(d.particleDensity);
+        NullVisualSettings.setParticleRange(d.particleRange);
+        NullVisualSettings.setParticleSize(d.particleSize);
+        NullVisualSettings.setParticleMoveSparks(d.particleMoveSparks);
+        NullVisualSettings.setTrailLength(d.trailLength);
+        NullVisualSettings.setTrailWidth(d.trailWidth);
+        NullVisualSettings.setTrailGlow(d.trailGlow);
+        NullVisualSettings.setTrailGlowBrightness(d.trailGlowBrightness);
+        NullVisualSettings.setTrailFadeSpeed(d.trailFadeSpeed);
+        NullVisualSettings.setTrailColorIndex(d.trailColor);
+    }
+
+    private static void saveVisuals(Data d) {
+        d.manualStretch = NullUiSettings.manualStretch();
+        d.particleDensity = NullVisualSettings.particleDensity();
+        d.particleRange = NullVisualSettings.particleRange();
+        d.particleSize = NullVisualSettings.particleSize();
+        d.particleMoveSparks = NullVisualSettings.particleMoveSparks();
+        d.trailLength = NullVisualSettings.trailLength();
+        d.trailWidth = NullVisualSettings.trailWidth();
+        d.trailGlow = NullVisualSettings.trailGlow();
+        d.trailGlowBrightness = NullVisualSettings.trailGlowBrightness();
+        d.trailFadeSpeed = NullVisualSettings.trailFadeSpeed();
+        d.trailColor = NullVisualSettings.trailColorIndex();
+    }
+
     private static final class Data {
         boolean targetHud=true, keystrokes, coordinates, fps, glowAccent=true, arrayList=true, armorHud, potionHud, ping, autoSprint, sprintDisplay, jumpStats, speedGraph, sessionInfo, clock, hitVisuals, combatHud, worldTint, crosshair=true, durability, inventory=true;
         boolean notifications=true, armorStatus, timeChanger, blockOutline, aimAssist, directionHud, totemCounter, foodHud, xpHud, legitEsp, handPosition;
+        int particleDensity=45, particleRange=14; float particleSize=1.0f; boolean particleMoveSparks=true;
+        int trailLength=50, trailGlowBrightness=60, trailColor=0; float trailWidth=0.08f, trailFadeSpeed=1.0f; boolean trailGlow=true;
+        float manualStretch=1.25f;
         boolean particles=true, worldParticles=true, playerTrail=true; int theme; float uiScale=1.0f; String layoutMode="FIT", language="ru", stretchMode="FOUR_THREE";
         float handX=0.0f,handY=0.0f,handZ=0.0f;
         int watermarkX=12,watermarkY=12,fpsX=-1,fpsY=12,coordinatesX=12,coordinatesY=-1,keysX=12,keysY=-1;

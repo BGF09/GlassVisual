@@ -39,14 +39,12 @@ public final class GlassVisualClient implements ClientModInitializer {
             if (screen instanceof TitleScreen) client.setScreen(new NullMainMenuScreen());
         });
 
-        WorldRenderEvents.START.register(context -> {
-            float stretch = NullUiSettings.stretchFactor(MinecraftClient.getInstance());
-            if (Math.abs(stretch - 1.0f) > 0.001f) {
-                var projection = context.projectionMatrix();
-                projection.m00(projection.m00() * stretch);
-            }
+        // Own 3D rendering inside the world pass (camera-relative geometry, after translucent terrain).
+        // Screen Stretch itself is done in GameRendererMixin on the 3D projection matrix only.
+        WorldRenderEvents.LAST.register(context -> {
+            NullWorldParticles.render(context);
+            NullPlayerTrail.render(context);
         });
-        WorldRenderEvents.AFTER_ENTITIES.register(NullWorldEffects::render);
         WorldRenderEvents.AFTER_ENTITIES.register(NullLegitEsp::render);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -63,14 +61,15 @@ public final class GlassVisualClient implements ClientModInitializer {
             NullMovementTracker.tick(client);
             NullHitVisuals.tick(client);
             NullParticleRenderer.tick(client);
-            NullWorldEffects.tick(client);
+            NullWorldParticles.tick(client);
+            NullPlayerTrail.tick(client);
             TargetNotifier.tick(client);
             while (openHudEditor.wasPressed()) {
                 if (client.currentScreen == null) client.setScreen(new HudEditorScreen());
             }
             while (openClickGui.wasPressed()) {
                 if (client.currentScreen == null) client.setScreen(new ClickGuiScreen());
-                else if (client.currentScreen instanceof ClickGuiScreen) client.setScreen(null);
+                else if (client.currentScreen instanceof ClickGuiScreen gui) gui.close();
             }
         });
 
