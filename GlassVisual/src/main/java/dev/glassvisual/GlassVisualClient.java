@@ -32,7 +32,7 @@ public final class GlassVisualClient implements ClientModInitializer {
         ));
         openHudEditor = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.glassvisual.hud_editor", InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_RIGHT_ALT, "category.glassvisual"
+            GLFW.GLFW_KEY_LEFT_ALT, "category.glassvisual"
         ));
 
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
