@@ -15,7 +15,6 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.client.world.ClientWorld;
 import org.lwjgl.glfw.GLFW;
 
 public final class GlassVisualClient implements ClientModInitializer {
@@ -54,9 +53,6 @@ public final class GlassVisualClient implements ClientModInitializer {
             NullAimAssist.tick(client);
             NullHandSettings.tick(client);
             NullLegitEsp.tick(client);
-            if (MODULES.timeChanger && client.world != null) {
-                ((ClientWorld.Properties) client.world.getLevelProperties()).setTimeOfDay(18000L);
-            }
             if (MODULES.autoSprint && client.player != null) {
                 var player = client.player;
                 boolean canSprint = player.input.movementForward > 0.0F
