@@ -412,8 +412,13 @@ internal sealed class LauncherForm : Form
             var exe = launcherPath.Text.Trim().Trim('"');
             if (!File.Exists(exe)) { ShowStatus("Укажи LegacyLauncher.exe через кнопку ОБЗОР."); return; }
             File.WriteAllText(launcherPathFile, exe);
-            Process.Start(new ProcessStartInfo(exe) { UseShellExecute = true, WorkingDirectory = Path.GetDirectoryName(exe)! });
-            ShowStatus("Legacy Launcher открыт. Выбери Fabric 1.21.4 и выполни вход там.");
+            Process.Start(new ProcessStartInfo(exe)
+            {
+                UseShellExecute = true,
+                WorkingDirectory = Path.GetDirectoryName(exe)!,
+                WindowStyle = ProcessWindowStyle.Minimized
+            });
+            ShowStatus("Legacy Launcher запущен свёрнутым в фоне. Если нужен вход или выбор версии, открой его через панель задач.");
         }
         catch (Exception ex) { MessageBox.Show(ex.Message, "NULL Launcher", MessageBoxButtons.OK, MessageBoxIcon.Error); }
     }
