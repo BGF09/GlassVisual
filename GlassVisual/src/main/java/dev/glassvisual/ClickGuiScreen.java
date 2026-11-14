@@ -26,6 +26,9 @@ public final class ClickGuiScreen extends Screen {
     };
     private int x,y,w,h,selected;
     private TextFieldWidget search;
+    private boolean settingsTab;
+    private String moduleSettingsName = "";
+    private int moduleSettingsCategory = -1, moduleSettingsIndex = -1;
     public ClickGuiScreen(){super(Text.literal("NULL"));}
     private static Text ui(String s){return Text.literal(s).setStyle(Style.EMPTY.withFont(Identifier.of("glassvisual","ui")));}
     private String[][] categories(){return NullUiSettings.russian()?RU:EN;}
@@ -50,10 +53,13 @@ public final class ClickGuiScreen extends Screen {
         ctx.fill(x+12,y+43,x+133,y+44,0xFF282E3A);
         String[] cats=categoryNames();
         for(int i=0;i<cats.length;i++){
-            int cy=y+57+i*37;boolean active=i==selected;
+            int cy=y+57+i*37;boolean active=!settingsTab&&moduleSettingsName.isEmpty()&&i==selected;
             if(active){roundedFill(ctx,x+8,cy-5,129,30,8,0xFF293447);ctx.fill(x+8,cy-5,x+11,cy+25,accent);}
             ctx.drawText(textRenderer,cats[i],x+20,cy+5,active?WHITE:MUTED,active);
         }
+        int settingsY=y+57+cats.length*37;
+        if(settingsTab){roundedFill(ctx,x+8,settingsY-5,129,30,8,0xFF293447);ctx.fill(x+8,settingsY-5,x+11,settingsY+25,accent);}
+        ctx.drawText(textRenderer,tr("Настройки","Settings"),x+20,settingsY+5,settingsTab?WHITE:MUTED,settingsTab);
         ctx.drawText(textRenderer,tr("НАСТРОЙКИ","SETTINGS"),x+17,y+h-111,MUTED,true);
         drawSmallButton(ctx,x+14,y+h-89,112,23,NullUiSettings.russian()?"ЯЗЫК: RU":"LANG: EN",accent);
         drawSmallButton(ctx,x+14,y+h-60,112,23,NullUiSettings.particles?tr("ЧАСТИЦЫ: ВКЛ","PARTICLES: ON"):tr("ЧАСТИЦЫ: ВЫКЛ","PARTICLES: OFF"),accent);
@@ -65,6 +71,8 @@ public final class ClickGuiScreen extends Screen {
         drawSmallButton(ctx,x+w-190,y+20,48,22,"4:3",accent);
         drawSmallButton(ctx,x+w-138,y+20,48,22,"16:9",accent);
         drawSmallButton(ctx,x+w-86,y+20,68,22,"STRETCH",accent);
+        if(settingsTab){drawSettingsPage(ctx,accent);super.render(ctx,mx,my,delta);return;}
+        if(!moduleSettingsName.isEmpty()){drawModuleSettingsPage(ctx,accent);super.render(ctx,mx,my,delta);return;}
         int listX=x+164,listY=y+62,listW=w-184;
         String q=search.getText().toLowerCase();
         int rowY=listY,shown=0;
@@ -169,18 +177,100 @@ public final class ClickGuiScreen extends Screen {
     }
     @Override public boolean mouseClicked(double mx,double my,int button){
         if(super.mouseClicked(mx,my,button))return true;
-        if(button!=0)return false;
-        for(int i=0;i<categories().length;i++){int cy=y+57+i*37;if(mx>=x+8&&mx<=x+137&&my>=cy-5&&my<=cy+25){selected=i;return true;}}
+        if(button!=0&&button!=1)return false;
+        int settingsY=y+57+categories().length*37;
+        if(button==0&&hit(mx,my,x+8,settingsY-5,129,30)){settingsTab=true;moduleSettingsName="";return true;}
+        for(int i=0;i<categories().length;i++){int cy=y+57+i*37;if(button==0&&mx>=x+8&&mx<=x+137&&my>=cy-5&&my<=cy+25){selected=i;settingsTab=false;moduleSettingsName="";return true;}}
+        if(settingsTab){
+            if(button!=0)return false;
+            if(hit(mx,my,x+354,y+99,190,28))NullUiSettings.toggleLanguage();
+            else if(hit(mx,my,x+354,y+145,34,28))NullUiSettings.adjustScale(-0.05f);
+            else if(hit(mx,my,x+396,y+145,34,28))NullUiSettings.adjustScale(0.05f);
+            else if(hit(mx,my,x+354,y+192,210,28))NullUiSettings.particles=!NullUiSettings.particles;
+            else if(hit(mx,my,x+354,y+233,210,28))NullUiSettings.worldParticles=!NullUiSettings.worldParticles;
+            else if(hit(mx,my,x+354,y+274,210,28))NullUiSettings.playerTrail=!NullUiSettings.playerTrail;
+            else if(hit(mx,my,x+354,y+315,100,28))NullUiSettings.setStretchMode(NullUiSettings.StretchMode.OFF);
+            else if(hit(mx,my,x+460,y+315,100,28))NullUiSettings.setStretchMode(NullUiSettings.StretchMode.FOUR_THREE);
+            else if(hit(mx,my,x+566,y+315,100,28))NullUiSettings.setStretchMode(NullUiSettings.StretchMode.SIXTEEN_NINE);
+            else if(hit(mx,my,x+354,y+359,210,28))NullHandSettings.set(0,0,0);
+            GlassVisualConfig.save();return true;
+        }
+        if(!moduleSettingsName.isEmpty()){
+            if(button!=0)return false;
+            if(hit(mx,my,x+164,y+62,95,26)){moduleSettingsName="";return true;}
+            if(hit(mx,my,x+354,y+145,160,28)&&moduleSettingsCategory>=0){toggle(moduleSettingsCategory,moduleSettingsIndex);return true;}
+            if(moduleSettingsName.equals("Hand Position")){
+                float sx=NullHandSettings.x(), sy=NullHandSettings.y(), sz=NullHandSettings.z();
+                if(hit(mx,my,x+369,y+269,34,28))sx-=0.01f;
+                else if(hit(mx,my,x+409,y+269,34,28))sx+=0.01f;
+                else if(hit(mx,my,x+369,y+316,34,28))sy-=0.01f;
+                else if(hit(mx,my,x+409,y+316,34,28))sy+=0.01f;
+                else if(hit(mx,my,x+369,y+363,34,28))sz-=0.01f;
+                else if(hit(mx,my,x+409,y+363,34,28))sz+=0.01f;
+                else if(hit(mx,my,x+369,y+410,115,28)){sx=0;sy=0;sz=0;}
+                NullHandSettings.set(sx,sy,sz);GlassVisualConfig.save();return true;
+            }
+            return true;
+        }
         if(mx>=x+14&&mx<=x+126&&my>=y+h-89&&my<=y+h-66){NullUiSettings.toggleLanguage();GlassVisualConfig.save();init();return true;}
         if(mx>=x+14&&mx<=x+126&&my>=y+h-60&&my<=y+h-37){NullUiSettings.particles=!NullUiSettings.particles;GlassVisualConfig.save();return true;}
         if(mx>=x+164&&mx<=x+w-20&&my>=y+62&&my<=y+h-20){
-            int row=(int)(my-(y+62))/42;int i=row+1;String q=search.getText().toLowerCase();
-            int actual=0;for(int n=1;n<categories()[selected].length;n++){if(!q.isBlank()&&!categories()[selected][n].toLowerCase().contains(q))continue;if(actual++==row){if(isSupported(selected,n)){toggle(selected,n);return true;}break;}}
+            int row=(int)(my-(y+62))/42;String q=search.getText().toLowerCase();
+            int actual=0;for(int n=1;n<categories()[selected].length;n++){if(!q.isBlank()&&!categories()[selected][n].toLowerCase().contains(q))continue;if(actual++==row){
+                if(button==1){moduleSettingsName=categories()[selected][n];moduleSettingsCategory=selected;moduleSettingsIndex=n;return true;}
+                if(isSupported(selected,n)){toggle(selected,n);return true;}break;}}
         }
         if(my>=y+20&&my<=y+42&&mx>=x+w-190&&mx<=x+w-142){NullUiSettings.setStretchMode(NullUiSettings.StretchMode.FOUR_THREE);GlassVisualConfig.save();return true;}
         if(my>=y+20&&my<=y+42&&mx>=x+w-138&&mx<=x+w-90){NullUiSettings.setStretchMode(NullUiSettings.StretchMode.SIXTEEN_NINE);GlassVisualConfig.save();return true;}
         if(my>=y+20&&my<=y+42&&mx>=x+w-86&&mx<=x+w-18){NullUiSettings.setStretchMode(NullUiSettings.StretchMode.MANUAL);GlassVisualConfig.save();return true;}
         return false;
     }
+
+    private void drawSettingsPage(DrawContext ctx,int accent){
+        int px=x+164, py=y+62;
+        ctx.drawText(textRenderer,tr("ОБЩИЕ НАСТРОЙКИ","GENERAL SETTINGS"),px,py,WHITE,true);
+        ctx.drawText(textRenderer,tr("Язык интерфейса","Interface language"),px,py+45,MUTED,false);
+        drawSmallButton(ctx,px+190,py+37,190,28,NullUiSettings.russian()?"РУССКИЙ / RU":"ENGLISH / EN",accent);
+        ctx.drawText(textRenderer,tr("Масштаб ClickGUI","ClickGUI scale"),px,py+92,MUTED,false);
+        drawSmallButton(ctx,px+190,py+83,34,28,"−",accent);
+        drawSmallButton(ctx,px+232,py+83,34,28,"+",accent);
+        ctx.drawText(textRenderer,String.format(java.util.Locale.ROOT,"%.0f%%",NullUiSettings.scale()*100),px+278,py+92,WHITE,true);
+        ctx.drawText(textRenderer,tr("Эффекты интерфейса","Interface effects"),px,py+139,MUTED,false);
+        drawSmallButton(ctx,px+190,py+130,210,28,NullUiSettings.particles?tr("Частицы: ВКЛ","Particles: ON"):tr("Частицы: ВЫКЛ","Particles: OFF"),accent);
+        drawSmallButton(ctx,px+190,py+171,210,28,NullUiSettings.worldParticles?tr("Частицы мира: ВКЛ","World particles: ON"):tr("Частицы мира: ВЫКЛ","World particles: OFF"),accent);
+        drawSmallButton(ctx,px+190,py+212,210,28,NullUiSettings.playerTrail?tr("След игрока: ВКЛ","Player trail: ON"):tr("След игрока: ВЫКЛ","Player trail: OFF"),accent);
+        ctx.drawText(textRenderer,tr("Растяжение экрана","Screen stretch"),px,py+263,MUTED,false);
+        drawSmallButton(ctx,px+190,py+254,100,28,"OFF",accent);
+        drawSmallButton(ctx,px+296,py+254,100,28,"4:3",accent);
+        drawSmallButton(ctx,px+402,py+254,100,28,"16:9",accent);
+        ctx.drawText(textRenderer,tr("Сбросить положение руки","Reset hand position"),px,py+307,MUTED,false);
+        drawSmallButton(ctx,px+190,py+298,210,28,tr("СБРОСИТЬ XYZ","RESET XYZ"),accent);
+        ctx.drawText(textRenderer,tr("Изменения сохраняются автоматически","Changes are saved automatically"),px,py+350,MUTED,false);
+    }
+    private void drawModuleSettingsPage(DrawContext ctx,int accent){
+        int px=x+164,py=y+62;
+        drawSmallButton(ctx,px,py,95,26,tr("← НАЗАД","← BACK"),accent);
+        ctx.drawText(textRenderer,moduleSettingsName.toUpperCase(),px+112,py+8,WHITE,true);
+        ctx.drawText(textRenderer,tr("ИНДИВИДУАЛЬНЫЕ НАСТРОЙКИ МОДУЛЯ","MODULE-SPECIFIC SETTINGS"),px,py+47,MUTED,false);
+        ctx.drawText(textRenderer,tr("ЛКМ по модулю — включить / выключить. ПКМ — открыть параметры.","Left-click toggles a module. Right-click opens its options."),px,py+75,WHITE,false);
+        boolean active=moduleSettingsCategory>=0&&enabled(moduleSettingsCategory,moduleSettingsIndex);
+        drawSmallButton(ctx,px+190,py+83,160,28,active?tr("МОДУЛЬ: ВКЛ","MODULE: ON"):tr("МОДУЛЬ: ВЫКЛ","MODULE: OFF"),accent);
+        if(moduleSettingsName.equals("Hand Position")){
+            ctx.drawText(textRenderer,tr("Положение руки / предмета","Hand and held-item position"),px,py+112,accent,true);
+            ctx.drawText(textRenderer,String.format(java.util.Locale.ROOT,"X: %.3f",NullHandSettings.x()),px,py+222,WHITE,true);
+            drawSmallButton(ctx,px+205,py+207,34,28,"−",accent);drawSmallButton(ctx,px+245,py+207,34,28,"+",accent);
+            ctx.drawText(textRenderer,String.format(java.util.Locale.ROOT,"Y: %.3f",NullHandSettings.y()),px,py+269,WHITE,true);
+            drawSmallButton(ctx,px+205,py+254,34,28,"−",accent);drawSmallButton(ctx,px+245,py+254,34,28,"+",accent);
+            ctx.drawText(textRenderer,String.format(java.util.Locale.ROOT,"Z: %.3f",NullHandSettings.z()),px,py+316,WHITE,true);
+            drawSmallButton(ctx,px+205,py+301,34,28,"−",accent);drawSmallButton(ctx,px+245,py+301,34,28,"+",accent);
+            drawSmallButton(ctx,px+205,py+348,115,28,tr("СБРОСИТЬ","RESET"),accent);
+            ctx.drawText(textRenderer,tr("NumPad 4/6 — X  •  8/2 — Y  •  7/9 — Z","NumPad 4/6 — X  •  8/2 — Y  •  7/9 — Z"),px,py+385,MUTED,false);
+        }else{
+            ctx.drawText(textRenderer,tr("Параметры модуля","Module options"),px,py+112,accent,true);
+            ctx.drawText(textRenderer,tr("Общие визуальные параметры доступны во вкладке","Shared visual options are available in the Settings"),px,py+143,WHITE,false);
+            ctx.drawText(textRenderer,tr("«Настройки». Состояние этого модуля можно менять выше.","tab. You can toggle this module above."),px,py+160,WHITE,false);
+        }
+    }
+    private static boolean hit(double mx,double my,int bx,int by,int bw,int bh){return mx>=bx&&mx<=bx+bw&&my>=by&&my<=by+bh;}
     @Override public boolean shouldPause(){return false;}
 }

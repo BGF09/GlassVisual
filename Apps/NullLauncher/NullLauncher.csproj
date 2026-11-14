@@ -11,6 +11,6 @@
     <RootNamespace>NullLauncher</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\GlassVisual\build\libs\glass-visual-1.0.0.jar" LogicalName="NULL.jar" />
+    <EmbeddedResource Include="NULL.jar" LogicalName="NULL.jar" />
   </ItemGroup>
 </Project>

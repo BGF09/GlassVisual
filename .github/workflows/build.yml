@@ -1,10 +1,11 @@
-name: Build NULL Client and Windows Apps
+name: Build NULL Launcher and Fabric Client
 
 on:
   push:
     branches: [update/glassvisual-v1.1]
     paths:
-      - 'Apps/**'
+      - 'Apps/NullLauncher/**'
+      - 'GlassVisual/**'
       - '.github/workflows/build.yml'
   workflow_dispatch:
 
@@ -33,6 +34,15 @@ jobs:
         working-directory: GlassVisual
         run: gradle build
 
+      - name: Prepare embedded NULL JAR
+        shell: pwsh
+        run: |
+          $jar = Get-ChildItem "GlassVisual/build/libs/glass-visual-*.jar" | Where-Object { $_.Name -notlike "*sources*" } | Select-Object -First 1
+          if (-not $jar) { throw "NULL mod JAR was not produced" }
+          New-Item -ItemType Directory -Force dist/mod | Out-Null
+          Copy-Item $jar.FullName "Apps/NullLauncher/NULL.jar"
+          Copy-Item $jar.FullName "dist/mod/NULL-Visual-1.2.0.jar"
+
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
@@ -43,32 +53,19 @@ jobs:
           python -m pip install --quiet pillow
           python Apps/NullLauncher/create_icon.py
 
-      - name: Publish NULL Installer.exe
-        run: dotnet publish Apps/NullInstaller/NullInstaller.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o dist/installer
-
-      - name: Publish NULL Launcher.exe
+      - name: Publish standalone NULL Launcher.exe
         run: dotnet publish Apps/NullLauncher/NullLauncher.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o dist/launcher
 
-      - name: Collect JAR
-        shell: pwsh
-        run: |
-          $jar = Get-ChildItem "GlassVisual/build/libs/glass-visual-*.jar" | Where-Object { $_.Name -notlike "*sources*" } | Select-Object -First 1
-          if (-not $jar) { throw "NULL mod JAR was not produced" }
-          New-Item -ItemType Directory -Force dist/mod | Out-Null
-          Copy-Item $jar.FullName dist/mod/NULL-Visual-1.0.0.jar
-
-      - name: Upload Windows EXE files
+      - name: Upload standalone launcher
         uses: actions/upload-artifact@v4
         with:
-          name: NULL-Windows-EXE
-          path: |
-            dist/installer/NULL-Installer.exe
-            dist/launcher/NULL-Launcher.exe
+          name: NULL-Launcher-Windows
+          path: dist/launcher/NULL-Launcher.exe
           if-no-files-found: error
 
       - name: Upload mod JAR
         uses: actions/upload-artifact@v4
         with:
           name: NULL-Fabric-JAR
-          path: dist/mod/NULL-Visual-1.0.0.jar
+          path: dist/mod/NULL-Visual-1.2.0.jar
           if-no-files-found: error

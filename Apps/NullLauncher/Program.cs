@@ -63,7 +63,7 @@ internal sealed class LauncherForm : Form
         launcherPath.Text = LoadLauncherPath();
         var browse = MakeButton("ОБЗОР", 480, 436, 125, 32);
         browse.Click += (_, _) => ChooseLegacyLauncher();
-        var install = MakeButton("УСТАНОВИТЬ / ОБНОВИТЬ NULL", 34, 480, 275, 42);
+        var install = MakeButton("ОБНОВИТЬ NULL", 34, 480, 275, 42);
         install.Click += (_, _) => InstallMod();
         var play = MakeButton("PLAY  /  LEGACY LAUNCHER", 324, 480, 281, 42);
         play.BackColor = Color.FromArgb(85, 48, 135);
@@ -72,6 +72,7 @@ internal sealed class LauncherForm : Form
         status.ForeColor = Color.Gainsboro;
         status.Text = "Аккаунты хранятся локально на этом ПК. Вход Minecraft выполняется отдельно.";
         Controls.AddRange([title, subtitle, tabs, pathLabel, launcherPath, browse, install, play, status]);
+        InstallMod();
     }
 
     private TabPage BuildRegisterTab()
@@ -191,12 +192,15 @@ internal sealed class LauncherForm : Form
     {
         try
         {
-            Directory.CreateDirectory(Path.Combine(minecraft, "mods"));
+            var mods = Path.Combine(minecraft, "mods");
+            Directory.CreateDirectory(mods);
             using var source = Assembly.GetExecutingAssembly().GetManifestResourceStream("NULL.jar")
-                ?? throw new FileNotFoundException("В сборку не встроен NULL.jar.");
-            using var target = File.Create(Path.Combine(minecraft, "mods", "NULL-Visual-1.0.0.jar"));
-            source.CopyTo(target);
-            ShowStatus("NULL установлен. Твой логин будет показан в главном меню игры.");
+                ?? throw new FileNotFoundException("В сборку лаунчера не встроен NULL.jar.");
+            var targetPath = Path.Combine(mods, "NULL-Visual-1.2.0.jar");
+            using (var target = File.Create(targetPath)) source.CopyTo(target);
+            foreach (var oldJar in Directory.GetFiles(mods, "NULL-Visual-*.jar"))
+                if (!string.Equals(oldJar, targetPath, StringComparison.OrdinalIgnoreCase)) File.Delete(oldJar);
+            ShowStatus("NULL 1.2.0 готов. Мод автоматически установлен в .minecraft/mods.");
         }
         catch (Exception ex) { MessageBox.Show(ex.Message, "NULL Launcher", MessageBoxButtons.OK, MessageBoxIcon.Error); }
     }
