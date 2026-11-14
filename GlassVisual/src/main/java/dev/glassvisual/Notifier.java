@@ -91,7 +91,7 @@ public final class Notifier {
         long now = System.nanoTime();
         int screenW = client.getWindow().getScaledWidth();
         int screenH = client.getWindow().getScaledHeight();
-        int bottom = screenH - 58;
+        int baseY = Math.max(8, Math.min(screenH - 46, HudLayout.notificationsY));
         synchronized (ACTIVE) {
             for (int i = ACTIVE.size() - 1; i >= 0; i--) {
                 Card card = ACTIVE.get(i);
@@ -125,8 +125,8 @@ public final class Notifier {
                     alpha = 1.0f - out;
                     yOffset += out * 34.0f;
                 }
-                int x = (screenW - width) / 2;
-                int y = bottom - stackOffset - 38 + Math.round(yOffset);
+                int x = HudLayout.notificationsX < 0 ? (screenW - width) / 2 : Math.max(4, Math.min(screenW - width - 4, HudLayout.notificationsX));
+                int y = Math.max(4, Math.min(screenH - 42, baseY + stackOffset + Math.round(yOffset)));
                 drawCard(context, client, card, x, y, width, 38, alpha);
                 stackOffset += 45;
             }
