@@ -121,9 +121,9 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean hitVisuals;
         public boolean combatHud;
         public boolean worldTint;
-        public boolean crosshair;
+        public boolean crosshair = true;
         public boolean durability;
-        public boolean inventory;
+        public boolean inventory = true;
         public boolean notifications = true;
         public boolean armorStatus;
         public boolean timeChanger;

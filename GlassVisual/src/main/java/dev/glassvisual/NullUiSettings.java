@@ -12,7 +12,7 @@ public final class NullUiSettings {
     public static boolean worldParticles=true;
     public static boolean playerTrail=true;
     public enum StretchMode { OFF, FOUR_THREE, SIXTEEN_NINE, MANUAL }
-    private static StretchMode stretchMode=StretchMode.OFF;
+    private static StretchMode stretchMode=StretchMode.FOUR_THREE;
     private NullUiSettings(){}
     public static LayoutMode mode(){return mode;}
     public static float scale(){return scale;}

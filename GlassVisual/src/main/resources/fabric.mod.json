@@ -4,9 +4,23 @@
   "version": "${version}",
   "name": "NULL",
   "description": "NULL visual client interface and HUD for Minecraft 1.21.4.",
-  "authors": ["NULL"],
+  "authors": [
+    "NULL"
+  ],
   "license": "MIT",
   "environment": "client",
-  "entrypoints": {"client": ["dev.glassvisual.GlassVisualClient"]},
-  "depends": {"fabricloader": ">=0.16.0", "minecraft": "1.21.4", "java": ">=21", "fabric-api": "*"}
+  "entrypoints": {
+    "client": [
+      "dev.glassvisual.GlassVisualClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "mixins": [
+    "glassvisual.mixins.json"
+  ]
 }

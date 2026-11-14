@@ -4,6 +4,8 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
+import net.minecraft.text.Style;
+import net.minecraft.util.Identifier;
 
 public final class ClickGuiScreen extends Screen {
     private static final int SHADE=0x99060A12, PANEL=0xF21A202D, SIDE=0xFF141A25, CARD=0xFF242D3B;
@@ -25,6 +27,7 @@ public final class ClickGuiScreen extends Screen {
     private int x,y,w,h,selected;
     private TextFieldWidget search;
     public ClickGuiScreen(){super(Text.literal("NULL"));}
+    private static Text ui(String s){return Text.literal(s).setStyle(Style.EMPTY.withFont(Identifier.of("glassvisual","ui")));}
     private String[][] categories(){return NullUiSettings.russian()?RU:EN;}
     private String tr(String ru,String en){return NullUiSettings.russian()?ru:en;}
     @Override public void renderBackground(DrawContext ctx,int mx,int my,float delta){}
@@ -102,14 +105,14 @@ public final class ClickGuiScreen extends Screen {
             case "World Tint" -> tr("Лёгкий цветовой оттенок игрового экрана","Subtle color tint over the game view");
             case "Block Outline" -> tr("Цветная обводка блока под прицелом","Accent outline around the targeted block");
             case "Time Changer" -> tr("Фиксирует локальное время мира на полдень","Locks the local world time to noon");
-            case "Crosshair" -> tr("Акцентный прицел NULL поверх стандартного","NULL accent reticle over the vanilla crosshair");
+            case "Crosshair" -> tr("Собственный прицел NULL вместо стандартного","Custom NULL reticle replacing the vanilla crosshair");
             case "Armor Status" -> tr("Процент прочности каждой части брони","Durability percentage for each armor piece");
             case "Totem Counter" -> tr("Считает тотемы во всём инвентаре","Counts totems in your inventory");
             case "Food HUD" -> tr("Показывает голод и насыщение","Shows hunger and saturation");
             case "XP HUD" -> tr("Уровень и прогресс опыта","Experience level and progress");
             case "Direction" -> tr("Показывает направление взгляда","Shows your current facing direction");
             case "Durability" -> tr("Прочность предмета в основной руке","Main-hand item durability");
-            case "Inventory" -> tr("Название выбранного предмета и количество","Selected item name and stack count");
+            case "Inventory" -> tr("Собственная стеклянная панель хотбара из 9 слотов","Custom glass hotbar with nine item slots");
             case "Notifications" -> tr("Уведомления о переключении модулей","Module toggle notifications");
             case "Auto Sprint" -> tr("Автоматически бежать при движении вперёд","Automatically sprint while moving forward");
             case "Keystrokes" -> tr("Отображение нажатых клавиш","Show pressed movement keys");

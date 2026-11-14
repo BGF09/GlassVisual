@@ -39,6 +39,7 @@ public final class GlassVisualConfig {
             HudLayout.armorX=d.armorX; HudLayout.armorY=d.armorY;
             HudLayout.potionsX=d.potionsX; HudLayout.potionsY=d.potionsY;
             HudLayout.pingX=d.pingX; HudLayout.pingY=d.pingY;
+            HudLayout.inventoryX=d.inventoryX; HudLayout.inventoryY=d.inventoryY;
             try { NullUiSettings.setMode(d.layoutMode == null ? NullUiSettings.LayoutMode.FIT : NullUiSettings.LayoutMode.valueOf(d.layoutMode)); }
             catch (IllegalArgumentException ignored) { NullUiSettings.setMode(NullUiSettings.LayoutMode.FIT); }
         } catch (Exception e) { System.err.println("[NULL] Config load failed: " + e.getMessage()); }
@@ -60,15 +61,16 @@ public final class GlassVisualConfig {
         d.keysX=HudLayout.keysX; d.keysY=HudLayout.keysY; d.arrayListX=HudLayout.arrayListX; d.arrayListY=HudLayout.arrayListY;
         d.armorX=HudLayout.armorX; d.armorY=HudLayout.armorY; d.potionsX=HudLayout.potionsX; d.potionsY=HudLayout.potionsY;
         d.pingX=HudLayout.pingX; d.pingY=HudLayout.pingY;
+        d.inventoryX=HudLayout.inventoryX; d.inventoryY=HudLayout.inventoryY;
         try { Files.createDirectories(FILE.getParent()); Files.writeString(FILE,GSON.toJson(d)); }
         catch(IOException e) { System.err.println("[NULL] Config save failed: " + e.getMessage()); }
     }
 
     private static final class Data {
-        boolean targetHud=true, keystrokes, coordinates, fps, glowAccent=true, arrayList=true, armorHud, potionHud, ping, autoSprint, sprintDisplay, jumpStats, speedGraph, sessionInfo, clock, hitVisuals, combatHud, worldTint, crosshair, durability, inventory;
+        boolean targetHud=true, keystrokes, coordinates, fps, glowAccent=true, arrayList=true, armorHud, potionHud, ping, autoSprint, sprintDisplay, jumpStats, speedGraph, sessionInfo, clock, hitVisuals, combatHud, worldTint, crosshair=true, durability, inventory=true;
         boolean notifications=true, armorStatus, timeChanger, blockOutline, aimAssist, directionHud, totemCounter, foodHud, xpHud;
-        boolean particles=true, worldParticles=true, playerTrail=true; int theme; float uiScale=1.0f; String layoutMode="FIT", language="ru", stretchMode="OFF";
+        boolean particles=true, worldParticles=true, playerTrail=true; int theme; float uiScale=1.0f; String layoutMode="FIT", language="ru", stretchMode="FOUR_THREE";
         int watermarkX=12,watermarkY=12,fpsX=-1,fpsY=12,coordinatesX=12,coordinatesY=-1,keysX=12,keysY=-1;
-        int arrayListX=-1,arrayListY=70,armorX=12,armorY=-1,potionsX=-1,potionsY=170,pingX=-1,pingY=42;
+        int arrayListX=-1,arrayListY=70,armorX=12,armorY=-1,potionsX=-1,potionsY=170,pingX=-1,pingY=42,inventoryX=-1,inventoryY=-1;
     }
 }

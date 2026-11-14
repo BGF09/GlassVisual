@@ -13,6 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 public final class HudOverlayRenderer {
     private static final int PANEL = 0xE91A202D;
@@ -21,6 +24,7 @@ public final class HudOverlayRenderer {
     private static final int SOFT = 0xFF7D8AA0;
 
     private HudOverlayRenderer() {}
+    private static Text ui(String s){return Text.literal(s).setStyle(Style.EMPTY.withFont(Identifier.of("glassvisual","ui")));}
 
     public static void render(DrawContext ctx, MinecraftClient client) {
         int accent = NullTheme.accent();
@@ -34,7 +38,7 @@ public final class HudOverlayRenderer {
             int x = HudLayout.fpsX < 0 ? width - 92 : HudLayout.fpsX;
             int y = HudLayout.fpsY;
             panel(ctx, x, y, 80, 26, accent);
-            ctx.drawText(client.textRenderer, fps, x + 10, y + 9, TEXT, true);
+            ctx.drawText(client.textRenderer, ui(fps), x + 10, y + 9, TEXT, true);
         }
 
         if (GlassVisualClient.MODULES.ping && client.player != null && client.getNetworkHandler() != null) {
@@ -43,8 +47,8 @@ public final class HudOverlayRenderer {
                 String value = entry.getLatency() + " ms";
                 int x = HudLayout.pingX < 0 ? width - 92 : HudLayout.pingX;
                 panel(ctx, x, HudLayout.pingY, 80, 24, accent);
-                ctx.drawText(client.textRenderer, "PING", x + 8, HudLayout.pingY + 7, MUTED, false);
-                ctx.drawText(client.textRenderer, value, x + 43, HudLayout.pingY + 7, TEXT, true);
+                ctx.drawText(client.textRenderer, ui("PING"), x + 8, HudLayout.pingY + 7, MUTED, false);
+                ctx.drawText(client.textRenderer, ui(value), x + 43, HudLayout.pingY + 7, TEXT, true);
             }
         }
 
@@ -54,7 +58,7 @@ public final class HudOverlayRenderer {
             int x = HudLayout.coordinatesX;
             int y = HudLayout.coordinatesY < 0 ? height - 34 : HudLayout.coordinatesY;
             panel(ctx, x, y, 154, 24, accent);
-            ctx.drawText(client.textRenderer, coords, x + 11, y + 8, TEXT, false);
+            ctx.drawText(client.textRenderer, ui(coords), x + 11, y + 8, TEXT, false);
         }
 
         if (GlassVisualClient.MODULES.keystrokes && client.player != null) {
@@ -89,23 +93,23 @@ public final class HudOverlayRenderer {
             int x = 12, y = height - 62;
             panel(ctx, x, y, 112, 24, accent);
             boolean sprinting = client.player.isSprinting();
-            ctx.drawText(client.textRenderer, "SPRINT", x + 8, y + 8, MUTED, true);
+            ctx.drawText(client.textRenderer, ui("SPRINT"), x + 8, y + 8, MUTED, true);
             String state = sprinting ? "ON" : "OFF";
             int color = sprinting ? 0xFF36A875 : 0xFF8792A5;
-            ctx.drawText(client.textRenderer, state, x + 69, y + 8, color, true);
+            ctx.drawText(client.textRenderer, ui(state), x + 69, y + 8, color, true);
         }
         if (modules.jumpStats && client.player != null) {
             int x = 12, y = height - 92;
             panel(ctx, x, y, 112, 24, accent);
-            ctx.drawText(client.textRenderer, "JUMPS", x + 8, y + 8, MUTED, true);
-            ctx.drawText(client.textRenderer, Integer.toString(NullMovementTracker.jumps()), x + 69, y + 8, TEXT, true);
+            ctx.drawText(client.textRenderer, ui("JUMPS"), x + 8, y + 8, MUTED, true);
+            ctx.drawText(client.textRenderer, ui(Integer.toString(NullMovementTracker.jumps())), x + 69, y + 8, TEXT, true);
         }
         if (modules.speedGraph && client.player != null) {
             int x = width - 154, y = height - 72;
             panel(ctx, x, y, 142, 58, accent);
-            ctx.drawText(client.textRenderer, "SPEED", x + 8, y + 6, MUTED, true);
+            ctx.drawText(client.textRenderer, ui("SPEED"), x + 8, y + 6, MUTED, true);
             String speed = String.format(java.util.Locale.ROOT, "%.1f m/s", NullMovementTracker.speed());
-            ctx.drawText(client.textRenderer, speed, x + 76, y + 6, TEXT, true);
+            ctx.drawText(client.textRenderer, ui(speed), x + 76, y + 6, TEXT, true);
             int graphX = x + 8, graphY = y + 24, graphW = 126, graphH = 27;
             ctx.fill(graphX, graphY + graphH - 1, graphX + graphW, graphY + graphH, 0x55313C50);
             for (int i = 0; i < NullMovementTracker.samples(); i++) {
@@ -120,14 +124,14 @@ public final class HudOverlayRenderer {
             String elapsed = String.format(java.util.Locale.ROOT, "%02d:%02d:%02d",
                 seconds / 3600, (seconds / 60) % 60, seconds % 60);
             panel(ctx, 12, 44, 132, 24, accent);
-            ctx.drawText(client.textRenderer, "SESSION", 20, 52, MUTED, true);
-            ctx.drawText(client.textRenderer, elapsed, 74, 52, TEXT, true);
+            ctx.drawText(client.textRenderer, ui("SESSION"), 20, 52, MUTED, true);
+            ctx.drawText(client.textRenderer, ui(elapsed), 74, 52, TEXT, true);
         }
         if (modules.clock) {
             String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
             int x = width - 92, y = 12;
             panel(ctx, x, y, 80, 24, accent);
-            ctx.drawText(client.textRenderer, time, x + 10, y + 8, TEXT, true);
+            ctx.drawText(client.textRenderer, ui(time), x + 10, y + 8, TEXT, true);
         }
 
         if (modules.totemCounter && client.player != null) {
@@ -139,17 +143,17 @@ public final class HudOverlayRenderer {
                 count += client.player.getOffHandStack().getCount();
             int x = 12, y = height - 152;
             panel(ctx, x, y, 112, 24, accent);
-            ctx.drawText(client.textRenderer, "TOTEMS", x + 8, y + 8, MUTED, true);
-            ctx.drawText(client.textRenderer, Integer.toString(count), x + 76, y + 8, TEXT, true);
+            ctx.drawText(client.textRenderer, ui("TOTEMS"), x + 8, y + 8, MUTED, true);
+            ctx.drawText(client.textRenderer, ui(Integer.toString(count)), x + 76, y + 8, TEXT, true);
         }
         if (modules.foodHud && client.player != null) {
             int food = client.player.getHungerManager().getFoodLevel();
             float saturation = client.player.getHungerManager().getSaturationLevel();
             int x = 12, y = height - 182;
             panel(ctx, x, y, 142, 24, accent);
-            ctx.drawText(client.textRenderer, "FOOD", x + 8, y + 8, MUTED, true);
-            ctx.drawText(client.textRenderer, food + "/20", x + 54, y + 8, TEXT, true);
-            ctx.drawText(client.textRenderer, String.format(java.util.Locale.ROOT, "%.1f sat", saturation),
+            ctx.drawText(client.textRenderer, ui("FOOD"), x + 8, y + 8, MUTED, true);
+            ctx.drawText(client.textRenderer, ui(food + "/20"), x + 54, y + 8, TEXT, true);
+            ctx.drawText(client.textRenderer, ui(String.format(java.util.Locale.ROOT, "%.1f sat", saturation)),
                 x + 91, y + 8, accent, true);
         }
         if (modules.xpHud && client.player != null) {
@@ -157,8 +161,8 @@ public final class HudOverlayRenderer {
             float progress = client.player.experienceProgress;
             int x = 12, y = height - 212;
             panel(ctx, x, y, 142, 24, accent);
-            ctx.drawText(client.textRenderer, "LEVEL", x + 8, y + 8, MUTED, true);
-            ctx.drawText(client.textRenderer, Integer.toString(level), x + 54, y + 8, TEXT, true);
+            ctx.drawText(client.textRenderer, ui("LEVEL"), x + 8, y + 8, MUTED, true);
+            ctx.drawText(client.textRenderer, ui(Integer.toString(level)), x + 54, y + 8, TEXT, true);
             ctx.fill(x + 84, y + 10, x + 133, y + 15, 0xFF303B4D);
             int fill = Math.round(49 * MathHelper.clamp(progress, 0.0f, 1.0f));
             if (fill > 0) ctx.fill(x + 84, y + 10, x + 84 + fill, y + 15, accent);
@@ -168,23 +172,21 @@ public final class HudOverlayRenderer {
             String[] directions = {"SOUTH", "WEST", "NORTH", "EAST"};
             int x = width / 2 - 42, y = 12;
             panel(ctx, x, y, 84, 24, accent);
-            ctx.drawCenteredTextWithShadow(client.textRenderer, directions[facing], x + 42, y + 8, TEXT);
+            ctx.drawCenteredTextWithShadow(client.textRenderer, ui(directions[facing]), x + 42, y + 8, TEXT);
         }
     }
 
     private static void renderCombatWidgets(DrawContext ctx, MinecraftClient client, int accent, int width, int height) {
         var modules = GlassVisualClient.MODULES;
         if (modules.crosshair) {
-            int cx = width / 2, cy = height / 2;
-            int dark = 0xB0182232;
-            ctx.fill(cx - 1, cy - 8, cx + 2, cy - 3, dark);
-            ctx.fill(cx - 1, cy + 4, cx + 2, cy + 9, dark);
-            ctx.fill(cx - 8, cy - 1, cx - 3, cy + 2, dark);
-            ctx.fill(cx + 4, cy - 1, cx + 9, cy + 2, dark);
-            ctx.fill(cx, cy - 7, cx + 1, cy - 3, accent);
-            ctx.fill(cx, cy + 4, cx + 1, cy + 8, accent);
-            ctx.fill(cx - 7, cy, cx - 3, cy + 1, accent);
-            ctx.fill(cx + 4, cy, cx + 8, cy + 1, accent);
+            int cx=width/2,cy=height/2;
+            int color=client.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult?0xFFFF718B:accent;
+            int shadow=0xD90A0E16;
+            ctx.fill(cx-1,cy-10,cx+2,cy-4,shadow);ctx.fill(cx-1,cy+4,cx+2,cy+10,shadow);
+            ctx.fill(cx-10,cy-1,cx-4,cy+2,shadow);ctx.fill(cx+4,cy-1,cx+10,cy+2,shadow);
+            ctx.fill(cx-1,cy-9,cx+1,cy-4,color);ctx.fill(cx-1,cy+4,cx+1,cy+9,color);
+            ctx.fill(cx-9,cy-1,cx-4,cy+1,color);ctx.fill(cx+4,cy-1,cx+9,cy+1,color);
+            ctx.fill(cx-1,cy-1,cx+2,cy+2,0xFF101722);ctx.fill(cx,cy,cx+1,cy+1,0xFFFFFFFF);
         }
         if (client.player == null) return;
         if (modules.combatHud) {
@@ -193,8 +195,8 @@ public final class HudOverlayRenderer {
             String held = client.player.getMainHandStack().isEmpty() ? "EMPTY"
                 : client.player.getMainHandStack().getName().getString();
             if (held.length() > 18) held = held.substring(0, 17) + "…";
-            ctx.drawText(client.textRenderer, "COMBAT", x + 9, y + 7, MUTED, true);
-            ctx.drawText(client.textRenderer, held, x + 58, y + 7, TEXT, true);
+            ctx.drawText(client.textRenderer, ui("COMBAT"), x + 9, y + 7, MUTED, true);
+            ctx.drawText(client.textRenderer, ui(held), x + 58, y + 7, TEXT, true);
             float cooldown = client.player.getAttackCooldownProgress(0.0f);
             int barWidth = Math.round(154 * Math.max(0.0f, Math.min(1.0f, cooldown)));
             ctx.fill(x + 9, y + 25, x + 163, y + 31, 0xFF303B4D);
@@ -206,8 +208,8 @@ public final class HudOverlayRenderer {
                 int x = width / 2 + 96, y = height - 34;
                 float remaining = 1.0f - (float) stack.getDamage() / stack.getMaxDamage();
                 panel(ctx, x, y, 110, 24, accent);
-                ctx.drawText(client.textRenderer, "DURABILITY", x + 7, y + 4, MUTED, true);
-                ctx.drawText(client.textRenderer, Math.round(remaining * 100) + "%", x + 72, y + 4,
+                ctx.drawText(client.textRenderer, ui("DURABILITY"), x + 7, y + 4, MUTED, true);
+                ctx.drawText(client.textRenderer, ui(Math.round(remaining * 100) + "%"), x + 72, y + 4,
                     remaining > 0.5f ? 0xFF36A875 : 0xFFE18B55, true);
                 ctx.fill(x + 7, y + 16, x + 103, y + 19, 0xFFDCE3EF);
                 int bar = Math.round(96 * Math.max(0.0f, remaining));
@@ -215,16 +217,20 @@ public final class HudOverlayRenderer {
             }
         }
         if (modules.inventory) {
-            int x = width / 2 - 94, y = height - 82;
-            panel(ctx, x, y, 188, 27, accent);
-            for (int slot = 0; slot < 9; slot++) {
-                int sx = x + 3 + slot * 20;
-                boolean selected = client.player.getInventory().selectedSlot == slot;
-                ctx.fill(sx, y + 3, sx + 19, y + 24, selected ? 0xFF303B4D : 0x22313C50);
-                if (selected) ctx.fill(sx, y + 3, sx + 19, y + 5, accent);
-                var stack = client.player.getInventory().getStack(slot);
-                if (!stack.isEmpty()) ctx.drawItem(stack, sx + 1, y + 4);
+            int x=HudLayout.inventoryX<0?width/2-100:HudLayout.inventoryX;
+            int y=HudLayout.inventoryY<0?height-48:HudLayout.inventoryY;
+            roundedPanel(ctx,x,y,200,34,accent);
+            for(int slot=0;slot<9;slot++){
+                int sx=x+4+slot*21;boolean selected=client.player.getInventory().selectedSlot==slot;
+                roundedFill(ctx,sx,y+4,20,26,4,selected?0xFF343E55:0x88303B4D);
+                if(selected){ctx.fill(sx+3,y+3,sx+17,y+5,accent);ctx.fill(sx+3,y+29,sx+17,y+30,accent);}
+                var stack=client.player.getInventory().getStack(slot);
+                if(!stack.isEmpty()){ctx.drawItem(stack,sx+2,y+8);if(stack.getCount()>1)ctx.drawStackOverlay(client.textRenderer,stack,sx+2,y+8);}
             }
+            var selectedStack=client.player.getInventory().getSelectedStack();
+            if(!selectedStack.isEmpty()){String name=selectedStack.getName().getString();int labelWidth=client.textRenderer.getWidth(name)+14;
+                roundedFill(ctx,x+100-labelWidth/2,y-19,labelWidth,16,5,0xC9161D2A);
+                ctx.drawCenteredTextWithShadow(client.textRenderer,ui(name),x+100,y-15,TEXT);}
         }
     }
 
@@ -232,8 +238,8 @@ public final class HudOverlayRenderer {
         int x = HudLayout.watermarkX;
         int y = HudLayout.watermarkY;
         panel(ctx, x, y, 114, 26, accent);
-        ctx.drawText(client.textRenderer, "NULL", x + 11, y + 5, TEXT, true);
-        ctx.drawText(client.textRenderer, "CLIENT", x + 47, y + 6, MUTED, false);
+        ctx.drawText(client.textRenderer, ui("NULL"), x + 11, y + 5, TEXT, true);
+        ctx.drawText(client.textRenderer, ui("CLIENT"), x + 47, y + 6, MUTED, false);
     }
 
     private static void renderArrayList(DrawContext ctx, MinecraftClient client, int accent, int screenWidth) {
@@ -258,7 +264,7 @@ public final class HudOverlayRenderer {
             int left = x < 0 ? screenWidth - w - 8 : x;
             ctx.fill(left, y, left + w, y + 17, PANEL);
             ctx.fill(left + w - 2, y, left + w, y + 17, accent);
-            ctx.drawText(client.textRenderer, names[i], left + 7, y + 4, TEXT, true);
+            ctx.drawText(client.textRenderer, ui(names[i]), left + 7, y + 4, TEXT, true);
             y += 19;
         }
     }
@@ -287,14 +293,14 @@ public final class HudOverlayRenderer {
         String[] labels = {"HELMET", "CHEST", "LEGS", "BOOTS"};
         int x = 12, y = Math.max(82, screenHeight / 2 + 62);
         panel(ctx, x, y, 132, 82, accent);
-        ctx.drawText(client.textRenderer, "ARMOR STATUS", x + 8, y + 6, accent, true);
+        ctx.drawText(client.textRenderer, ui("ARMOR STATUS"), x + 8, y + 6, accent, true);
         for (int i = 0; i < slots.length; i++) {
             ItemStack stack = client.player.getEquippedStack(slots[i]);
             int remaining = stack.isEmpty() || !stack.isDamageable() ? 0
                 : Math.round(100.0f * (1.0f - (float) stack.getDamage() / stack.getMaxDamage()));
             int color = remaining > 50 ? 0xFF36A875 : remaining > 20 ? 0xFFE0A04E : 0xFFE16F78;
-            ctx.drawText(client.textRenderer, labels[i], x + 8, y + 21 + i * 14, MUTED, false);
-            ctx.drawText(client.textRenderer, stack.isEmpty() ? "—" : remaining + "%",
+            ctx.drawText(client.textRenderer, ui(labels[i]), x + 8, y + 21 + i * 14, MUTED, false);
+            ctx.drawText(client.textRenderer, ui(stack.isEmpty() ? "—" : remaining + "%"),
                 x + 91, y + 21 + i * 14, color, true);
         }
     }
@@ -306,7 +312,7 @@ public final class HudOverlayRenderer {
         int y = HudLayout.potionsY;
         int rows = Math.min(effects.size(), 6);
         panel(ctx, x, y, 146, 20 + rows * 17, accent);
-        ctx.drawText(client.textRenderer, "EFFECTS", x + 8, y + 6, accent, true);
+        ctx.drawText(client.textRenderer, ui("EFFECTS"), x + 8, y + 6, accent, true);
         for (int i = 0; i < rows; i++) {
             StatusEffectInstance effect = effects.get(i);
             String name = effect.getEffectType().value().getName().getString();
@@ -314,11 +320,15 @@ public final class HudOverlayRenderer {
             int ticks = effect.getDuration();
             String time = ticks < 0 ? "∞" : String.format("%d:%02d", ticks / 1200, (ticks / 20) % 60);
             if (name.length() > 15) name = name.substring(0, 14) + "…";
-            ctx.drawText(client.textRenderer, name, x + 8, y + 21 + i * 17, TEXT, false);
-            ctx.drawText(client.textRenderer, time, x + 108, y + 21 + i * 17, MUTED, false);
+            ctx.drawText(client.textRenderer, ui(name), x + 8, y + 21 + i * 17, TEXT, false);
+            ctx.drawText(client.textRenderer, ui(time), x + 108, y + 21 + i * 17, MUTED, false);
         }
     }
 
+    private static void roundedPanel(DrawContext ctx,int x,int y,int w,int h,int accent){
+        roundedFill(ctx,x+2,y+2,w,h,8,0x33000000);roundedFill(ctx,x,y,w,h,8,0xE9161D2A);
+        ctx.fill(x+10,y+1,x+w-10,y+2,0x22FFFFFF);ctx.fill(x+8,y+1,x+10,y+3,accent);
+    }
     private static void panel(DrawContext ctx, int x, int y, int w, int h, int accent) {
         roundedFill(ctx, x + 2, y + 2, w, h, 7, 0x33000000);
         roundedFill(ctx, x, y, w, h, 7, PANEL);
@@ -342,6 +352,6 @@ public final class HudOverlayRenderer {
         ctx.fill(x, y, x + width, y + 2, pressed ? accent : 0x665E687F);
         int textColor = pressed ? 0xFF202A3B : MUTED;
         int textX = x + (width - client.textRenderer.getWidth(label)) / 2;
-        ctx.drawText(client.textRenderer, label, textX, y + 6, textColor, true);
+        ctx.drawText(client.textRenderer, ui(label), textX, y + 6, textColor, true);
     }
 }
