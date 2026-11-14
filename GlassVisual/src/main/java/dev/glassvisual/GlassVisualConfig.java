@@ -23,6 +23,8 @@ public final class GlassVisualConfig {
             m.sprintDisplay=d.sprintDisplay; m.jumpStats=d.jumpStats; m.speedGraph=d.speedGraph; m.sessionInfo=d.sessionInfo; m.clock=d.clock;
             m.hitVisuals=d.hitVisuals; m.combatHud=d.combatHud; m.worldTint=d.worldTint; m.crosshair=d.crosshair;
             m.durability=d.durability; m.inventory=d.inventory; m.notifications=d.notifications; m.armorStatus=d.armorStatus; m.timeChanger=d.timeChanger; m.blockOutline=d.blockOutline; m.aimAssist=d.aimAssist; m.directionHud=d.directionHud; m.totemCounter=d.totemCounter; m.foodHud=d.foodHud; m.xpHud=d.xpHud;
+            m.legitEsp=d.legitEsp; m.handPosition=d.handPosition;
+            NullHandSettings.set(d.handX,d.handY,d.handZ);
             NullTheme.select(d.theme);
             NullUiSettings.particles=d.particles;
             NullUiSettings.worldParticles=d.worldParticles;
@@ -52,6 +54,8 @@ public final class GlassVisualConfig {
         d.sprintDisplay=m.sprintDisplay; d.jumpStats=m.jumpStats; d.speedGraph=m.speedGraph; d.sessionInfo=m.sessionInfo; d.clock=m.clock;
         d.hitVisuals=m.hitVisuals; d.combatHud=m.combatHud; d.worldTint=m.worldTint; d.crosshair=m.crosshair;
         d.durability=m.durability; d.inventory=m.inventory; d.notifications=m.notifications; d.armorStatus=m.armorStatus; d.timeChanger=m.timeChanger; d.blockOutline=m.blockOutline; d.aimAssist=m.aimAssist; d.directionHud=m.directionHud; d.totemCounter=m.totemCounter; d.foodHud=m.foodHud; d.xpHud=m.xpHud;
+        d.legitEsp=m.legitEsp; d.handPosition=m.handPosition;
+        d.handX=NullHandSettings.x(); d.handY=NullHandSettings.y(); d.handZ=NullHandSettings.z();
         d.theme=NullTheme.selectedIndex(); d.particles=NullUiSettings.particles;
         d.worldParticles=NullUiSettings.worldParticles; d.playerTrail=NullUiSettings.playerTrail;
         d.stretchMode=NullUiSettings.stretchMode().name(); d.uiScale=NullUiSettings.scale();
@@ -68,8 +72,9 @@ public final class GlassVisualConfig {
 
     private static final class Data {
         boolean targetHud=true, keystrokes, coordinates, fps, glowAccent=true, arrayList=true, armorHud, potionHud, ping, autoSprint, sprintDisplay, jumpStats, speedGraph, sessionInfo, clock, hitVisuals, combatHud, worldTint, crosshair=true, durability, inventory=true;
-        boolean notifications=true, armorStatus, timeChanger, blockOutline, aimAssist, directionHud, totemCounter, foodHud, xpHud;
+        boolean notifications=true, armorStatus, timeChanger, blockOutline, aimAssist, directionHud, totemCounter, foodHud, xpHud, legitEsp, handPosition;
         boolean particles=true, worldParticles=true, playerTrail=true; int theme; float uiScale=1.0f; String layoutMode="FIT", language="ru", stretchMode="FOUR_THREE";
+        float handX=0.0f,handY=0.0f,handZ=0.0f;
         int watermarkX=12,watermarkY=12,fpsX=-1,fpsY=12,coordinatesX=12,coordinatesY=-1,keysX=12,keysY=-1;
         int arrayListX=-1,arrayListY=70,armorX=12,armorY=-1,potionsX=-1,potionsY=170,pingX=-1,pingY=42,inventoryX=-1,inventoryY=-1;
     }

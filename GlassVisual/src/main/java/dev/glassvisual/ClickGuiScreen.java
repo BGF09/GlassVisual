@@ -13,15 +13,15 @@ public final class ClickGuiScreen extends Screen {
     private static final String[][] RU={
         {"Бой","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
         {"Движение","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
-        {"Визуалы","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer","World Particles","Player Trail","Screen Stretch"},
-        {"Игрок","Armor Status","Armor HUD","Coordinates","Durability","Inventory","Totem Counter","Food HUD","XP HUD"},
+        {"Визуалы","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer","World Particles","Player Trail","Screen Stretch","Legit ESP"},
+        {"Игрок","Armor Status","Armor HUD","Coordinates","Durability","Inventory","Totem Counter","Food HUD","XP HUD","Hand Position"},
         {"Разное","Session Info","Clock","ArrayList","Notifications","Ping","Direction"}
     };
     private static final String[][] EN={
         {"Combat","Aim Assist","Hit Visuals","Target HUD","Combat HUD","Particles"},
         {"Movement","Auto Sprint","Sprint Display","Jump Stats","Speed Graph","Keystrokes"},
-        {"Visuals","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer","World Particles","Player Trail","Screen Stretch"},
-        {"Player","Armor Status","Armor HUD","Coordinates","Durability","Inventory","Totem Counter","Food HUD","XP HUD"},
+        {"Visuals","World Tint","Block Outline","Crosshair","FPS Counter","Potion HUD","Time Changer","World Particles","Player Trail","Screen Stretch","Legit ESP"},
+        {"Player","Armor Status","Armor HUD","Coordinates","Durability","Inventory","Totem Counter","Food HUD","XP HUD","Hand Position"},
         {"Misc","Session Info","Clock","ArrayList","Notifications","Ping","Direction"}
     };
     private int x,y,w,h,selected;
@@ -104,7 +104,9 @@ public final class ClickGuiScreen extends Screen {
             case "Combat HUD" -> tr("Предмет в руке и индикатор перезарядки удара","Held item and attack cooldown indicator");
             case "World Tint" -> tr("Лёгкий цветовой оттенок игрового экрана","Subtle color tint over the game view");
             case "Block Outline" -> tr("Цветная обводка блока под прицелом","Accent outline around the targeted block");
-            case "Time Changer" -> tr("Фиксирует локальное время мира на полдень","Locks the local world time to noon");
+            case "Time Changer" -> tr("Постоянная ночь только на твоём клиенте","Always night on your client only");
+            case "Legit ESP" -> tr("Обводка игроков только при прямой видимости + HP над головой","Player outline and health above head only when visible");
+            case "Hand Position" -> tr("Двигай рукой: NumPad 4/6, 8/2, 7/9","Move hand with NumPad 4/6, 8/2, 7/9");
             case "Crosshair" -> tr("Собственный прицел NULL вместо стандартного","Custom NULL reticle replacing the vanilla crosshair");
             case "Armor Status" -> tr("Процент прочности каждой части брони","Durability percentage for each armor piece");
             case "Totem Counter" -> tr("Считает тотемы во всём инвентаре","Counts totems in your inventory");
@@ -137,8 +139,8 @@ public final class ClickGuiScreen extends Screen {
     private boolean enabled(int c,int i){var m=GlassVisualClient.MODULES;
         if(c==0&&i==5)return NullUiSettings.particles;if(c==0&&i==1)return m.aimAssist;if(c==0&&i==2)return m.hitVisuals;if(c==0&&i==3)return m.targetHud;if(c==0&&i==4)return m.combatHud;if(c==1&&i==1)return m.autoSprint;if(c==1&&i==5)return m.keystrokes;
         if(c==2&&i==1)return m.worldTint;if(c==2&&i==2)return m.blockOutline;if(c==2&&i==3)return m.crosshair;if(c==2&&i==6)return m.timeChanger;if(c==2&&i==4)return m.fps;if(c==2&&i==5)return m.potionHud;
-        if(c==2&&i==7)return NullUiSettings.worldParticles;if(c==2&&i==8)return NullUiSettings.playerTrail;if(c==2&&i==9)return NullUiSettings.stretchMode()!=NullUiSettings.StretchMode.OFF;
-        if(c==3&&i==6)return m.totemCounter;if(c==3&&i==7)return m.foodHud;if(c==3&&i==8)return m.xpHud;if(c==3&&i==1)return m.armorStatus;if(c==3&&i==2)return m.armorHud;if(c==3&&i==3)return m.coordinates;if(c==3&&i==4)return m.durability;if(c==3&&i==5)return m.inventory;
+        if(c==2&&i==7)return NullUiSettings.worldParticles;if(c==2&&i==8)return NullUiSettings.playerTrail;if(c==2&&i==9)return NullUiSettings.stretchMode()!=NullUiSettings.StretchMode.OFF;if(c==2&&i==10)return m.legitEsp;
+        if(c==3&&i==6)return m.totemCounter;if(c==3&&i==7)return m.foodHud;if(c==3&&i==8)return m.xpHud;if(c==3&&i==9)return m.handPosition;if(c==3&&i==1)return m.armorStatus;if(c==3&&i==2)return m.armorHud;if(c==3&&i==3)return m.coordinates;if(c==3&&i==4)return m.durability;if(c==3&&i==5)return m.inventory;
         if(c==1&&i==2)return m.sprintDisplay;if(c==1&&i==3)return m.jumpStats;if(c==1&&i==4)return m.speedGraph;
         if(c==4&&i==1)return m.sessionInfo;if(c==4&&i==2)return m.clock;if(c==4&&i==4)return m.notifications;
         if(c==4&&i==3)return m.arrayList;if(c==4&&i==5)return m.ping;if(c==4&&i==6)return m.directionHud;return false;
@@ -146,8 +148,8 @@ public final class ClickGuiScreen extends Screen {
     private void toggle(int c,int i){var m=GlassVisualClient.MODULES;
         if(c==0&&i==5)NullUiSettings.particles=!NullUiSettings.particles;else if(c==0&&i==1)m.aimAssist=!m.aimAssist;else if(c==0&&i==2)m.hitVisuals=!m.hitVisuals;else if(c==0&&i==3)m.targetHud=!m.targetHud;else if(c==0&&i==4)m.combatHud=!m.combatHud;else if(c==1&&i==1)m.autoSprint=!m.autoSprint;else if(c==1&&i==5)m.keystrokes=!m.keystrokes;
         else if(c==2&&i==1)m.worldTint=!m.worldTint;else if(c==2&&i==2)m.blockOutline=!m.blockOutline;else if(c==2&&i==3)m.crosshair=!m.crosshair;else if(c==2&&i==6)m.timeChanger=!m.timeChanger;else if(c==2&&i==4)m.fps=!m.fps;else if(c==2&&i==5)m.potionHud=!m.potionHud;
-        else if(c==2&&i==7)NullUiSettings.worldParticles=!NullUiSettings.worldParticles;else if(c==2&&i==8)NullUiSettings.playerTrail=!NullUiSettings.playerTrail;else if(c==2&&i==9)NullUiSettings.toggleScreenStretch();
-        else if(c==3&&i==6)m.totemCounter=!m.totemCounter;else if(c==3&&i==7)m.foodHud=!m.foodHud;else if(c==3&&i==8)m.xpHud=!m.xpHud;else if(c==3&&i==1)m.armorStatus=!m.armorStatus;else if(c==3&&i==2)m.armorHud=!m.armorHud;else if(c==3&&i==3)m.coordinates=!m.coordinates;else if(c==3&&i==4)m.durability=!m.durability;else if(c==3&&i==5)m.inventory=!m.inventory;
+        else if(c==2&&i==7)NullUiSettings.worldParticles=!NullUiSettings.worldParticles;else if(c==2&&i==8)NullUiSettings.playerTrail=!NullUiSettings.playerTrail;else if(c==2&&i==9)NullUiSettings.toggleScreenStretch();else if(c==2&&i==10)m.legitEsp=!m.legitEsp;
+        else if(c==3&&i==6)m.totemCounter=!m.totemCounter;else if(c==3&&i==7)m.foodHud=!m.foodHud;else if(c==3&&i==8)m.xpHud=!m.xpHud;else if(c==3&&i==9)m.handPosition=!m.handPosition;else if(c==3&&i==1)m.armorStatus=!m.armorStatus;else if(c==3&&i==2)m.armorHud=!m.armorHud;else if(c==3&&i==3)m.coordinates=!m.coordinates;else if(c==3&&i==4)m.durability=!m.durability;else if(c==3&&i==5)m.inventory=!m.inventory;
         else if(c==1&&i==2)m.sprintDisplay=!m.sprintDisplay;else if(c==1&&i==3)m.jumpStats=!m.jumpStats;else if(c==1&&i==4)m.speedGraph=!m.speedGraph;
         else if(c==4&&i==1)m.sessionInfo=!m.sessionInfo;else if(c==4&&i==2)m.clock=!m.clock;else if(c==4&&i==4)m.notifications=!m.notifications;
         else if(c==4&&i==3)m.arrayList=!m.arrayList;else if(c==4&&i==5)m.ping=!m.ping;else if(c==4&&i==6)m.directionHud=!m.directionHud;

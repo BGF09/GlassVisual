@@ -48,11 +48,14 @@ public final class GlassVisualClient implements ClientModInitializer {
             }
         });
         WorldRenderEvents.AFTER_ENTITIES.register(NullWorldEffects::render);
+        WorldRenderEvents.AFTER_ENTITIES.register(NullLegitEsp::render);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             NullAimAssist.tick(client);
+            NullHandSettings.tick(client);
+            NullLegitEsp.tick(client);
             if (MODULES.timeChanger && client.world != null) {
-                ((ClientWorld.Properties) client.world.getLevelProperties()).setTimeOfDay(6000L);
+                ((ClientWorld.Properties) client.world.getLevelProperties()).setTimeOfDay(18000L);
             }
             if (MODULES.autoSprint && client.player != null) {
                 var player = client.player;
@@ -133,5 +136,7 @@ public final class GlassVisualClient implements ClientModInitializer {
         public boolean totemCounter;
         public boolean foodHud;
         public boolean xpHud;
+        public boolean legitEsp;
+        public boolean handPosition;
     }
 }
